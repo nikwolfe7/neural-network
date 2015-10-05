@@ -13,7 +13,7 @@ public class Neuron implements NetworkElement {
   private double errorTerm;
   
   public Neuron() {
-    this.output = 0;
+    this.setOutput(0);
     this.errorTerm = 0;
     this.incoming = new ArrayList<NetworkElement>();
     this.outgoing = new ArrayList<NetworkElement>();
@@ -30,9 +30,9 @@ public class Neuron implements NetworkElement {
   @Override
   public void forward() {
     double sum = 0;
-    for(NetworkElement e : incoming)
+    for(NetworkElement e : getIncomingElements())
       sum += e.getOutput();
-    output = ActivationFunction.getActivation(sum);
+    setOutput(ActivationFunction.getActivation(sum));
   }
 
   @Override
@@ -61,6 +61,14 @@ public class Neuron implements NetworkElement {
   @Override
   public double getErrorTerm() {
     return errorTerm;
+  }
+
+  protected List<NetworkElement> getIncomingElements() {
+    return incoming;
+  }
+
+  protected void setOutput(double output) {
+    this.output = output;
   }
 
 }

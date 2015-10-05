@@ -36,7 +36,14 @@ public abstract class NetworkElementLayer {
     return elements;
   }
   
-  public NetworkElement[] connect(NetworkElementLayer networkElementLayer) {
+  /**
+   * Connects this layer to the layer passed to it and returns
+   * the weight matrix of the connections
+   * 
+   * @param networkElementLayer
+   * @return
+   */
+  public NetworkElement[] connectLayer(NetworkElementLayer networkElementLayer) {
     NetworkElement[] nextLayer = networkElementLayer.getLayerElements();
     Edge[] weightMatrix = new Edge[elements.length * nextLayer.length];
     int ncols = nextLayer.length;
@@ -52,7 +59,7 @@ public abstract class NetworkElementLayer {
     return weightMatrix;
   }
   
-  private void connectElements(Neuron in, Edge w, Neuron out) {
+  public void connectElements(Neuron in, Edge w, Neuron out) {
     w.setIncomingElement(in);
     w.setOutgoingElement(out);
     in.addOutgoingElement(w);

@@ -3,10 +3,6 @@ package mlsp.cs.cmu.edu.factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import mlsp.cs.cmu.edu.elements.Input;
-import mlsp.cs.cmu.edu.elements.NetworkElement;
-import mlsp.cs.cmu.edu.elements.Output;
-import mlsp.cs.cmu.edu.structure.HiddenLayer;
 import mlsp.cs.cmu.edu.structure.InputLayer;
 import mlsp.cs.cmu.edu.structure.NetworkElementLayer;
 import mlsp.cs.cmu.edu.structure.OutputLayer;

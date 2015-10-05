@@ -7,12 +7,14 @@ public class ActivationFunction {
   /*================================================*/
   public static double getActivation(double input) {
     return sigmoid(input);
-//    return tanh(input);
+    // return linear(input);
+    // return tanh(input);
   }
   
   public static double getActivationDerivative(double output) {
     return getSigmoidActivationDerivative(output);
-//    return getTanhActivationDerivative(output);
+    // return getLinearActivationDerivative(output);
+    // return getTanhActivationDerivative(output);
   }
   
   /*================================================*/
@@ -22,7 +24,12 @@ public class ActivationFunction {
     return 1.0 / (1.0 + Math.exp(-input));
   }
   
+  private static double linear(double input) {
+    return input;
+  }
+  
   private static double tanh(double input) {
+//    return 1.0 * Math.tanh(input);
     return 1.7159 * Math.tanh(0.66666666666 * input);
   }
   
@@ -30,8 +37,13 @@ public class ActivationFunction {
     return output * (1 - output);
   }
   
+  private static double getLinearActivationDerivative(double output) {
+    return output;
+  }
+  
   private static double getTanhActivationDerivative(double output) {
-    return 1.14393333333 / Math.pow(Math.cosh(0.66666666666 * output), 2);
+//    return 1.0 / Math.pow(Math.cosh(output), 2);
+  return 1.14393333333 / Math.pow(Math.cosh(0.66666666666 * output), 2);
   }
 
   public static void main(String[] args) {
