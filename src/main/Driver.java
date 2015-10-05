@@ -32,15 +32,15 @@ public class Driver {
     Output o = new Output();
 
     Edge e1, e2, e3, e4, e5, e6, e7, e8, e9;
-    e1 = new Edge(learningRate);
-    e2 = new Edge(learningRate);
-    e3 = new Edge(learningRate);
-    e4 = new Edge(learningRate);
-    e5 = new Edge(learningRate);
-    e6 = new Edge(learningRate);
-    e7 = new Edge(learningRate);
-    e8 = new Edge(learningRate);
-    e9 = new Edge(learningRate);
+    e1 = new Edge();
+    e2 = new Edge();
+    e3 = new Edge();
+    e4 = new Edge();
+    e5 = new Edge();
+    e6 = new Edge();
+    e7 = new Edge();
+    e8 = new Edge();
+    e9 = new Edge();
     
     connect(x1, e1, z1);
     connect(x1, e2, z2);
@@ -63,7 +63,7 @@ public class Driver {
     Random r = new Random();
     List<double[]> data = new ArrayList<double[]>();
     for(int i = 0; i < 1000; i++) {
-      double x,y,z;
+      double x, y, z;
       x = r.nextDouble();
       y = 1 - x; 
       z = x + y;

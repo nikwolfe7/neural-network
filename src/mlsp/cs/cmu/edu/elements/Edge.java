@@ -2,19 +2,20 @@ package mlsp.cs.cmu.edu.elements;
 
 public class Edge implements NetworkElement {
 
-  private double weight, learningRate, output, errorTerm;
+  private double weight, output, errorTerm;
 
   private NetworkElement incoming, outgoing;
 
   /* Initializations from Tom Mitchell */
   private double initLow = -0.05;
   private double initHigh = 0.05;
+  private double learningRate = 0.05;
 
-  public Edge(double learningRate) {
+  public Edge() {
     this.output = 0;
     this.errorTerm = 0;
-    this.learningRate = learningRate;
     this.weight = Math.random() * (initHigh - initLow) + initLow;
+//    this.learningRate = Math.random(); 
   }
 
   public void setIncomingElement(NetworkElement element) {

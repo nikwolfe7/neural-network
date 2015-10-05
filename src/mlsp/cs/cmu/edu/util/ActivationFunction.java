@@ -6,13 +6,13 @@ public class ActivationFunction {
   /* Public functions to change
   /*================================================*/
   public static double getActivation(double input) {
-//    return sigmoid(input);
-    return tanh(input);
+    return sigmoid(input);
+//    return tanh(input);
   }
   
   public static double getActivationDerivative(double output) {
-//    return getSigmoidActivationDerivative(output);
-    return getTanhActivationDerivative(output);
+    return getSigmoidActivationDerivative(output);
+//    return getTanhActivationDerivative(output);
   }
   
   /*================================================*/
