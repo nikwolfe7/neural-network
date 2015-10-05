@@ -43,6 +43,7 @@ public class Neuron implements NetworkElement {
     setErrorTerm(sum * derivative());
   }
   
+  /* This is used in subclasses... */
   protected void setErrorTerm(double e) {
     errorTerm = e;
   }

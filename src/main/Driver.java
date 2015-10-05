@@ -23,6 +23,8 @@ public class Driver {
   static Edge[] w2; 
   static Output[] output;
   
+  static DecimalFormat f = new DecimalFormat("##.####");
+  
   public static void main(String[] args) {
     Input x1 = new Input();
     Input x2 = new Input();
@@ -55,21 +57,23 @@ public class Driver {
     connect(b, e9, o);
     
     inputs = new Input[] { x1, x2 };
-    w1 = new Edge[] { e1, e2, e3, e4 };
+    w1 = new Edge[] { e1, e2, e3, e4, e7, e8 };
     layer = new Neuron[] { z1, z2 };
-    w2 = new Edge[] { e5, e6 };
+    w2 = new Edge[] { e5, e6, e9 };
     output = new Output[] { o };
     
     Random r = new Random();
     List<double[]> data = new ArrayList<double[]>();
-    for(int i = 0; i < 1000; i++) {
+    for(int i = 0; i < 100000; i++) {
       double x, y, z;
-      x = r.nextDouble();
-      y = 1 - x; 
+      x = r.nextInt(100);
+      y = r.nextInt(100); 
       z = x + y;
       double[] d = new double[] {z, x, y};
       data.add(d);
     }
+    data = standardize(data, 1, 2);
+    data = normalize(data, 0, 1, 0);
     
     DecimalFormat f = new DecimalFormat("##.#####");
     double prevSqError = Double.POSITIVE_INFINITY;
@@ -77,10 +81,10 @@ public class Driver {
       squaredError = 0;
       for(double[] x : data)
         train(x[0], x[1], x[2]);
-      double diff = prevSqError - squaredError;
-      System.out.println("Squared Error: " + f.format(squaredError) + "\tDiff: " + f.format(diff));
+      double diff = Math.abs(prevSqError - squaredError);
+      System.out.println("Squared Error: " + f.format(squaredError) + "\tDiff: " + diff);
       prevSqError = squaredError;
-      if(diff < 1.0e-8) 
+      if(diff < 1.0e-7) 
         break;
     }
     System.out.println("Converged.");
@@ -96,6 +100,56 @@ public class Driver {
 
   }
   
+  private static List<double[]> standardize(List<double[]> data, int... cols) {
+    for (int k = 0; k < cols.length; k++) {
+      int j = cols[k];
+      double sum = 0;
+      double N = data.size();
+      /* calc avg */
+      for (int i = 0; i < data.size(); i++) {
+        double[] x = data.get(i);
+        sum += x[j];
+      }
+      double mean = sum / N;
+      /* calc variance */
+      sum = 0;
+      for (int i = 0; i < data.size(); i++) {
+        double[] x = data.get(i);
+        sum += Math.pow((x[j] - mean), 2);
+      }
+      double variance = sum / (N-1);
+      double stdev = Math.sqrt(variance);
+      for (int i = 0; i < data.size(); i++) {
+        double[] x = data.get(i);
+        x[j] = (x[j] - mean) / stdev;
+        data.set(i, x);
+      }
+    }
+    return data;
+  }
+  
+  private static List<double[]> normalize(List<double[]> data, double low, double high, int... cols) {
+    for (int k = 0; k < cols.length; k++) {
+      int j = cols[k];
+      double min = data.get(0)[j];
+      double max = min;
+      /* calc range */
+      for (int i = 0; i < data.size(); i++) {
+        double[] x = data.get(i);
+        min = Math.min(min, x[j]);
+        max = Math.max(max, x[j]);
+      }
+      /* normalize on range */
+      for (int i = 0; i < data.size(); i++) {
+        double[] x = data.get(i);
+        x[j] = (x[j] - min) / (max - min);
+        x[j] = x[j] * (high - low) + low;
+        data.set(i, x);
+      }
+    }
+    return data;
+  }
+
   private static void connect(Neuron in, Edge w, Neuron out) {
     w.setIncomingElement(in);
     w.setOutgoingElement(out);
@@ -124,8 +178,8 @@ public class Driver {
     t = trueOutput;
     o = output[0].getOutput();
     output[0].setTruthValue(t);
-    squaredError += (0.5) * Math.pow((t - o), 2);
-//    System.out.println("Output: " + o + "\t" + "Truth: " + t);
+    squaredError += Math.pow((t - o), 2);
+//    System.out.println("Output: " + f.format(o) + "\t" + "Truth: " + f.format(t));
     backward(output);
     backward(w2);
     backward(layer);

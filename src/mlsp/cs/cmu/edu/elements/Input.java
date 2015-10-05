@@ -2,7 +2,7 @@ package mlsp.cs.cmu.edu.elements;
 
 public class Input extends Neuron {
 
-  private volatile double inputValue = 0;
+  private double inputValue = 0;
   private double output;
   
   public void setInputValue(double val) {

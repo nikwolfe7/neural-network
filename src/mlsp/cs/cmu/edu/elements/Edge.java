@@ -7,17 +7,20 @@ public class Edge implements NetworkElement {
   private NetworkElement incoming, outgoing;
 
   /* Initializations from Tom Mitchell */
-  private double initLow = -0.05;
-  private double initHigh = 0.05;
-  private double learningRate = 0.05;
+  private double initLow = -4;
+  private double initHigh = 4;
+  private double learningRate = 0.1;
 
   public Edge() {
     this.output = 0;
     this.errorTerm = 0;
-    this.weight = Math.random() * (initHigh - initLow) + initLow;
-//    this.learningRate = Math.random(); 
+    this.weight = initializeWeight(initHigh, initLow);
   }
-
+  
+  private double initializeWeight(double high, double low) {
+    return Math.random() * (high - low) + low;
+  }
+  
   public void setIncomingElement(NetworkElement element) {
     this.incoming = element;
   }
