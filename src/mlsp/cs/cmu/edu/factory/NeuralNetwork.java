@@ -6,27 +6,42 @@ import java.util.List;
 import mlsp.cs.cmu.edu.elements.Input;
 import mlsp.cs.cmu.edu.elements.NetworkElement;
 import mlsp.cs.cmu.edu.elements.Output;
+import mlsp.cs.cmu.edu.structure.HiddenLayer;
+import mlsp.cs.cmu.edu.structure.InputLayer;
+import mlsp.cs.cmu.edu.structure.NetworkElementLayer;
+import mlsp.cs.cmu.edu.structure.OutputLayer;
 
 public class NeuralNetwork {
   
-  private List<NetworkElement[]> network;
-  private Input[] inputLayer;
-  private Output[] outputLayer;
+  private List<NetworkElementLayer> hiddenLayers;
+  private InputLayer inputLayer;
+  private OutputLayer outputLayer;
   
-  public NeuralNetwork(NetworkElement[]... layers) {
+  public NeuralNetwork(InputLayer input, OutputLayer output, NetworkElementLayer... hidden) {
 	/* using ArrayList b/c the width varies */
-    this.network = new ArrayList<NetworkElement[]>();
-    for(int i = 0; i < layers.length; i++) {
-      network.add(layers[i]); 
-      if(i == 0) {
-        this.inputLayer = (Input[]) layers[i];
-      } else if (i == layers.length - 1) {
-        this.outputLayer = (Output[]) layers[i];
-      } 
-    }
+	this.inputLayer = input;
+	this.outputLayer = output;
+	this.hiddenLayers = new ArrayList<>();
+	for(NetworkElementLayer layer : hidden)
+		hiddenLayers.add(layer);
   }
   
+  public double[] forwardPropagate(double[] input) {
+	 inputLayer.setInputVector(input);
+	 inputLayer.forwardPropagate();
+	 for(NetworkElementLayer layer : hiddenLayers)
+		 layer.forwardPropagate();
+	 outputLayer.forwardPropagate();
+	 return outputLayer.getOutput();
+  }
   
+  public void backPropagate(double[] truthValue) {
+	  outputLayer.setTruthValue(truthValue);
+	  outputLayer.backPropagate();
+	  for(NetworkElementLayer layer : hiddenLayers)
+		  layer.backPropagate();
+	  inputLayer.backPropagate();
+  }
 
 
 }
