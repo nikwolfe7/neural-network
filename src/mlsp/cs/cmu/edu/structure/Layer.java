@@ -4,7 +4,7 @@ import mlsp.cs.cmu.edu.elements.Edge;
 import mlsp.cs.cmu.edu.elements.NetworkElement;
 import mlsp.cs.cmu.edu.elements.Neuron;
 
-public abstract class Layer {
+public class Layer {
 
   private Neuron[] elements;
   
@@ -36,14 +36,15 @@ public abstract class Layer {
     return elements;
   }
   
-  public Edge[][] connect(Layer layer) {
+  public Edge[] connect(Layer layer) {
     Neuron[] nextLayer = layer.getLayerElements();
-    Edge[][] weightMatrix = new Edge[elements.length][nextLayer.length];
-    for (int i = 0; i < elements.length; i++) {
-      for (int j = 0; j < nextLayer.length; j++) {
+    Edge[] weightMatrix = new Edge[elements.length * nextLayer.length];
+    int ncols = nextLayer.length;
+    for (int row = 0; row < elements.length; row++) {
+      for (int col = 0; col < nextLayer.length; col++) {
         Edge e = new Edge();
-        connectElements(elements[i], e, nextLayer[j]);
-        weightMatrix[i][j] = e;
+        connectElements(elements[row], e, nextLayer[col]);
+        weightMatrix[row * ncols + col] = e;
       }
     }
     return weightMatrix;
