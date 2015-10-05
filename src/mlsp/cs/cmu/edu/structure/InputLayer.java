@@ -2,7 +2,7 @@ package mlsp.cs.cmu.edu.structure;
 
 import mlsp.cs.cmu.edu.elements.Input;
 
-public class InputLayer extends Layer {
+public class InputLayer extends NetworkElementLayer {
 
   private Input[] inputs;
   

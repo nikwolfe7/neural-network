@@ -2,7 +2,7 @@ package mlsp.cs.cmu.edu.structure;
 
 import mlsp.cs.cmu.edu.elements.Output;
 
-public class OutputLayer extends Layer {
+public class OutputLayer extends NetworkElementLayer {
 
   private Output[] outputs;
   

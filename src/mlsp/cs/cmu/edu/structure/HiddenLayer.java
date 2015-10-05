@@ -2,7 +2,7 @@ package mlsp.cs.cmu.edu.structure;
 
 import mlsp.cs.cmu.edu.elements.Neuron;
 
-public class HiddenLayer extends Layer {
+public class HiddenLayer extends NetworkElementLayer {
   
   private Neuron[] neurons;
 
