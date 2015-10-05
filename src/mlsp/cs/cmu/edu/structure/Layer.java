@@ -4,11 +4,11 @@ import mlsp.cs.cmu.edu.elements.Edge;
 import mlsp.cs.cmu.edu.elements.NetworkElement;
 import mlsp.cs.cmu.edu.elements.Neuron;
 
-public class Layer {
+public abstract class Layer {
 
-  private Neuron[] elements;
+  private NetworkElement[] elements;
   
-  public Layer(Neuron... elements) {
+  public Layer(NetworkElement... elements) {
     this.elements = elements;
   }
   
@@ -32,18 +32,20 @@ public class Layer {
     return output;
   }
   
-  public Neuron[] getLayerElements() {
+  public NetworkElement[] getLayerElements() {
     return elements;
   }
   
-  public Edge[] connect(Layer layer) {
-    Neuron[] nextLayer = layer.getLayerElements();
+  public NetworkElement[] connect(Layer layer) {
+    NetworkElement[] nextLayer = layer.getLayerElements();
     Edge[] weightMatrix = new Edge[elements.length * nextLayer.length];
     int ncols = nextLayer.length;
     for (int row = 0; row < elements.length; row++) {
       for (int col = 0; col < nextLayer.length; col++) {
         Edge e = new Edge();
-        connectElements(elements[row], e, nextLayer[col]);
+        Neuron in = (Neuron) elements[row];
+        Neuron out = (Neuron) nextLayer[col];
+        connectElements(in, e, out);
         weightMatrix[row * ncols + col] = e;
       }
     }
