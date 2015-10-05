@@ -9,7 +9,7 @@ package mlsp.cs.cmu.edu.elements;
 public class Output extends Neuron {
 
   private volatile double outputTruthValue = 0;
-  
+
   @Override
   public void backward() {
     /* output derivative is (O - T) */
