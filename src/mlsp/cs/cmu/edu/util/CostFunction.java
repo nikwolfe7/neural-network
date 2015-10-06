@@ -10,4 +10,18 @@ public class CostFunction {
 		return output - truth;
 	}
 
+	public static double meanSqError(double[] prediction, double[] truth) {
+		double sum = 0;
+		for(int i = 0; i < prediction.length; i++)
+			sum += meanSqError(prediction[i], truth[i]);
+		return sum;
+	}
+	
+	public static double meanSqErrorDerivative(double[] prediction, double[] truth) {
+		double sum = 0;
+		for(int i = 0; i < prediction.length; i++)
+			sum += meanSqErrorDerivative(prediction[i], truth[i]);
+		return sum;
+	}
+
 }
