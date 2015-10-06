@@ -1,6 +1,5 @@
 package mlsp.cs.cmu.edu.factory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mlsp.cs.cmu.edu.elements.Input;

@@ -3,7 +3,7 @@ package mlsp.cs.cmu.edu.elements;
 public class Input extends Neuron {
 
   private double inputValue = 0;
-  private double output;
+  private double output = 0;
   
   public void setInputValue(double val) {
     inputValue = val;
