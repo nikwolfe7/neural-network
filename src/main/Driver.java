@@ -71,7 +71,7 @@ public class Driver {
     output = new Output[] { o };
     
     /* Do training */
-    List<double[]> data = getData(100000);
+    List<double[]> data = getData(10000);
     DecimalFormat f = new DecimalFormat("##.#####");
     double prevSqError = Double.POSITIVE_INFINITY;
     while(true) {
@@ -111,13 +111,13 @@ public class Driver {
     List<double[]> data = new ArrayList<double[]>();
     for(int i = 0; i < numInstances; i++) {
       double x, y, z;
-      x = r.nextInt(100);
-      y = r.nextInt(100); 
+      x = r.nextInt(10);
+      y = r.nextInt(10); 
       z = x + y;
       double[] d = new double[] {z, x, y};
       data.add(d);
     }
-    data = standardize(data, 1, 2);
+//    data = standardize(data, 1, 2);
     return data;
   }
   

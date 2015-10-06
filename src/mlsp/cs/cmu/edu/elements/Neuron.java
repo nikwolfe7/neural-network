@@ -13,7 +13,7 @@ public class Neuron implements NetworkElement {
   private double errorTerm;
   
   public Neuron() {
-    this.setOutput(0);
+    this.output = 0;
     this.errorTerm = 0;
     this.incoming = new ArrayList<NetworkElement>();
     this.outgoing = new ArrayList<NetworkElement>();
