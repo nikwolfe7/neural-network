@@ -8,9 +8,8 @@ import java.util.Random;
 import mlsp.cs.cmu.edu.elements.Bias;
 import mlsp.cs.cmu.edu.elements.Edge;
 import mlsp.cs.cmu.edu.elements.Input;
+import mlsp.cs.cmu.edu.elements.LinearOutput;
 import mlsp.cs.cmu.edu.elements.Output;
-import mlsp.cs.cmu.edu.factory.NetworkElementAbstractFactory;
-import mlsp.cs.cmu.edu.factory.SimpleNetworkElementAbstractFactory;
 import mlsp.cs.cmu.edu.elements.NetworkElement;
 import mlsp.cs.cmu.edu.elements.Neuron;
 import mlsp.cs.cmu.edu.util.DNNUtils;
@@ -26,16 +25,15 @@ public class Driver {
   static Output[] output;
   
   static DecimalFormat f = new DecimalFormat("##.####");
-  static NetworkElementAbstractFactory factory = new SimpleNetworkElementAbstractFactory();
   
   public static void main(String[] args) {
-    Input x1 = factory.getInputElement();
-    Input x2 = factory.getInputElement();
-    Neuron z1 = factory.getNeuronElement();
-    Neuron z2 = factory.getNeuronElement();
-    Neuron z3 = factory.getNeuronElement();
-    Bias b = factory.getBiasElement();
-    Output o = factory.getOutputElement();
+    Input x1 = new Input();
+    Input x2 = new Input();
+    Neuron z1 = new Neuron();
+    Neuron z2 = new Neuron();
+    Neuron z3 = new Neuron();
+    Bias b = new Bias();
+    Output o = new LinearOutput();
 
     Edge e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13;
     e1 = new Edge();
@@ -75,7 +73,7 @@ public class Driver {
     output = new Output[] { o };
     
     /* Do training */
-    List<double[]> data = getData(10000);
+    List<double[]> data = getData(1000000);
     DecimalFormat f = new DecimalFormat("##.#####");
     double prevSqError = Double.POSITIVE_INFINITY;
     while(true) {
@@ -85,7 +83,7 @@ public class Driver {
       double diff = Math.abs(prevSqError - squaredError);
       System.out.println("Squared Error: " + f.format(squaredError) + "\tDiff: " + diff);
       prevSqError = squaredError;
-      if(diff < 1.0e-5) 
+      if(diff < 0.001) 
         break;
     }
     

@@ -1,8 +1,10 @@
 package mlsp.cs.cmu.edu.elements;
 
+import mlsp.cs.cmu.edu.util.CostFunction;
+
 /**
  * Output based on derivative of mean
- * squared error: 0.5 * (T - O) ^ 2
+ * squared error: 0.5 * (O - T) ^ 2
  * 
  * @author nwolfe
  */
@@ -25,8 +27,8 @@ public class LinearOutput extends Output {
 
 	@Override
 	public double derivative() {
-		/* output derivative is (T - O) */
-		return getOutput() - outputTruthValue;
+		/* output derivative is (O - T) */
+		return CostFunction.meanSqErrorDerivative(getOutput(), outputTruthValue);
 	}
 
 	public void setTruthValue(double val) {

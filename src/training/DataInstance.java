@@ -5,6 +5,13 @@ public class DataInstance {
   private double[] input;
   private double[] output;
  
+  /**
+   * Assumes we have truth first from left to right, then input value 
+   * 
+   * @param inputDimension
+   * @param outputDimension
+   * @param vector
+   */
   public DataInstance(int inputDimension, int outputDimension, double[] vector) {
     this.input = new double[inputDimension];
     this.output = new double[outputDimension];

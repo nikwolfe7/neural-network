@@ -1,12 +1,15 @@
 package mlsp.cs.cmu.edu.elements;
 
+import mlsp.cs.cmu.edu.util.CostFunction;
+
 public class Output extends Neuron {
 
 	private volatile double outputTruthValue = 0;
 
 	@Override
 	public void backward() {
-		double errorTerm = (getOutput() - outputTruthValue) * derivative();
+		double mseDerivative = CostFunction.meanSqErrorDerivative(getOutput(), outputTruthValue);
+		double errorTerm = mseDerivative * derivative();
 		setErrorTerm(errorTerm);
 	}
 
