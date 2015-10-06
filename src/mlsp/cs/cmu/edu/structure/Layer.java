@@ -1,5 +1,7 @@
 package mlsp.cs.cmu.edu.structure;
 
+import mlsp.cs.cmu.edu.elements.NetworkElement;
+
 public interface Layer {
 	
 	public void forward();
@@ -11,5 +13,9 @@ public interface Layer {
 	public double[] getOutput();
 
 	public double[] getErrorTerm();
+	
+	public NetworkElement[] getElements();
+	
+	public int size();
 
 }

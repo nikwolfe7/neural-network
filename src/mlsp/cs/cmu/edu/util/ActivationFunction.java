@@ -20,7 +20,7 @@ public class ActivationFunction {
 	}
 
 	public static double getLinearActivationDerivative(double output) {
-		return output;
+		return 0;
 	}
 
 	public static double getTanhActivationDerivative(double output) {

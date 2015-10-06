@@ -6,11 +6,11 @@ import mlsp.cs.cmu.edu.util.CostFunction;
  * Output based on derivative of mean
  * squared error: 0.5 * (O - T) ^ 2
  * 
+ * Output derivative is (O - T) 
+ * 
  * @author nwolfe
  */
 public class LinearOutput extends Output {
-
-	private volatile double outputTruthValue = 0;
 
 	@Override
 	public void forward() {
@@ -27,12 +27,7 @@ public class LinearOutput extends Output {
 
 	@Override
 	public double derivative() {
-		/* output derivative is (O - T) */
-		return CostFunction.meanSqErrorDerivative(getOutput(), outputTruthValue);
-	}
-
-	public void setTruthValue(double val) {
-		outputTruthValue = val;
+		return CostFunction.meanSqErrorDerivative(getOutput(), getTruthValue());
 	}
 
 }

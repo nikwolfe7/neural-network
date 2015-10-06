@@ -12,14 +12,14 @@ public class NetworkElementLayer implements Layer {
 
 	@Override
 	public void forward() {
-		for(NetworkElement e : elements)
-			e.forward();
+		for(int i = 0; i < elements.length; i++)
+			elements[i].forward();
 	}
 		
 	@Override
 	public void backward() {
-		for(NetworkElement e : elements)
-			e.backward();
+		for(int i = 0; i < elements.length; i++)
+			elements[i].backward();
 	}
 
 	@Override
@@ -49,5 +49,14 @@ public class NetworkElementLayer implements Layer {
 		return e;
 	}
 
+	@Override
+	public NetworkElement[] getElements() {
+		return elements;
+	}
+
+	@Override
+	public int size() {
+		return elements.length;
+	}
 
 }
