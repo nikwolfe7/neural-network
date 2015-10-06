@@ -9,7 +9,7 @@ public class NetworkElementLayer implements Layer {
 	public NetworkElementLayer(NetworkElement... elements) {
 		this.elements = elements;
 	}
-
+	
 	@Override
 	public void forward() {
 		for(int i = 0; i < elements.length; i++)
@@ -58,5 +58,13 @@ public class NetworkElementLayer implements Layer {
 	public int size() {
 		return elements.length;
 	}
+
+  @Override
+  public void addNetworkElements(NetworkElement... newElements) {
+    NetworkElement[] newElementArray = new NetworkElement[elements.length + newElements.length];
+    System.arraycopy(elements, 0, newElementArray, 0, elements.length);
+    System.arraycopy(newElements, 0, newElementArray, elements.length, newElements.length);
+    elements = newElementArray;
+  }
 
 }

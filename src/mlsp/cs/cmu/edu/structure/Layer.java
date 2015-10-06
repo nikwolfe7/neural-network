@@ -16,6 +16,8 @@ public interface Layer {
 	
 	public NetworkElement[] getElements();
 	
+	public void addNetworkElements(NetworkElement... elements);
+	
 	public int size();
 
 }
