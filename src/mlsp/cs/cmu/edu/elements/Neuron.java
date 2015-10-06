@@ -32,7 +32,7 @@ public class Neuron implements NetworkElement {
     double sum = 0;
     for(NetworkElement e : getIncomingElements())
       sum += e.getOutput();
-    setOutput(ActivationFunction.getActivation(sum));
+    setOutput(ActivationFunction.sigmoid(sum));
   }
 
   @Override
@@ -50,7 +50,7 @@ public class Neuron implements NetworkElement {
 
   @Override
   public double derivative() {
-    return ActivationFunction.getActivationDerivative(getOutput());
+    return ActivationFunction.getSigmoidActivationDerivative(getOutput());
   }
 
   @Override

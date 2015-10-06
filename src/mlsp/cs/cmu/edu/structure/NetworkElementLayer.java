@@ -43,7 +43,7 @@ public abstract class NetworkElementLayer {
    * @param networkElementLayer
    * @return
    */
-  public NetworkElement[] connectLayer(NetworkElementLayer networkElementLayer) {
+  public Edge[] connectLayer(NetworkElementLayer networkElementLayer) {
     NetworkElement[] nextLayer = networkElementLayer.getLayerElements();
     Edge[] weightMatrix = new Edge[elements.length * nextLayer.length];
     int ncols = nextLayer.length;

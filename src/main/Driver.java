@@ -8,9 +8,12 @@ import java.util.Random;
 import mlsp.cs.cmu.edu.elements.Bias;
 import mlsp.cs.cmu.edu.elements.Edge;
 import mlsp.cs.cmu.edu.elements.Input;
+import mlsp.cs.cmu.edu.elements.Output;
+import mlsp.cs.cmu.edu.factory.NetworkElementAbstractFactory;
+import mlsp.cs.cmu.edu.factory.SimpleNetworkElementAbstractFactory;
 import mlsp.cs.cmu.edu.elements.NetworkElement;
 import mlsp.cs.cmu.edu.elements.Neuron;
-import mlsp.cs.cmu.edu.elements.Output;
+import mlsp.cs.cmu.edu.util.DNNUtils;
 
 public class Driver {
 
@@ -23,15 +26,16 @@ public class Driver {
   static Output[] output;
   
   static DecimalFormat f = new DecimalFormat("##.####");
+  static NetworkElementAbstractFactory factory = new SimpleNetworkElementAbstractFactory();
   
   public static void main(String[] args) {
-    Input x1 = new Input();
-    Input x2 = new Input();
-    Neuron z1 = new Neuron();
-    Neuron z2 = new Neuron();
-    Neuron z3 = new Neuron();
-    Bias b = new Bias();
-    Output o = new Output();
+    Input x1 = factory.getInputElement();
+    Input x2 = factory.getInputElement();
+    Neuron z1 = factory.getNeuronElement();
+    Neuron z2 = factory.getNeuronElement();
+    Neuron z3 = factory.getNeuronElement();
+    Bias b = factory.getBiasElement();
+    Output o = factory.getOutputElement();
 
     Edge e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13;
     e1 = new Edge();
@@ -117,60 +121,10 @@ public class Driver {
       double[] d = new double[] {z, x, y};
       data.add(d);
     }
-//    data = standardize(data, 1, 2);
+    data = DNNUtils.standardize(data, 1, 2);
     return data;
   }
   
-  private static List<double[]> standardize(List<double[]> data, int... cols) {
-    for (int k = 0; k < cols.length; k++) {
-      int j = cols[k];
-      double sum = 0;
-      double N = data.size();
-      /* calc avg */
-      for (int i = 0; i < data.size(); i++) {
-        double[] x = data.get(i);
-        sum += x[j];
-      }
-      double mean = sum / N;
-      /* calc variance */
-      sum = 0;
-      for (int i = 0; i < data.size(); i++) {
-        double[] x = data.get(i);
-        sum += Math.pow((x[j] - mean), 2);
-      }
-      double variance = sum / (N-1);
-      double stdev = Math.sqrt(variance);
-      for (int i = 0; i < data.size(); i++) {
-        double[] x = data.get(i);
-        x[j] = (x[j] - mean) / stdev;
-        data.set(i, x);
-      }
-    }
-    return data;
-  }
-  
-  private static List<double[]> normalize(List<double[]> data, double low, double high, int... cols) {
-    for (int k = 0; k < cols.length; k++) {
-      int j = cols[k];
-      double min = data.get(0)[j];
-      double max = min;
-      /* calc range */
-      for (int i = 0; i < data.size(); i++) {
-        double[] x = data.get(i);
-        min = Math.min(min, x[j]);
-        max = Math.max(max, x[j]);
-      }
-      /* normalize on range */
-      for (int i = 0; i < data.size(); i++) {
-        double[] x = data.get(i);
-        x[j] = (x[j] - min) / (max - min);
-        x[j] = x[j] * (high - low) + low;
-        data.set(i, x);
-      }
-    }
-    return data;
-  }
-
   private static void connect(Neuron in, Edge w, Neuron out) {
     w.setIncomingElement(in);
     w.setOutgoingElement(out);
