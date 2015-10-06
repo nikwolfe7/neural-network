@@ -5,11 +5,11 @@ import java.util.List;
 
 import mlsp.cs.cmu.edu.structure.Layer;
 
-public class SimpleDNNFactory implements DNNFactory {
+public class FeedForwardDNNFactory implements DNNFactory {
 
 	private NeuralNetwork network;
 	
-	public SimpleDNNFactory(int inputDimension, int outputDimension, int... hiddenLayerDimenions) {
+	public FeedForwardDNNFactory(int inputDimension, int outputDimension, int... hiddenLayerDimenions) {
 		List<Layer> layers = new ArrayList<>();
 	}
 	

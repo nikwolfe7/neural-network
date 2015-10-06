@@ -10,7 +10,6 @@ import mlsp.cs.cmu.edu.util.CostFunction;
 import training.DataInstance;
 
 /**
- * 
  * @author Nikolas Wolfe
  */
 public class NeuralNetwork {
