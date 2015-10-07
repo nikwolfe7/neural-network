@@ -23,7 +23,7 @@ import training.XORGenerator;
 public class FactoryDriver {
 
   static DataInstanceGenerator dataGen = new CosineGenerator();
-  static DNNFactory factory = new SimpleFeedForwardDNNFactory(dataGen.getNewDataInstance(), 15, 10, 5);
+  static DNNFactory factory = new SimpleFeedForwardDNNFactory(dataGen.getNewDataInstance(), 150);
   
   public static void main(String[] args) {
     
