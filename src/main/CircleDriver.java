@@ -19,7 +19,7 @@ public class CircleDriver {
     DataReader reader = new ReadCSVTrainingData();
     List<DataInstance> training = reader.getDataFromFile("circle-train.csv", 2, 1);
     List<DataInstance> testing = reader.getDataFromFile("circle-test.csv", 2, 1);
-    DNNFactory factory = new LinearOutputFeedForwardDNNFactory(training.get(0), 100);
+    DNNFactory factory = new ThresholdOutputFFDNNFactory(training.get(0), 8, 4);
     
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
