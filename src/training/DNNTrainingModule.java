@@ -12,7 +12,7 @@ public class DNNTrainingModule {
 	private NeuralNetwork net;
 	private List<DataInstance> training;
 	private List<DataInstance> testing;
-	private double minDifference = 1.0e-5;
+	private double minDifference = 10e-5;
 	private DecimalFormat f = new DecimalFormat("##.#####");
 	private boolean outputOn = false;
 
