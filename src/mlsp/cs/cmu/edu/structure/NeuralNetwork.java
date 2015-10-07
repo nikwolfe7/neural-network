@@ -1,9 +1,12 @@
 package mlsp.cs.cmu.edu.structure;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import mlsp.cs.cmu.edu.elements.Edge;
 import mlsp.cs.cmu.edu.elements.Input;
 import mlsp.cs.cmu.edu.elements.NetworkElement;
+import mlsp.cs.cmu.edu.elements.Neuron;
 import mlsp.cs.cmu.edu.elements.Output;
 import mlsp.cs.cmu.edu.util.CostFunction;
 import training.DataInstance;
@@ -17,9 +20,9 @@ public class NeuralNetwork {
 	private Output[] outputLayer;
 	private List<Layer> layers;
 	/* These are the indices of the weight matrices */
-	private int[] weightMatrixLayers;
+	private List<Integer> weightMatrixLayers;
 	/* These are the indices of the neuron layers */
-	private int[] hiddenNeuronLayers;
+	private List<Integer> hiddenNeuronLayers;
 	/**
 	 * We will infer that the first and last layers
 	 * are the input and output layers, respectively
@@ -28,6 +31,8 @@ public class NeuralNetwork {
 	 */
 	public NeuralNetwork(List<Layer> layers) {
 		this.layers = layers;
+		this.weightMatrixLayers = new ArrayList<>();
+		this.hiddenNeuronLayers = new ArrayList<>();
 		Layer input = layers.get(0);
 		Layer output = layers.get(layers.size()-1);
 		this.inputLayer = new Input[input.size()];
@@ -36,6 +41,17 @@ public class NeuralNetwork {
 			inputLayer[i] = (Input) input.getElements()[i];
 		for(int i = 0; i < output.size(); i++) 
 			outputLayer[i] = (Output) output.getElements()[i];
+		for(int i = 1; i < layers.size() - 1; i++) {
+			for(NetworkElement e : layers.get(i).getElements()) {
+				if( e instanceof Edge ) {
+					weightMatrixLayers.add(i);
+					break;
+				} else if ( e instanceof Neuron ) {
+					hiddenNeuronLayers.add(i);
+					break;
+				}
+			}
+		}
 	}
 
 	/**************************************************
@@ -75,6 +91,20 @@ public class NeuralNetwork {
 	
 	public NetworkElement[] getLayerElements(int layer) {
 		return layers.get(layer).getElements();
+	}
+	
+	public int[] getWeightMatrixIndices() {
+		int[] weights = new int[weightMatrixLayers.size()];
+		for(int i = 0; i < weights.length; i++)
+			weights[i] = weightMatrixLayers.get(i);
+		return weights;
+	}
+	
+	public int[] getHiddenLayerIndices() {
+		int[] neurons = new int[hiddenNeuronLayers.size()];
+		for(int i = 0; i < neurons.length; i++)
+			neurons[i] = hiddenNeuronLayers.get(i);
+		return neurons;
 	}
 
 	/***************************************************

@@ -22,7 +22,7 @@ import training.XORGenerator;
 public class FactoryDriver {
 
   static DataInstanceGenerator dataGen = new XORGenerator();
-  static DNNFactory factory = new ThresholdOutputFFDNNFactory(dataGen.getNewDataInstance(), 10);
+  static DNNFactory factory = new ThresholdOutputFFDNNFactory(dataGen.getNewDataInstance(), 20);
   
   public static void main(String[] args) {
     
@@ -30,8 +30,8 @@ public class FactoryDriver {
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
 
     /* Generate training and test data */
-    List<DataInstance> training = getData(10000);
-    List<DataInstance> testing = getData(10);
+    List<DataInstance> training = getData(100000);
+    List<DataInstance> testing = getData(100);
 
     /* Train the network */
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);

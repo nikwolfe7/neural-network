@@ -9,7 +9,7 @@ public class Edge implements NetworkElement {
   /* Initializations from Tom Mitchell */
   private double initLow = -0.05;
   private double initHigh = 0.05;
-  private double learningRate = 0.1;
+  private double learningRate = 0.01;
 
   public Edge() {
     this.output = 0;
