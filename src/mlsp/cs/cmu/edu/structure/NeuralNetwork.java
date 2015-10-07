@@ -16,6 +16,10 @@ public class NeuralNetwork {
 	private Input[] inputLayer;
 	private Output[] outputLayer;
 	private List<Layer> layers;
+	/* These are the indices of the weight matrices */
+	private int[] weightMatrixLayers;
+	/* These are the indices of the neuron layers */
+	private int[] hiddenNeuronLayers;
 	/**
 	 * We will infer that the first and last layers
 	 * are the input and output layers, respectively
