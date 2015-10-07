@@ -12,7 +12,6 @@ import mlsp.cs.cmu.edu.elements.LinearOutput;
 import mlsp.cs.cmu.edu.elements.Output;
 import mlsp.cs.cmu.edu.elements.NetworkElement;
 import mlsp.cs.cmu.edu.elements.Neuron;
-import mlsp.cs.cmu.edu.util.DNNUtils;
 
 public class Driver {
 

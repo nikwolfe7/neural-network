@@ -3,16 +3,20 @@ package mlsp.cs.cmu.edu.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import training.DataInstance;
 import mlsp.cs.cmu.edu.elements.*;
 import mlsp.cs.cmu.edu.structure.*;
 
-public class FeedForwardDNNFactory implements DNNFactory {
+public abstract class FeedForwardDNNFactory implements DNNFactory {
 
 	private NeuralNetwork network;
-	private NetworkElementAbstractFactory factory = new LinearOutputAbstractFactoryImpl();
+	private NetworkElementAbstractFactory factory;
 
-	public FeedForwardDNNFactory(int inputDimension, int outputDimension, int... hiddenLayerDimenions) {
-		List<Layer> layers = new ArrayList<>();
+	public FeedForwardDNNFactory(DataInstance example, int... hiddenLayerDimenions) {
+	  this.factory = getNetworkElementFactory();
+		int inputDimension = example.getInputDimension();
+		int outputDimension = example.getOutputDimension();
+	  List<Layer> layers = new ArrayList<>();
 
 		/* Input layer */
 		Input[] inputs = new Input[inputDimension];
@@ -54,7 +58,7 @@ public class FeedForwardDNNFactory implements DNNFactory {
 		this.network = new NeuralNetwork(layers);
 	}
 
-	private Layer connect(Layer prev, Layer hiddenLayer) {
+  private Layer connect(Layer prev, Layer hiddenLayer) {
 		int rows, cols;
 		rows = hiddenLayer.size();
 		cols = prev.size();
@@ -83,11 +87,6 @@ public class FeedForwardDNNFactory implements DNNFactory {
 		return network;
 	}
 	
-	public static void main(String[] args) {
-		DNNFactory factory = new FeedForwardDNNFactory(2, 1, 3);
-		NeuralNetwork dnn = factory.getInitializedNeuralNetwork();
-		double[] val = dnn.getPrediction(new double[] {1, 2});
-		System.out.println("Pred: " + val[0]);
-	}
+	protected abstract NetworkElementAbstractFactory getNetworkElementFactory();
 
 }

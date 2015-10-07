@@ -1,10 +1,11 @@
-package mlsp.cs.cmu.edu.util;
+package training;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
-import mlsp.cs.cmu.edu.factory.NeuralNetwork;
-import training.DataInstance;
+import mlsp.cs.cmu.edu.structure.NeuralNetwork;
+import mlsp.cs.cmu.edu.util.CostFunction;
+import mlsp.cs.cmu.edu.util.DNNUtils;
 
 public class DNNTrainingModule {
 

@@ -1,11 +1,10 @@
-package mlsp.cs.cmu.edu.factory;
+package mlsp.cs.cmu.edu.structure;
 
 import java.util.List;
 
 import mlsp.cs.cmu.edu.elements.Input;
 import mlsp.cs.cmu.edu.elements.NetworkElement;
 import mlsp.cs.cmu.edu.elements.Output;
-import mlsp.cs.cmu.edu.structure.Layer;
 import mlsp.cs.cmu.edu.util.CostFunction;
 import training.DataInstance;
 
