@@ -2,15 +2,15 @@ package mlsp.cs.cmu.edu.dnn.factory;
 
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 
-public class SimpleFeedForwardDNNFactory extends FeedForwardDNNFactory {
+public class SigmoidNetworkFFDNNFactory extends FeedForwardDNNAbstractFactory {
 
-  public SimpleFeedForwardDNNFactory(DataInstance example, int... hiddenLayerDimenions) {
+  public SigmoidNetworkFFDNNFactory(DataInstance example, int... hiddenLayerDimenions) {
     super(example, hiddenLayerDimenions);
   }
 
   @Override
   protected NetworkElementAbstractFactory getNetworkElementFactory() {
-    return new SigmoidNetworkAbstractFactoryImpl();
+    return new SigmoidNetworkFactory();
   }
 
 }

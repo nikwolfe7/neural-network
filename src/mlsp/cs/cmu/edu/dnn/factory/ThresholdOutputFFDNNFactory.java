@@ -2,7 +2,7 @@ package mlsp.cs.cmu.edu.dnn.factory;
 
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 
-public class ThresholdOutputFFDNNFactory extends FeedForwardDNNFactory {
+public class ThresholdOutputFFDNNFactory extends FeedForwardDNNAbstractFactory {
 
   public ThresholdOutputFFDNNFactory(DataInstance example, int... hiddenLayerDimenions) {
     super(example, hiddenLayerDimenions);
@@ -10,7 +10,7 @@ public class ThresholdOutputFFDNNFactory extends FeedForwardDNNFactory {
 
   @Override
   protected NetworkElementAbstractFactory getNetworkElementFactory() {
-    return new ThresholdOutputAbstractFactoryImpl();
+    return new ThresholdOutputFactory();
   }
 
 }

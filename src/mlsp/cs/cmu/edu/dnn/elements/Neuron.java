@@ -50,7 +50,7 @@ public class Neuron implements NetworkElement {
 
   @Override
   public double derivative() {
-    return ActivationFunction.getSigmoidActivationDerivative(getOutput());
+    return ActivationFunction.sigmoidDerivative(getOutput());
   }
 
   @Override

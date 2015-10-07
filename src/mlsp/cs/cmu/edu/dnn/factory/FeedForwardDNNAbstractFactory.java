@@ -7,12 +7,12 @@ import mlsp.cs.cmu.edu.dnn.elements.*;
 import mlsp.cs.cmu.edu.dnn.structure.*;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 
-public abstract class FeedForwardDNNFactory implements DNNFactory {
+public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 
 	private NeuralNetwork network;
 	private NetworkElementAbstractFactory factory;
 
-	public FeedForwardDNNFactory(DataInstance example, int... hiddenLayerDimenions) {
+	public FeedForwardDNNAbstractFactory(DataInstance example, int... hiddenLayerDimenions) {
 	  this.factory = getNetworkElementFactory();
 		int inputDimension = example.getInputDimension();
 		int outputDimension = example.getOutputDimension();

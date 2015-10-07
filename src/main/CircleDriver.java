@@ -3,7 +3,7 @@ package main;
 import java.util.List;
 
 import mlsp.cs.cmu.edu.dnn.factory.DNNFactory;
-import mlsp.cs.cmu.edu.dnn.factory.SimpleFeedForwardDNNFactory;
+import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
@@ -17,7 +17,7 @@ public class CircleDriver {
     DataReader reader = new ReadCSVTrainingData();
     List<DataInstance> training = reader.getDataFromFile("circle-train.csv", 2, 1);
     List<DataInstance> testing = reader.getDataFromFile("circle-test.csv", 2, 1);
-    DNNFactory factory = new SimpleFeedForwardDNNFactory(training.get(0), 16, 8);
+    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), 16, 8);
     
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);

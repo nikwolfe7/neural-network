@@ -6,7 +6,7 @@ import mlsp.cs.cmu.edu.dnn.elements.Input;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
 
-public class SigmoidNetworkAbstractFactoryImpl implements NetworkElementAbstractFactory {
+public class SigmoidNetworkFactory implements NetworkElementAbstractFactory {
 
   @Override
   public Input getNewInput() {

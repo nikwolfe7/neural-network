@@ -4,7 +4,7 @@ import mlsp.cs.cmu.edu.dnn.elements.Output;
 import mlsp.cs.cmu.edu.dnn.elements.SimpleThresholdOutput;
 import mlsp.cs.cmu.edu.dnn.elements.ThresholdOutput;
 
-public class ThresholdOutputAbstractFactoryImpl extends SigmoidNetworkAbstractFactoryImpl {
+public class ThresholdOutputFactory extends SigmoidNetworkFactory {
 
   @Override
   public Output getNewOutput() {

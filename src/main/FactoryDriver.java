@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Random;
 
 import mlsp.cs.cmu.edu.dnn.factory.DNNFactory;
-import mlsp.cs.cmu.edu.dnn.factory.FeedForwardDNNFactory;
-import mlsp.cs.cmu.edu.dnn.factory.LinearOutputFeedForwardDNNFactory;
-import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkAbstractFactoryImpl;
-import mlsp.cs.cmu.edu.dnn.factory.SimpleFeedForwardDNNFactory;
+import mlsp.cs.cmu.edu.dnn.factory.FeedForwardDNNAbstractFactory;
+import mlsp.cs.cmu.edu.dnn.factory.LinearOutputFFDNNFactory;
+import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFactory;
+import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.ThresholdOutputFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.training.AdditionDataGenerator;
@@ -23,7 +23,7 @@ import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
 public class FactoryDriver {
 
   static DataInstanceGenerator dataGen = new CosineGenerator();
-  static DNNFactory factory = new SimpleFeedForwardDNNFactory(dataGen.getNewDataInstance(), 150);
+  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(), 150);
   
   public static void main(String[] args) {
     

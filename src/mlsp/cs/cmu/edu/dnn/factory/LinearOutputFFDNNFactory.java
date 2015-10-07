@@ -2,15 +2,15 @@ package mlsp.cs.cmu.edu.dnn.factory;
 
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 
-public class LinearOutputFeedForwardDNNFactory extends FeedForwardDNNFactory {
+public class LinearOutputFFDNNFactory extends FeedForwardDNNAbstractFactory {
 
-  public LinearOutputFeedForwardDNNFactory(DataInstance example, int... hiddenLayerDimenions) {
+  public LinearOutputFFDNNFactory(DataInstance example, int... hiddenLayerDimenions) {
     super(example, hiddenLayerDimenions);
   }
 
   @Override
   protected NetworkElementAbstractFactory getNetworkElementFactory() {
-    return new LinearOutputAbstractFactoryImpl();
+    return new LinearOutputFactory();
   }
 
 }
