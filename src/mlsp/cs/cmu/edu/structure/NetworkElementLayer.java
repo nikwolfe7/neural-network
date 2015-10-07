@@ -1,22 +1,49 @@
 package mlsp.cs.cmu.edu.structure;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 import mlsp.cs.cmu.edu.elements.NetworkElement;
 
 public class NetworkElementLayer implements Layer {
 
 	private NetworkElement[] elements;
+	private int blockSize = 25;
+	private LinkedBlockingQueue<NetworkElement> queue;
 
 	public NetworkElementLayer(NetworkElement... elements) {
-		this.elements = elements;
+	  this.queue = new LinkedBlockingQueue<NetworkElement>();
+	  this.elements = elements;
 	}
 	
 	@Override
 	public void forward() {
 		for(int i = 0; i < elements.length; i++)
-			elements[i].forward();
+			dispatchThreadsOnForward(elements[i], i);
 	}
 		
-	@Override
+  private void dispatchThreadsOnForward(NetworkElement networkElement, int i) {
+    try {
+      queue.put(networkElement);
+      if (i % blockSize == 1 || i > (elements.length - blockSize - 1)) {
+        new Runnable() {
+          @Override
+          public void run() {
+            while(!queue.isEmpty()) {
+              try {
+                queue.take().forward();
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            }
+          }
+        }.run();
+      }
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
 	public void backward() {
 		for(int i = 0; i < elements.length; i++)
 			elements[i].backward();

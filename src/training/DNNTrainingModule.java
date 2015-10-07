@@ -42,6 +42,7 @@ public class DNNTrainingModule {
 	public void doTrainNetworkUntilConvergence() {
 		double prevSumSqError = Double.POSITIVE_INFINITY;
 		int countDown = numMinIterations;
+		int epoch = 0;
 		/* Train on training data */
 		while (true) {
 			double sumOfSquaredErrors = 0;
@@ -50,7 +51,7 @@ public class DNNTrainingModule {
 			/* Should never be negative */
 			double diff = prevSumSqError - sumOfSquaredErrors; 
 			if (outputOn)
-				System.out.println("Squared Error: " + f.format(sumOfSquaredErrors) + "\tDiff: " + diff);
+				System.out.println("Epoch " + (epoch++) + " | Squared Error: " + f.format(sumOfSquaredErrors) + "\tDiff: " + diff);
 			prevSumSqError = sumOfSquaredErrors;
 			if (diff <= minDifference) {
 			  if(countDown-- <= 0)
