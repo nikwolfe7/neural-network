@@ -11,8 +11,8 @@ public class ActivationFunction {
 	}
 
 	public static double tanh(double input) {
-		return 1.0 * Math.tanh(input);
-		// return 1.7159 * Math.tanh(0.66666666666 * input);
+//		return 1.0 * Math.tanh(input);
+		 return 1.7159 * Math.tanh(0.66666666666 * input);
 	}
 
 	public static double sigmoidDerivative(double output) {
@@ -24,8 +24,8 @@ public class ActivationFunction {
 	}
 
 	public static double tanhDerivative(double output) {
-		return 1.0 / Math.pow(Math.cosh(output), 2);
-		// return 1.14393333333 / Math.pow(Math.cosh(0.66666666666 * output), 2);
+//		return 1.0 / Math.pow(Math.cosh(output), 2);
+		 return 1.14393333333 / Math.pow(Math.cosh(0.66666666666 * output), 2);
 	}
 
 }

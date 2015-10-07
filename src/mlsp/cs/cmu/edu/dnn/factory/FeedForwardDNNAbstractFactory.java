@@ -13,10 +13,10 @@ public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 	private NetworkElementAbstractFactory factory;
 
 	public FeedForwardDNNAbstractFactory(DataInstance example, int... hiddenLayerDimenions) {
-	  this.factory = getNetworkElementFactory();
+		this.factory = getNetworkElementFactory();
 		int inputDimension = example.getInputDimension();
 		int outputDimension = example.getOutputDimension();
-	  List<Layer> layers = new ArrayList<>();
+		List<Layer> layers = new ArrayList<>();
 
 		/* Input layer */
 		Input[] inputs = new Input[inputDimension];
@@ -44,7 +44,7 @@ public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 			layers.add(weightMatrix);
 			layers.add(hiddenLayer);
 		}
-		
+
 		/* Output layer */
 		Output[] outputs = new Output[outputDimension];
 		for (int i = 0; i < outputs.length; i++) {
@@ -69,7 +69,7 @@ public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 			for (int col = 0; col < cols; col++) {
 				Neuron out = (Neuron) hiddenLayer.getElements()[row];
 				Neuron in = (Neuron) prev.getElements()[col];
-				Edge w = new Edge();
+				Edge w = factory.getNewEdge();
 				attachElements(in, w, out);
 				weightMatrix[row * cols + col] = w;
 			}
