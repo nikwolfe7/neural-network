@@ -34,19 +34,23 @@ public class NeuralNetwork {
 		this.weightMatrixLayers = new ArrayList<>();
 		this.hiddenNeuronLayers = new ArrayList<>();
 		Layer input = layers.get(0);
-		Layer output = layers.get(layers.size()-1);
+		Layer output = layers.get(layers.size() - 1);
 		this.inputLayer = new Input[input.size()];
 		this.outputLayer = new Output[output.size()];
-		for(int i = 0; i < input.size(); i++) 
-			inputLayer[i] = (Input) input.getElements()[i];
-		for(int i = 0; i < output.size(); i++) 
-			outputLayer[i] = (Output) output.getElements()[i];
-		for(int i = 1; i < layers.size() - 1; i++) {
-			for(NetworkElement e : layers.get(i).getElements()) {
-				if( e instanceof Edge ) {
+		for (int i = 0; i < input.size(); i++) {
+			if (input.getElements()[i] instanceof Input)
+				inputLayer[i] = (Input) input.getElements()[i];
+		}
+		for (int i = 0; i < output.size(); i++) {
+			if (output.getElements()[i] instanceof Output)
+				outputLayer[i] = (Output) output.getElements()[i];
+		}
+		for (int i = 1; i < layers.size() - 1; i++) {
+			for (NetworkElement e : layers.get(i).getElements()) {
+				if (e instanceof Edge) {
 					weightMatrixLayers.add(i);
 					break;
-				} else if ( e instanceof Neuron ) {
+				} else if (e instanceof Neuron) {
 					hiddenNeuronLayers.add(i);
 					break;
 				}

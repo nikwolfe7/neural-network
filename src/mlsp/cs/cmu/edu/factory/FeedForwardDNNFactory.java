@@ -37,8 +37,7 @@ public abstract class FeedForwardDNNFactory implements DNNFactory {
 			}
 			Layer hiddenLayer = new NetworkElementLayer(hl);
 			/* Add the Bias */
-			Bias b = factory.getNewBias();
-			hiddenLayer.addNetworkElements(b);
+			prev.addNetworkElements(factory.getNewBias());
 			/* Connect the layers */
 			Layer weightMatrix = connect(prev, hiddenLayer);
 			/* Load them into the network stack */
@@ -52,7 +51,8 @@ public abstract class FeedForwardDNNFactory implements DNNFactory {
 			outputs[i] = factory.getNewOutput();
 		}
 		Layer outputLayer = new NetworkElementLayer(outputs);
-		Layer weightMatrix = connect(layers.get(layers.size()-1), outputLayer);
+		Layer prev = layers.get(layers.size() - 1);
+		Layer weightMatrix = connect(prev, outputLayer);
 		layers.add(weightMatrix);
 		layers.add(outputLayer);
 		this.network = new NeuralNetwork(layers);
