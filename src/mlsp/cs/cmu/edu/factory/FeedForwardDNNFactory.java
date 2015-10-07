@@ -52,6 +52,8 @@ public abstract class FeedForwardDNNFactory implements DNNFactory {
 		}
 		Layer outputLayer = new NetworkElementLayer(outputs);
 		Layer prev = layers.get(layers.size() - 1);
+		/* output layer bias... */
+		prev.addNetworkElements(factory.getNewBias());
 		Layer weightMatrix = connect(prev, outputLayer);
 		layers.add(weightMatrix);
 		layers.add(outputLayer);
