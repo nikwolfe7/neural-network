@@ -119,7 +119,6 @@ public class Driver {
       double[] d = new double[] {z, x, y};
       data.add(d);
     }
-    data = DNNUtils.standardize(data, 1, 2);
     return data;
   }
   

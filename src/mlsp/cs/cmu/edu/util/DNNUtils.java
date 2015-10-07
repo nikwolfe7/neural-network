@@ -44,9 +44,68 @@ public class DNNUtils {
 		return instances;
 	}
 
-	public static List<double[]> normalize(List<double[]> data, double low, double high, int... cols) {
-		for (int k = 0; k < cols.length; k++) {
-			int j = cols[k];
+	public static List<DataInstance> minMaxRangeNormalizeInputs(List<DataInstance> data, double low, double high) {
+		List<double[]> inputs = new ArrayList<>();
+		for(int i = 0; i < data.size(); i++)
+			inputs.add(data.get(i).getInputVector());
+		inputs = minMaxRangeNormalize(inputs, low, high);
+		for(int i = 0; i < data.size(); i++) 
+			data.get(i).replaceInputVector(inputs.get(i));
+		return data;
+	}
+	
+	public static List<DataInstance> minMaxRangeNormalizeOutputs(List<DataInstance> data, double low, double high) {
+		List<double[]> outputs = new ArrayList<>();
+		for(int i = 0; i < data.size(); i++)
+			outputs.add(data.get(i).getOutputTruthValue());
+		outputs = minMaxRangeNormalize(outputs, low, high);
+		for(int i = 0; i < data.size(); i++) 
+			data.get(i).replaceOutputTruthValue(outputs.get(i));
+		return data;
+	}
+
+	public static List<DataInstance> zScoreNormalizeInputs(List<DataInstance> data) {
+		List<double[]> inputs = new ArrayList<>();
+		for(int i = 0; i < data.size(); i++)
+			inputs.add(data.get(i).getInputVector());
+		inputs = zScoreNormalize(inputs);
+		for(int i = 0; i < data.size(); i++) 
+			data.get(i).replaceInputVector(inputs.get(i));
+		return data;
+	}
+	
+	public static List<DataInstance> zScoreNormalizeOutputs(List<DataInstance> data) {
+		List<double[]> outputs = new ArrayList<>();
+		for(int i = 0; i < data.size(); i++)
+			outputs.add(data.get(i).getOutputTruthValue());
+		outputs = zScoreNormalize(outputs);
+		for(int i = 0; i < data.size(); i++) 
+			data.get(i).replaceOutputTruthValue(outputs.get(i));
+		return data;
+	}
+	
+	public static List<DataInstance> meanSubtractNormalizeInputs(List<DataInstance> data) {
+		List<double[]> inputs = new ArrayList<>();
+		for(int i = 0; i < data.size(); i++)
+			inputs.add(data.get(i).getInputVector());
+		inputs = zScoreNormalize(inputs);
+		for(int i = 0; i < data.size(); i++) 
+			data.get(i).replaceInputVector(inputs.get(i));
+		return data;
+	}
+	
+	public static List<DataInstance> meanSubtractNormalizeOutputs(List<DataInstance> data) {
+		List<double[]> outputs = new ArrayList<>();
+		for(int i = 0; i < data.size(); i++)
+			outputs.add(data.get(i).getOutputTruthValue());
+		outputs = meanSubtractNormalize(outputs);
+		for(int i = 0; i < data.size(); i++) 
+			data.get(i).replaceOutputTruthValue(outputs.get(i));
+		return data;
+	}
+	
+	public static List<double[]> minMaxRangeNormalize(List<double[]> data, double low, double high) {
+		for (int j = 0; j < data.get(0).length; j++) {
 			double min = data.get(0)[j];
 			double max = min;
 			/* calc range */
@@ -65,10 +124,9 @@ public class DNNUtils {
 		}
 		return data;
 	}
-
-	public static List<double[]> standardize(List<double[]> data, int... cols) {
-		for (int k = 0; k < cols.length; k++) {
-			int j = cols[k];
+	
+	public static List<double[]> zScoreNormalize(List<double[]> data) {
+		for (int j = 0; j < data.get(0).length; j++) {
 			double sum = 0;
 			double N = data.size();
 			/* calc avg */
@@ -88,6 +146,25 @@ public class DNNUtils {
 			for (int i = 0; i < data.size(); i++) {
 				double[] x = data.get(i);
 				x[j] = (x[j] - mean) / stdev;
+				data.set(i, x);
+			}
+		}
+		return data;
+	}
+	
+	public static List<double[]> meanSubtractNormalize(List<double[]> data) {
+		for (int j = 0; j < data.get(0).length; j++) {
+			double sum = 0;
+			double N = data.size();
+			/* calc avg */
+			for (int i = 0; i < data.size(); i++) {
+				double[] x = data.get(i);
+				sum += x[j];
+			}
+			double mean = sum / N;
+			for (int i = 0; i < data.size(); i++) {
+				double[] x = data.get(i);
+				x[j] = (x[j] - mean);
 				data.set(i, x);
 			}
 		}
