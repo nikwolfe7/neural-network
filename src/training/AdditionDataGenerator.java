@@ -6,7 +6,7 @@ public class AdditionDataGenerator implements DataInstanceGenerator {
 
   private Random rnd;
   private int numVals;
-  private int bound = 100;
+  private int bound = 10;
   
   public AdditionDataGenerator(int numValues) {
     this.rnd = new Random();

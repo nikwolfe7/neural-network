@@ -6,6 +6,7 @@ import java.util.Random;
 
 import mlsp.cs.cmu.edu.factory.DNNFactory;
 import mlsp.cs.cmu.edu.factory.FeedForwardDNNFactory;
+import mlsp.cs.cmu.edu.factory.LinearOutputFeedForwardDNNFactory;
 import mlsp.cs.cmu.edu.factory.SimpleFeedForwardDNNFactory;
 import mlsp.cs.cmu.edu.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.util.DNNUtils;
@@ -21,7 +22,7 @@ public class FactoryDriver {
   public static void main(String[] args) {
 
     /* Build the network */
-    DNNFactory factory = new SimpleFeedForwardDNNFactory(dataGen.getNewDataInstance(), 4);
+    DNNFactory factory = new LinearOutputFeedForwardDNNFactory(dataGen.getNewDataInstance(), 4, 3);
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
 
     /* Generate training and test data */
