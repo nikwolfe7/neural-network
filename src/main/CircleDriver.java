@@ -11,6 +11,7 @@ import mlsp.cs.cmu.edu.factory.LinearOutputFeedForwardDNNFactory;
 import mlsp.cs.cmu.edu.factory.SimpleFeedForwardDNNFactory;
 import mlsp.cs.cmu.edu.factory.ThresholdOutputFFDNNFactory;
 import mlsp.cs.cmu.edu.structure.NeuralNetwork;
+import mlsp.cs.cmu.edu.util.DNNUtils;
 
 public class CircleDriver {
   
@@ -19,7 +20,9 @@ public class CircleDriver {
     DataReader reader = new ReadCSVTrainingData();
     List<DataInstance> training = reader.getDataFromFile("circle-train.csv", 2, 1);
     List<DataInstance> testing = reader.getDataFromFile("circle-test.csv", 2, 1);
-    DNNFactory factory = new ThresholdOutputFFDNNFactory(training.get(0), 8, 4);
+    DNNFactory factory = new SimpleFeedForwardDNNFactory(training.get(0), 16, 8);
+//    training = DNNUtils.minMaxRangeNormalizeInputs(training, 0, 1);
+//    testing = DNNUtils.minMaxRangeNormalizeInputs(testing, 0, 1);
     
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
