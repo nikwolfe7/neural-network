@@ -14,7 +14,7 @@ import training.DataInstance;
 public class FactoryDriver {
 
 	public static void main(String[] args) {
-		DNNFactory factory = new FeedForwardDNNFactory(2, 1, 4, 3);
+		DNNFactory factory = new FeedForwardDNNFactory(2, 1, 20, 10);
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		List<DataInstance> training = getData(10000);
 		List<DataInstance> testing = getData(100);
@@ -36,7 +36,7 @@ public class FactoryDriver {
 	      DataInstance instance = new DataInstance(2, 1, d);
 	      data.add(instance);
 	    }
-	    data = DNNUtils.zScoreNormalizeInputs(data);
+//	    data = DNNUtils.zScoreNormalizeInputs(data);
 	    return data;
 	  }
 }
