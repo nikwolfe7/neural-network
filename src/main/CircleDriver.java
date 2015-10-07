@@ -2,13 +2,13 @@ package main;
 
 import java.util.List;
 
-import training.DNNTrainingModule;
-import training.DataInstance;
-import training.DataReader;
-import training.ReadCSVTrainingData;
-import mlsp.cs.cmu.edu.factory.DNNFactory;
-import mlsp.cs.cmu.edu.factory.SimpleFeedForwardDNNFactory;
-import mlsp.cs.cmu.edu.structure.NeuralNetwork;
+import mlsp.cs.cmu.edu.dnn.factory.DNNFactory;
+import mlsp.cs.cmu.edu.dnn.factory.SimpleFeedForwardDNNFactory;
+import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
+import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
+import mlsp.cs.cmu.edu.dnn.training.DataInstance;
+import mlsp.cs.cmu.edu.dnn.training.DataReader;
+import mlsp.cs.cmu.edu.dnn.training.ReadCSVTrainingData;
 
 public class CircleDriver {
   
