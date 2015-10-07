@@ -13,6 +13,7 @@ import mlsp.cs.cmu.edu.factory.ThresholdOutputFFDNNFactory;
 import mlsp.cs.cmu.edu.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.util.DNNUtils;
 import training.AdditionDataGenerator;
+import training.CosineGenerator;
 import training.DNNTrainingModule;
 import training.DataInstance;
 import training.DataInstanceGenerator;
@@ -21,8 +22,8 @@ import training.XORGenerator;
 
 public class FactoryDriver {
 
-  static DataInstanceGenerator dataGen = new MultipleOutputAddition();
-  static DNNFactory factory = new LinearOutputFeedForwardDNNFactory(dataGen.getNewDataInstance(), 4);
+  static DataInstanceGenerator dataGen = new CosineGenerator();
+  static DNNFactory factory = new SimpleFeedForwardDNNFactory(dataGen.getNewDataInstance(), 15, 10, 5);
   
   public static void main(String[] args) {
     
@@ -30,8 +31,8 @@ public class FactoryDriver {
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
 
     /* Generate training and test data */
-    List<DataInstance> training = getData(1000000);
-    List<DataInstance> testing = getData(100);
+    List<DataInstance> training = getData(100000);
+    List<DataInstance> testing = getData(10);
 
     /* Train the network */
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
