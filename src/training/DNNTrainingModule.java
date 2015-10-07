@@ -12,7 +12,8 @@ public class DNNTrainingModule {
 	private NeuralNetwork net;
 	private List<DataInstance> training;
 	private List<DataInstance> testing;
-	private double minDifference = 10e-5;
+	private double minDifference = 0.01;
+	private int numMinIterations = 5;
 	private DecimalFormat f = new DecimalFormat("##.#####");
 	private boolean outputOn = false;
 
@@ -40,6 +41,7 @@ public class DNNTrainingModule {
 	
 	public void doTrainNetworkUntilConvergence() {
 		double prevSumSqError = Double.POSITIVE_INFINITY;
+		int countDown = numMinIterations;
 		/* Train on training data */
 		while (true) {
 			double sumOfSquaredErrors = 0;
@@ -50,8 +52,11 @@ public class DNNTrainingModule {
 			if (outputOn)
 				System.out.println("Squared Error: " + f.format(sumOfSquaredErrors) + "\tDiff: " + diff);
 			prevSumSqError = sumOfSquaredErrors;
-			if (diff <= minDifference)
-				break;
+			if (diff <= minDifference) {
+			  if(countDown-- <= 0)
+			    break;
+			}
+				
 		}
 		/* Converged! Now test... */
 		System.out.println(
