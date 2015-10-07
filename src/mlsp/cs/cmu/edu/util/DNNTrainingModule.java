@@ -38,13 +38,14 @@ public class DNNTrainingModule {
 	}
 	
 	public void doTrainNetworkUntilConvergence() {
-		double sumOfSquaredErrors = 0;
 		double prevSumSqError = Double.POSITIVE_INFINITY;
 		/* Train on training data */
 		while (true) {
+			double sumOfSquaredErrors = 0;
 			for (DataInstance x : training)
 				sumOfSquaredErrors += net.trainOnInstance(x);
-			double diff = prevSumSqError - sumOfSquaredErrors;
+			/* Should never be negative */
+			double diff = prevSumSqError - sumOfSquaredErrors; 
 			if (outputOn)
 				System.out.println("Squared Error: " + f.format(sumOfSquaredErrors) + "\tDiff: " + diff);
 			prevSumSqError = sumOfSquaredErrors;
@@ -65,12 +66,13 @@ public class DNNTrainingModule {
 			double[] output = net.getPrediction(x.getInputVector());
 			double[] truth = x.getOutputTruthValue();
 			double error = CostFunction.meanSqError(output, truth);
-			System.out.println("Network:\t" + DNNUtils.printVector(output));
-			System.out.println("Truth  :\t" + DNNUtils.printVector(truth));
+			System.out.println("Network:  " + DNNUtils.printVector(output));
+			System.out.println("Truth  :  " + DNNUtils.printVector(truth));
+			System.out.println("-----------------------------------------");
 			sumOfSquaredErrors += error;
 		}
-		System.out.println("Squared Error:\t" + f.format(sumOfSquaredErrors));
-		System.out.println("Mean Sq Error:\t" + f.format(sumOfSquaredErrors/testing.size()));
+		System.out.println("Squared Error:  " + f.format(sumOfSquaredErrors));
+		System.out.println("Mean Sq Error:  " + f.format(sumOfSquaredErrors/testing.size()));
 	}
 
 }

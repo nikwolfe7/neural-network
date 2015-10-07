@@ -9,10 +9,9 @@ import mlsp.cs.cmu.edu.structure.*;
 public class FeedForwardDNNFactory implements DNNFactory {
 
 	private NeuralNetwork network;
-	private NetworkElementAbstractFactory factory;
+	private NetworkElementAbstractFactory factory = new LinearOutputAbstractFactoryImpl();
 
 	public FeedForwardDNNFactory(int inputDimension, int outputDimension, int... hiddenLayerDimenions) {
-		this.factory = new SigmoidNetworkAbstractFactoryImpl();
 		List<Layer> layers = new ArrayList<>();
 
 		/* Input layer */

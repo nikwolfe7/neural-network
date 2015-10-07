@@ -14,11 +14,12 @@ import training.DataInstance;
 public class FactoryDriver {
 
 	public static void main(String[] args) {
-		DNNFactory factory = new FeedForwardDNNFactory(2, 1, 3);
+		DNNFactory factory = new FeedForwardDNNFactory(2, 1, 4, 3);
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		List<DataInstance> training = getData(10000);
 		List<DataInstance> testing = getData(100);
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
+		trainingModule.setOutputOn(true);
 		trainingModule.doTrainNetworkUntilConvergence();
 		trainingModule.doTestTrainedNetwork();
 	}
@@ -33,6 +34,7 @@ public class FactoryDriver {
 	      z = x + y;
 	      double[] d = new double[] {z, x, y};
 	      DataInstance instance = new DataInstance(2, 1, d);
+	      data.add(instance);
 	    }
 	    data = DNNUtils.zScoreNormalizeInputs(data);
 	    return data;
