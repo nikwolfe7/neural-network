@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import mlsp.cs.cmu.edu.elements.Bias;
-import mlsp.cs.cmu.edu.elements.Edge;
-import mlsp.cs.cmu.edu.elements.Input;
-import mlsp.cs.cmu.edu.elements.LinearOutput;
-import mlsp.cs.cmu.edu.elements.Output;
-import mlsp.cs.cmu.edu.elements.NetworkElement;
-import mlsp.cs.cmu.edu.elements.Neuron;
+import mlsp.cs.cmu.edu.dnn.elements.Bias;
+import mlsp.cs.cmu.edu.dnn.elements.Edge;
+import mlsp.cs.cmu.edu.dnn.elements.Input;
+import mlsp.cs.cmu.edu.dnn.elements.LinearOutput;
+import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
+import mlsp.cs.cmu.edu.dnn.elements.Neuron;
+import mlsp.cs.cmu.edu.dnn.elements.Output;
 
 public class Driver {
 
