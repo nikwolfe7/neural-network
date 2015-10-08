@@ -14,8 +14,8 @@ public class ShapesDriver {
 
 	public static void main(String[] args) {
 //		CircleDriver();
-		DiamondDriver();
-//		RShapeDriver();
+//		DiamondDriver();
+		RShapeDriver();
 //		DRShapeDriver();
 	}
 	
@@ -49,7 +49,7 @@ public class ShapesDriver {
 		DataReader reader = new ReadCSVTrainingData();
 	    List<DataInstance> training = reader.getDataFromFile("RShape-train.csv", 2, 1);
 	    List<DataInstance> testing = reader.getDataFromFile("RShape-test.csv", 2, 1);
-	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), 16, 16);
+	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), 32, 16);
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
