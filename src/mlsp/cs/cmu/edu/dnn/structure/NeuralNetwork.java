@@ -10,6 +10,7 @@ import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 import mlsp.cs.cmu.edu.dnn.util.CostFunction;
+import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 /**
  * @author Nikolas Wolfe
@@ -23,6 +24,7 @@ public class NeuralNetwork {
 	private List<Integer> weightMatrixLayers;
 	/* These are the indices of the neuron layers */
 	private List<Integer> hiddenNeuronLayers;
+	/* This produces a "clean" prediction, i.e. smoothed or formatted */
 	/**
 	 * We will infer that the first and last layers
 	 * are the input and output layers, respectively
@@ -72,6 +74,21 @@ public class NeuralNetwork {
 		for(int i = 0; i < layers.size(); i++) 
 			layers.get(i).forward();
 		return layers.get(layers.size()-1).getOutput();
+	}
+	
+	/**************************************************
+	 * FOR RUNNING: returns some smoothed output, i.e. 
+	 * text or a smoothed number, or something like that. 
+	 * 
+	 * The recipient of this output knows how to cast
+	 * it appropriately
+	 * 
+	 * @param inputVector
+	 * @return
+	 */
+	public Object getSmoothedPrediction(double[] inputVector, OutputAdapter adapter) {
+		double[] output = getPrediction(inputVector);
+		return adapter.getSmoothedPrediction(output);
 	}
 	
 	/**************************************************

@@ -9,7 +9,7 @@ public class ThresholdOutputFactory extends SigmoidNetworkFactory {
   @Override
   public Output getNewOutput() {
     return new ThresholdOutput();
-//    return new SimpleThresholdOutput();
+    // return new SimpleThresholdOutput();
   }
 
 }

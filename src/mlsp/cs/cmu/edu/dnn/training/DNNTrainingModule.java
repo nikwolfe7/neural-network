@@ -16,6 +16,7 @@ public class DNNTrainingModule {
 	private int numMinIterations = 5;
 	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
+	private OutputAdapter adapter = new DefaultAdapter();
 
 	public DNNTrainingModule(NeuralNetwork network, List<DataInstance> trainingSet, List<DataInstance> testingSet) {
 		this.net = network;
@@ -40,6 +41,7 @@ public class DNNTrainingModule {
 	}
 	
 	public void doTrainNetworkUntilConvergence() {
+		System.out.println("Now training network...");
 		double prevSumSqError = Double.POSITIVE_INFINITY;
 		int countDown = numMinIterations;
 		int epoch = 0;
@@ -73,9 +75,11 @@ public class DNNTrainingModule {
 			double[] output = net.getPrediction(x.getInputVector());
 			double[] truth = x.getOutputTruthValue();
 			double error = CostFunction.meanSqError(output, truth);
-			System.out.println("Network:  " + DNNUtils.printVector(output));
-			System.out.println("Truth  :  " + DNNUtils.printVector(truth));
-			System.out.println("-----------------------------------------");
+			if(outputOn) {
+				System.out.println("Network:  " + DNNUtils.printVector(output));
+				System.out.println("Truth  :  " + DNNUtils.printVector(truth));
+				System.out.println("-----------------------------------------");
+			}
 			sumOfSquaredErrors += error;
 		}
 		System.out.println("Squared Error:  " + f.format(sumOfSquaredErrors));

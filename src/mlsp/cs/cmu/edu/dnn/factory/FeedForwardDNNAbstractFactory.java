@@ -6,6 +6,7 @@ import java.util.List;
 import mlsp.cs.cmu.edu.dnn.elements.*;
 import mlsp.cs.cmu.edu.dnn.structure.*;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
+import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 
@@ -57,6 +58,7 @@ public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 		Layer weightMatrix = connect(prev, outputLayer);
 		layers.add(weightMatrix);
 		layers.add(outputLayer);
+		/* build the network object */
 		this.network = new NeuralNetwork(layers);
 	}
 
