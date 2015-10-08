@@ -14,7 +14,7 @@ public class DNNTrainingModule {
 	private List<DataInstance> testing;
 	private double minDifference = 0.01;
 	private int numMinIterations = 5;
-	private DecimalFormat f = new DecimalFormat("##.#####");
+	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
 
 	public DNNTrainingModule(NeuralNetwork network, List<DataInstance> trainingSet, List<DataInstance> testingSet) {
