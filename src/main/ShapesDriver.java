@@ -16,16 +16,31 @@ public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = false;
+  static int[][] configs = new int[][] {
+		{2,2},
+		{4,4},
+		{8,8},
+		{16,16},
+		{32,32},
+	};
+	static int[][] configs2 = new int[][] {
+		{1},
+		{2},
+		{3},
+		{4},
+		{5},
+		{6},
+		{7},
+	};
 
 	public static void main(String[] args) {
-		int[][] configs = new int[][] {
-			{2,2},
-			{4,4},
-			{8,8},
-			{16,16},
-			{32,32},
-		};
 		for(int[] config : configs) {
+			CircleDriver(config);
+			DiamondDriver(config);
+			RShapeDriver(config);
+			DRShapeDriver(config);
+		}
+		for(int[] config : configs2) {
 			CircleDriver(config);
 			DiamondDriver(config);
 			RShapeDriver(config);
