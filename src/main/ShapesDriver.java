@@ -17,6 +17,7 @@ public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = false;
+  
   static int[][] configs = new int[][] {
 		{2,2},
 		{4,4},

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
@@ -89,6 +90,7 @@ public class DNNTrainingModule {
 		System.out.println("Now testing network...");
 		double sumOfSquaredErrors = 0;
 		double numCorrect = 0;
+		List<String> results = new ArrayList<>();
 		for(DataInstance x : testing) {
 			double[] output = (double[]) net.getSmoothedPrediction(x.getInputVector(), adapter);
 			double[] truth = x.getOutputTruthValue();
@@ -104,19 +106,22 @@ public class DNNTrainingModule {
 				System.out.println("-----------------------------------------");
 			}
 			
-			if(printResults) {
-				try {
-					FileWriter writer = new FileWriter(outputFile, true);
-					double[] vec = new double[x.getInputDimension() + x.getOutputDimension()];
-					System.arraycopy(output, 0, vec, 0, output.length);
-					System.arraycopy(x.getInputVector(), 0, vec, output.length, x.getInputDimension());
-					writer.write(DNNUtils.csvPrintVector(vec) + "\n");
-					writer.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			if (printResults) {
+				double[] vec = new double[x.getInputDimension() + x.getOutputDimension()];
+				System.arraycopy(output, 0, vec, 0, output.length);
+				System.arraycopy(x.getInputVector(), 0, vec, output.length, x.getInputDimension());
+				results.add(DNNUtils.csvPrintVector(vec) + "\n");
 			}
-			
+		}
+		if(printResults) {
+			try {
+				FileWriter writer = new FileWriter(outputFile, true);
+				for(String s : results) 
+					writer.write(s);
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		System.out.println("Squared Error:  " + f.format(sumOfSquaredErrors));
 		System.out.println("Mean Sq Error:  " + f.format(sumOfSquaredErrors/testing.size()));
