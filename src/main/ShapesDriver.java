@@ -9,8 +9,13 @@ import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 import mlsp.cs.cmu.edu.dnn.training.DataReader;
 import mlsp.cs.cmu.edu.dnn.training.ReadCSVTrainingData;
+import mlsp.cs.cmu.edu.dnn.util.BinaryThresholdOutput;
+import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public class ShapesDriver {
+  
+  static OutputAdapter adapter = new BinaryThresholdOutput();
+  static boolean printOut = false;
 
 	public static void main(String[] args) {
 		int[][] configs = new int[][] {
@@ -29,7 +34,7 @@ public class ShapesDriver {
 	}
 	
 	public static void CircleDriver(int... structure) {
-		System.out.println("\n---------------------------------------------------");
+		System.out.println("---------------------------------------------------");
 		System.out.println("                    Circle                         ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
@@ -39,13 +44,14 @@ public class ShapesDriver {
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-//	    trainingModule.setOutputOn(true);
+	    trainingModule.setOutputOn(printOut);
+	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}
 	
 	public static void DiamondDriver(int... structure) {
-		System.out.println("\n---------------------------------------------------");
+		System.out.println("---------------------------------------------------");
 		System.out.println("                    Diamond                        ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
@@ -55,13 +61,14 @@ public class ShapesDriver {
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-//	    trainingModule.setOutputOn(true);
+	    trainingModule.setOutputOn(printOut);
+	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}
 	
 	public static void RShapeDriver(int... structure) {
-		System.out.println("\n---------------------------------------------------");
+		System.out.println("---------------------------------------------------");
 		System.out.println("                    RShape                         ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
@@ -72,12 +79,13 @@ public class ShapesDriver {
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 //	    trainingModule.setOutputOn(true);
+	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}
 	
 	public static void DRShapeDriver(int... structure) {
-		System.out.println("\n---------------------------------------------------");
+		System.out.println("---------------------------------------------------");
 		System.out.println("                    DRShape                        ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
@@ -87,7 +95,8 @@ public class ShapesDriver {
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-//	    trainingModule.setOutputOn(true);
+	    trainingModule.setOutputOn(printOut);
+	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}

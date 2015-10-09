@@ -6,6 +6,8 @@ import java.util.List;
 import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.util.CostFunction;
 import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
+import mlsp.cs.cmu.edu.dnn.util.DefaultOutput;
+import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public class DNNTrainingModule {
 
@@ -16,13 +18,17 @@ public class DNNTrainingModule {
 	private int numMinIterations = 5;
 	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
-	private OutputAdapter adapter = new DefaultAdapter();
+	private OutputAdapter adapter = new DefaultOutput();
 
 	public DNNTrainingModule(NeuralNetwork network, List<DataInstance> trainingSet, List<DataInstance> testingSet) {
 		this.net = network;
 		this.training = trainingSet;
 		this.testing = testingSet;
 	}
+	
+  public void setOutputAdapter(OutputAdapter adapter) {
+    this.adapter = adapter;
+  }
 	
 	public NeuralNetwork getNetwork() {
 		return net;
@@ -71,9 +77,12 @@ public class DNNTrainingModule {
 	public void doTestTrainedNetwork() {
 		System.out.println("Now testing network...");
 		double sumOfSquaredErrors = 0;
+		double numCorrect = 0;
 		for(DataInstance x : testing) {
-			double[] output = net.getPrediction(x.getInputVector());
+			double[] output = (double[]) net.getSmoothedPrediction(x.getInputVector(), adapter);
 			double[] truth = x.getOutputTruthValue();
+			if(adapter.isCorrect(output, truth))
+			  numCorrect++;
 			double error = CostFunction.meanSqError(output, truth);
 			if(outputOn) {
 				System.out.println("Network:  " + DNNUtils.printVector(output));
@@ -84,6 +93,7 @@ public class DNNTrainingModule {
 		}
 		System.out.println("Squared Error:  " + f.format(sumOfSquaredErrors));
 		System.out.println("Mean Sq Error:  " + f.format(sumOfSquaredErrors/testing.size()));
+		System.out.println("     Accuracy:  " + f.format(numCorrect/testing.size()));
 	}
 
 }
