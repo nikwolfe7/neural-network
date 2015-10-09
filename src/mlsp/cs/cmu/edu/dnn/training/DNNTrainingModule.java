@@ -1,5 +1,8 @@
 package mlsp.cs.cmu.edu.dnn.training;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -18,17 +21,20 @@ public class DNNTrainingModule {
 	private int numMinIterations = 5;
 	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
+	private boolean printResults = false;
+	private File outputFile; 
 	private OutputAdapter adapter = new DefaultOutput();
 
 	public DNNTrainingModule(NeuralNetwork network, List<DataInstance> trainingSet, List<DataInstance> testingSet) {
 		this.net = network;
 		this.training = trainingSet;
 		this.testing = testingSet;
+		this.outputFile = new File("testing-output.csv");
 	}
 	
-  public void setOutputAdapter(OutputAdapter adapter) {
-    this.adapter = adapter;
-  }
+	public void setOutputAdapter(OutputAdapter adapter) {
+		this.adapter = adapter;
+	}
 	
 	public NeuralNetwork getNetwork() {
 		return net;
@@ -44,6 +50,11 @@ public class DNNTrainingModule {
 
 	public void setOutputOn(boolean b) {
 		outputOn = b;
+	}
+	
+	public void setPrintResults(boolean b, String fileName) {
+		if(printResults = b) 
+			this.outputFile = new File(fileName);
 	}
 	
 	public void doTrainNetworkUntilConvergence() {
@@ -81,15 +92,31 @@ public class DNNTrainingModule {
 		for(DataInstance x : testing) {
 			double[] output = (double[]) net.getSmoothedPrediction(x.getInputVector(), adapter);
 			double[] truth = x.getOutputTruthValue();
+			double error = CostFunction.meanSqError(output, truth);
+			sumOfSquaredErrors += error;
+			
 			if(adapter.isCorrect(output, truth))
 			  numCorrect++;
-			double error = CostFunction.meanSqError(output, truth);
+			
 			if(outputOn) {
 				System.out.println("Network:  " + DNNUtils.printVector(output));
 				System.out.println("Truth  :  " + DNNUtils.printVector(truth));
 				System.out.println("-----------------------------------------");
 			}
-			sumOfSquaredErrors += error;
+			
+			if(printResults) {
+				try {
+					FileWriter writer = new FileWriter(outputFile, true);
+					double[] vec = new double[x.getInputDimension() + x.getOutputDimension()];
+					System.arraycopy(output, 0, vec, 0, output.length);
+					System.arraycopy(x.getInputVector(), 0, vec, output.length, x.getInputDimension());
+					writer.write(DNNUtils.csvPrintVector(vec) + "\n");
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
 		}
 		System.out.println("Squared Error:  " + f.format(sumOfSquaredErrors));
 		System.out.println("Mean Sq Error:  " + f.format(sumOfSquaredErrors/testing.size()));

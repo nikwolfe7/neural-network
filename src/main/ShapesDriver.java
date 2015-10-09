@@ -10,6 +10,7 @@ import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 import mlsp.cs.cmu.edu.dnn.training.DataReader;
 import mlsp.cs.cmu.edu.dnn.training.ReadCSVTrainingData;
 import mlsp.cs.cmu.edu.dnn.util.BinaryThresholdOutput;
+import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
 import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public class ShapesDriver {
@@ -61,6 +62,7 @@ public class ShapesDriver {
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
+	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}
@@ -78,6 +80,7 @@ public class ShapesDriver {
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
+	    trainingModule.setPrintResults(true, "diamond-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}
@@ -93,8 +96,9 @@ public class ShapesDriver {
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-//	    trainingModule.setOutputOn(true);
+	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
+	    trainingModule.setPrintResults(true, "RShape-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}
@@ -112,6 +116,7 @@ public class ShapesDriver {
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
+	    trainingModule.setPrintResults(true, "DRShape-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}

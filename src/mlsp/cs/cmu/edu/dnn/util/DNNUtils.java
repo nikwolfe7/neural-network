@@ -19,6 +19,21 @@ public class DNNUtils {
 			sb.append(f.format(d) + "  ");
 		return sb.toString() + "]";
 	}
+	
+	public static String csvPrintVector(double[] vec) {
+		DecimalFormat f = new DecimalFormat("###.###");
+		String[] arr = new String[vec.length];
+		for(int i = 0; i < vec.length; i++) 
+			arr[i] = f.format(vec[i]);
+		return String.join(",", arr);
+	}
+	
+	public static String joinNumbers(int[] vec, String delim) {
+		String[] arr = new String[vec.length];
+		for(int i = 0; i < vec.length; i++) 
+			arr[i] = "" + vec[i];
+		return String.join(delim, arr);
+	}
 
 	public static List<double[]> getInputsFromFile(String file) throws IOException {
 		List<double[]> inputs = new ArrayList<double[]>();
