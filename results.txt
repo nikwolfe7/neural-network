@@ -1,0 +1,576 @@
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  19578
+Mean Sq Error:  0.196
+     Accuracy:  0.608
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  13417
+Mean Sq Error:  0.134
+     Accuracy:  0.732
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  16497.5
+Mean Sq Error:  0.165
+     Accuracy:  0.67
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  26874.5
+Mean Sq Error:  0.269
+     Accuracy:  0.463
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  1417
+Mean Sq Error:  0.014
+     Accuracy:  0.972
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  1446.5
+Mean Sq Error:  0.014
+     Accuracy:  0.971
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  5670
+Mean Sq Error:  0.057
+     Accuracy:  0.887
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  15167.5
+Mean Sq Error:  0.152
+     Accuracy:  0.697
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  108
+Mean Sq Error:  0.001
+     Accuracy:  0.998
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  571.5
+Mean Sq Error:  0.006
+     Accuracy:  0.989
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  896
+Mean Sq Error:  0.009
+     Accuracy:  0.982
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  12033
+Mean Sq Error:  0.12
+     Accuracy:  0.759
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  307.5
+Mean Sq Error:  0.003
+     Accuracy:  0.994
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  102
+Mean Sq Error:  0.001
+     Accuracy:  0.998
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  1953.5
+Mean Sq Error:  0.02
+     Accuracy:  0.961
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  12354.5
+Mean Sq Error:  0.124
+     Accuracy:  0.753
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  486.5
+Mean Sq Error:  0.005
+     Accuracy:  0.99
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  108.5
+Mean Sq Error:  0.001
+     Accuracy:  0.998
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  583.5
+Mean Sq Error:  0.006
+     Accuracy:  0.988
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  6849.5
+Mean Sq Error:  0.068
+     Accuracy:  0.863
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  19578
+Mean Sq Error:  0.196
+     Accuracy:  0.608
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  19333.5
+Mean Sq Error:  0.193
+     Accuracy:  0.613
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  21191
+Mean Sq Error:  0.212
+     Accuracy:  0.576
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  26781.5
+Mean Sq Error:  0.268
+     Accuracy:  0.464
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  12521
+Mean Sq Error:  0.125
+     Accuracy:  0.75
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  25786.5
+Mean Sq Error:  0.258
+     Accuracy:  0.484
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  17810.5
+Mean Sq Error:  0.178
+     Accuracy:  0.644
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  29905
+Mean Sq Error:  0.299
+     Accuracy:  0.402
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  94.5
+Mean Sq Error:  0.001
+     Accuracy:  0.998
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  13890
+Mean Sq Error:  0.139
+     Accuracy:  0.722
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  10609
+Mean Sq Error:  0.106
+     Accuracy:  0.788
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  15033.5
+Mean Sq Error:  0.15
+     Accuracy:  0.699
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  11968.5
+Mean Sq Error:  0.12
+     Accuracy:  0.761
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  13062.5
+Mean Sq Error:  0.131
+     Accuracy:  0.739
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  10159
+Mean Sq Error:  0.102
+     Accuracy:  0.797
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  15526
+Mean Sq Error:  0.155
+     Accuracy:  0.689
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  129.5
+Mean Sq Error:  0.001
+     Accuracy:  0.997
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  1075
+Mean Sq Error:  0.011
+     Accuracy:  0.979
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  15732
+Mean Sq Error:  0.157
+     Accuracy:  0.685
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  14895
+Mean Sq Error:  0.149
+     Accuracy:  0.702
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  76.5
+Mean Sq Error:  0.001
+     Accuracy:  0.998
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  1108.5
+Mean Sq Error:  0.011
+     Accuracy:  0.978
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  10392
+Mean Sq Error:  0.104
+     Accuracy:  0.792
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  13051
+Mean Sq Error:  0.131
+     Accuracy:  0.739
+---------------------------------------------------
+                    Circle                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  147
+Mean Sq Error:  0.001
+     Accuracy:  0.997
+---------------------------------------------------
+                    Diamond                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  525
+Mean Sq Error:  0.005
+     Accuracy:  0.99
+---------------------------------------------------
+                    RShape                         
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  1774
+Mean Sq Error:  0.018
+     Accuracy:  0.965
+---------------------------------------------------
+                    DRShape                        
+---------------------------------------------------
+Now training network...
+==========================
+NETWORK WEIGHTS CONVERGED!
+==========================
+
+Now testing network...
+Squared Error:  11715.5
+Mean Sq Error:  0.117
+     Accuracy:  0.766
