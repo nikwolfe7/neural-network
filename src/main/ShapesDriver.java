@@ -4,6 +4,7 @@ import java.util.List;
 
 import mlsp.cs.cmu.edu.dnn.factory.DNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFFDNNFactory;
+import mlsp.cs.cmu.edu.dnn.factory.TanhOutputFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
@@ -37,18 +38,19 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		for(int[] config : configs) {
-			CircleDriver(config);
-			DiamondDriver(config);
-			RShapeDriver(config);
-			DRShapeDriver(config);
-		}
-		for(int[] config : configs2) {
-			CircleDriver(config);
-			DiamondDriver(config);
-			RShapeDriver(config);
-			DRShapeDriver(config);
-		}
+		DRShapeDriver(128,128);
+//		for(int[] config : configs) {
+//			CircleDriver(config);
+//			DiamondDriver(config);
+//			RShapeDriver(config);
+//			DRShapeDriver(config);
+//		}
+//		for(int[] config : configs2) {
+//			CircleDriver(config);
+//			DiamondDriver(config);
+//			RShapeDriver(config);
+//			DRShapeDriver(config);
+//		}
 	}
 	
 	public static void CircleDriver(int... structure) {
@@ -112,7 +114,7 @@ public class ShapesDriver {
 		DataReader reader = new ReadCSVTrainingData();
 	    List<DataInstance> training = reader.getDataFromFile("DRShape-train.csv", 2, 1);
 	    List<DataInstance> testing = reader.getDataFromFile("DRShape-test.csv", 2, 1);
-	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+	    DNNFactory factory = new TanhOutputFFDNNFactory(training.get(0), structure);
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);

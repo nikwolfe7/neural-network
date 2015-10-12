@@ -24,6 +24,7 @@ public class NeuralNetwork {
 	private List<Integer> weightMatrixLayers;
 	/* These are the indices of the neuron layers */
 	private List<Integer> hiddenNeuronLayers;
+	
 	/* This produces a "clean" prediction, i.e. smoothed or formatted */
 	/**
 	 * We will infer that the first and last layers
@@ -126,6 +127,14 @@ public class NeuralNetwork {
 		for(int i = 0; i < neurons.length; i++)
 			neurons[i] = hiddenNeuronLayers.get(i);
 		return neurons;
+	}
+	
+	public List<String> getStringRepresentation() {
+		List<String> arr = new ArrayList<>();
+		for(Layer layer : layers) {
+			
+		}
+		return null;
 	}
 
 	/***************************************************

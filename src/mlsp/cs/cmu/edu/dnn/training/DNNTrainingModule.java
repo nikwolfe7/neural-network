@@ -19,7 +19,7 @@ public class DNNTrainingModule {
 	private List<DataInstance> training;
 	private List<DataInstance> testing;
 	private double minDifference = 0.01;
-	private int numMinIterations = 5;
+	private int numMinIterations = 0;
 	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
 	private boolean printResults = false;
