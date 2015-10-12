@@ -24,6 +24,7 @@ public class ShapesDriver {
 		{8,8},
 		{16,16},
 		{32,32},
+		{64,64},
 	};
 	static int[][] configs2 = new int[][] {
 		{1},
@@ -36,25 +37,18 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		DRShapeDriver(256,256);
-//		DRShapeDriver(128,64);
-//		DRShapeDriver(64,64,64);
-//		DRShapeDriver(32,64);
-//		DRShapeDriver(64,32);
-//		DRShapeDriver(64,32,64);
-//		DRShapeDriver(32,64,32);
-//		for(int[] config : configs) {
-//			CircleDriver(config);
-//			DiamondDriver(config);
-//			RShapeDriver(config);
-//			DRShapeDriver(config);
-//		}
-//		for(int[] config : configs2) {
-//			CircleDriver(config);
-//			DiamondDriver(config);
-//			RShapeDriver(config);
-//			DRShapeDriver(config);
-//		}
+		for(int[] config : configs) {
+			CircleDriver(config);
+			DiamondDriver(config);
+			RShapeDriver(config);
+			DRShapeDriver(config);
+		}
+		for(int[] config : configs2) {
+			CircleDriver(config);
+			DiamondDriver(config);
+			RShapeDriver(config);
+			DRShapeDriver(config);
+		}
 	}
 	
 	public static void CircleDriver(int... structure) {
