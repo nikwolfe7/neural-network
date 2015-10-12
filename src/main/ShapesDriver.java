@@ -19,6 +19,8 @@ public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = false;
+  static String sep = System.getProperty("file.separator");
+  static String data = "." + sep + "data" + sep;
   
   static int[][] configs = new int[][] {
 		{2,2},
@@ -60,7 +62,7 @@ public class ShapesDriver {
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
 //	    List<DataInstance> training = reader.getDataFromFile("circle-train.csv", 2, 1);
-	    List<DataInstance> testing = reader.getDataFromFile("circle-test.csv", 2, 1);
+	    List<DataInstance> testing = reader.getDataFromFile(data + "circle-test.csv", 2, 1);
 //	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
 //	    
 //	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
@@ -74,7 +76,7 @@ public class ShapesDriver {
 	    
 	    /* Test */
 	    System.out.println("De-serializing the network..");
-	    ReadSerializedFileDNNFactory factory = new ReadSerializedFileDNNFactory("network.dnn");
+	    ReadSerializedFileDNNFactory factory = new ReadSerializedFileDNNFactory(data + "circle-network.dnn");
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 	    trainingModule.setOutputOn(printOut);
@@ -88,15 +90,15 @@ public class ShapesDriver {
 		System.out.println("                    Diamond                        ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
-	    List<DataInstance> training = reader.getDataFromFile("diamond-train.csv", 2, 1);
-	    List<DataInstance> testing = reader.getDataFromFile("diamond-test.csv", 2, 1);
+	    List<DataInstance> training = reader.getDataFromFile(data + "diamond-train.csv", 2, 1);
+	    List<DataInstance> testing = reader.getDataFromFile(data + "diamond-test.csv", 2, 1);
 	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
-	    trainingModule.setPrintResults(true, "diamond-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
+	    trainingModule.setPrintResults(true, data + "diamond-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}
@@ -106,15 +108,15 @@ public class ShapesDriver {
 		System.out.println("                    RShape                         ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
-	    List<DataInstance> training = reader.getDataFromFile("RShape-train.csv", 2, 1);
-	    List<DataInstance> testing = reader.getDataFromFile("RShape-test.csv", 2, 1);
+	    List<DataInstance> training = reader.getDataFromFile(data + "RShape-train.csv", 2, 1);
+	    List<DataInstance> testing = reader.getDataFromFile(data + "RShape-test.csv", 2, 1);
 	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
-	    trainingModule.setPrintResults(true, "RShape-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
+	    trainingModule.setPrintResults(true, data + "RShape-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}
@@ -124,15 +126,15 @@ public class ShapesDriver {
 		System.out.println("                    DRShape                        ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
-	    List<DataInstance> training = reader.getDataFromFile("DRShape-train.csv", 2, 1);
-	    List<DataInstance> testing = reader.getDataFromFile("DRShape-test.csv", 2, 1);
+	    List<DataInstance> training = reader.getDataFromFile(data + "DRShape-train.csv", 2, 1);
+	    List<DataInstance> testing = reader.getDataFromFile(data + "DRShape-test.csv", 2, 1);
 	    DNNFactory factory = new TanhOutputFFDNNFactory(training.get(0), structure);
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
-	    trainingModule.setPrintResults(true, "DRShape-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
+	    trainingModule.setPrintResults(true, data + "DRShape-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
 	}
