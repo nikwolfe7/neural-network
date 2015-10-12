@@ -4,7 +4,9 @@ import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
 
 public class NetworkElementLayer implements Layer {
 
-	private NetworkElement[] elements;
+  private static final long serialVersionUID = 3296151122386671579L;
+  
+  private NetworkElement[] elements;
 
 	public NetworkElementLayer(NetworkElement... elements) {
 		this.elements = elements;

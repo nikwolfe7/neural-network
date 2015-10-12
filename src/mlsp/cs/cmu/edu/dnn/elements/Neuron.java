@@ -7,6 +7,8 @@ import mlsp.cs.cmu.edu.dnn.util.ActivationFunction;
 
 public class Neuron implements NetworkElement {
 
+  private static final long serialVersionUID = 1621097065271638526L;
+  
   private List<NetworkElement> incoming;
   private List<NetworkElement> outgoing;
   private double output;

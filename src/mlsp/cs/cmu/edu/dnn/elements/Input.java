@@ -2,6 +2,8 @@ package mlsp.cs.cmu.edu.dnn.elements;
 
 public class Input extends Neuron {
 
+  private static final long serialVersionUID = -820683121797459764L;
+  
   private double inputValue = 0;
   private double output = 0;
   

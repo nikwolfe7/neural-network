@@ -2,6 +2,8 @@ package mlsp.cs.cmu.edu.dnn.elements;
 
 public class SimpleThresholdOutput extends LinearOutput {
   
+  private static final long serialVersionUID = -1472742405278570231L;
+  
   private double threshold = 0.5;
   
   @Override

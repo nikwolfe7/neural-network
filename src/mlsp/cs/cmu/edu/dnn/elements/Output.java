@@ -12,7 +12,9 @@ import mlsp.cs.cmu.edu.dnn.util.CostFunction;
  */
 public class Output extends Neuron {
 
-	private volatile double outputTruthValue = 0;
+  private static final long serialVersionUID = -785924549621505371L;
+  
+  private volatile double outputTruthValue = 0;
 
 	@Override
 	public void backward() {

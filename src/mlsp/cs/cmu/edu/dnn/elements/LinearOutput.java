@@ -12,7 +12,9 @@ import mlsp.cs.cmu.edu.dnn.util.CostFunction;
  */
 public class LinearOutput extends Output {
 
-	@Override
+  private static final long serialVersionUID = 3008584528210916008L;
+
+  @Override
 	public void forward() {
 		double sum = 0;
 		for (NetworkElement e : getIncomingElements())

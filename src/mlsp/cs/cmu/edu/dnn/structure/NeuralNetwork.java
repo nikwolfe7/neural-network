@@ -18,9 +18,6 @@ import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
  */
 public class NeuralNetwork implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5761924668947132220L;
 	
 	private Input[] inputLayer;

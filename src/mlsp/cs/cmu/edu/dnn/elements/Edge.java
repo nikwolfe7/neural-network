@@ -2,7 +2,9 @@ package mlsp.cs.cmu.edu.dnn.elements;
 
 public class Edge implements NetworkElement {
 
-	private double weight, output, errorTerm;
+  private static final long serialVersionUID = -3785529802453031665L;
+
+  private double weight, output, errorTerm;
 
 	private NetworkElement incoming, outgoing;
 

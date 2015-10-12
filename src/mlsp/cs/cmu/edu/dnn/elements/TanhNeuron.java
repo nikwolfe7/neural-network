@@ -4,7 +4,9 @@ import mlsp.cs.cmu.edu.dnn.util.ActivationFunction;
 
 public class TanhNeuron extends Neuron {
 
-	@Override
+  private static final long serialVersionUID = 5932029667602181226L;
+
+  @Override
 	public void forward() {
 		double sum = 0;
 	    for(NetworkElement e : getIncomingElements())
