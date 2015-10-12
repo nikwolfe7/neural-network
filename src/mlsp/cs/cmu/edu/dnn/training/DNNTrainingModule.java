@@ -1,8 +1,12 @@
 package mlsp.cs.cmu.edu.dnn.training;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +23,7 @@ public class DNNTrainingModule {
 	private List<DataInstance> training;
 	private List<DataInstance> testing;
 	private double minDifference = 0.01;
-	private int numMinIterations = 0;
+	private int numMinIterations = 10;
 	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
 	private boolean printResults = false;
@@ -29,6 +33,14 @@ public class DNNTrainingModule {
 	public DNNTrainingModule(NeuralNetwork network, List<DataInstance> trainingSet, List<DataInstance> testingSet) {
 		this.net = network;
 		this.training = trainingSet;
+		this.testing = testingSet;
+		this.outputFile = new File("testing-output.csv");
+	}
+	
+	/* Just for Testing */
+	public DNNTrainingModule(NeuralNetwork network, List<DataInstance> testingSet) {
+		this.training = new ArrayList<>();
+		this.net = network;
 		this.testing = testingSet;
 		this.outputFile = new File("testing-output.csv");
 	}
@@ -127,5 +139,18 @@ public class DNNTrainingModule {
 		System.out.println("Mean Sq Error:  " + f.format(sumOfSquaredErrors/testing.size()));
 		System.out.println("     Accuracy:  " + f.format(numCorrect/testing.size()));
 	}
-
+	
+	public void saveNetworkToFile(String fileName) {
+		OutputStream writer;
+		ObjectOutputStream outputStream;
+		try {
+			writer = new FileOutputStream(new File(fileName));
+			outputStream = new ObjectOutputStream(writer);
+			outputStream.writeObject(net);
+			outputStream.close();
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

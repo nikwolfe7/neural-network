@@ -1,5 +1,6 @@
 package mlsp.cs.cmu.edu.dnn.structure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,12 @@ import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 /**
  * @author Nikolas Wolfe
  */
-public class NeuralNetwork {
+public class NeuralNetwork implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5761924668947132220L;
 	
 	private Input[] inputLayer;
 	private Output[] outputLayer;
@@ -131,8 +137,9 @@ public class NeuralNetwork {
 	
 	public List<String> getStringRepresentation() {
 		List<String> arr = new ArrayList<>();
-		for(Layer layer : layers) {
-			
+		for(int i : getWeightMatrixIndices()) {
+			Layer l = getLayer(i);
+			StringBuilder sb = new StringBuilder();
 		}
 		return null;
 	}

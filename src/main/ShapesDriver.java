@@ -3,6 +3,7 @@ package main;
 import java.util.List;
 
 import mlsp.cs.cmu.edu.dnn.factory.DNNFactory;
+import mlsp.cs.cmu.edu.dnn.factory.ReadSerializedFileDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.TanhOutputFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
@@ -17,7 +18,7 @@ import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
-  static boolean printOut = true;
+  static boolean printOut = false;
   
   static int[][] configs = new int[][] {
 		{2,2},
@@ -38,7 +39,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		DRShapeDriver(128,128);
+		CircleDriver(4);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -69,6 +70,17 @@ public class ShapesDriver {
 	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
+	    trainingModule.saveNetworkToFile("network.dnn");
+	    
+	    /* Test */
+	    System.out.println("De-serializing the network..");
+	    factory = new ReadSerializedFileDNNFactory("network.dnn");
+	    net = factory.getInitializedNeuralNetwork();
+	    trainingModule = new DNNTrainingModule(net, testing);
+	    trainingModule.setOutputOn(printOut);
+	    trainingModule.setOutputAdapter(adapter);
+	    trainingModule.doTestTrainedNetwork();
+	    
 	}
 	
 	public static void DiamondDriver(int... structure) {

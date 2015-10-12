@@ -1,6 +1,8 @@
 package mlsp.cs.cmu.edu.dnn.elements;
 
-public interface NetworkElement {
+import java.io.Serializable;
+
+public interface NetworkElement extends Serializable {
   
   public void forward();
   
