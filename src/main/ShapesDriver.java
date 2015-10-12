@@ -59,24 +59,24 @@ public class ShapesDriver {
 		System.out.println("                    Circle                         ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
-	    List<DataInstance> training = reader.getDataFromFile("circle-train.csv", 2, 1);
+//	    List<DataInstance> training = reader.getDataFromFile("circle-train.csv", 2, 1);
 	    List<DataInstance> testing = reader.getDataFromFile("circle-test.csv", 2, 1);
-	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
-	    
-	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
-	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-	    trainingModule.setOutputOn(printOut);
-	    trainingModule.setOutputAdapter(adapter);
-	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
-	    trainingModule.doTrainNetworkUntilConvergence();
-	    trainingModule.doTestTrainedNetwork();
-	    trainingModule.saveNetworkToFile("network.dnn");
+//	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+//	    
+//	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
+//	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
+//	    trainingModule.setOutputOn(printOut);
+//	    trainingModule.setOutputAdapter(adapter);
+//	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
+//	    trainingModule.doTrainNetworkUntilConvergence();
+//	    trainingModule.doTestTrainedNetwork();
+//	    trainingModule.saveNetworkToFile("network.dnn");
 	    
 	    /* Test */
 	    System.out.println("De-serializing the network..");
-	    factory = new ReadSerializedFileDNNFactory("network.dnn");
-	    net = factory.getInitializedNeuralNetwork();
-	    trainingModule = new DNNTrainingModule(net, testing);
+	    ReadSerializedFileDNNFactory factory = new ReadSerializedFileDNNFactory("network.dnn");
+	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
+	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.doTestTrainedNetwork();
