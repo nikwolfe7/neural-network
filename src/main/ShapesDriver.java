@@ -16,7 +16,7 @@ import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
-  static boolean printOut = false;
+  static boolean printOut = true;
   
   static int[][] configs = new int[][] {
 		{2,2},
