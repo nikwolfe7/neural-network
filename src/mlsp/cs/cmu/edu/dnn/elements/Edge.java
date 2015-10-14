@@ -54,7 +54,7 @@ public class Edge implements NetworkElement {
 
 	@Override
 	public void backward() {
-		errorTerm = outgoing.getErrorTerm() * derivative();
+		errorTerm = outgoing.getGradient() * derivative();
 		double update = weight - learningRate * errorTerm;
 		weight = update;
 	}
@@ -71,7 +71,7 @@ public class Edge implements NetworkElement {
 	}
 
 	@Override
-	public double getErrorTerm() {
+	public double getGradient() {
 		return errorTerm;
 	}
 

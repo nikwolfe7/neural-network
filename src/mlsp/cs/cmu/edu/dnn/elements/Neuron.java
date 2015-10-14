@@ -41,7 +41,7 @@ public class Neuron implements NetworkElement {
   public void backward() {
     double sum = 0;
     for(NetworkElement e : outgoing)
-      sum += e.getErrorTerm();
+      sum += e.getGradient();
     setErrorTerm(sum * derivative());
   }
   
@@ -61,7 +61,7 @@ public class Neuron implements NetworkElement {
   }
 
   @Override
-  public double getErrorTerm() {
+  public double getGradient() {
     return errorTerm;
   }
 

@@ -32,7 +32,7 @@ public class Input extends Neuron {
   }
 
   @Override
-  public double getErrorTerm() {
+  public double getGradient() {
     return 0;
   }
 

@@ -25,7 +25,7 @@ public class Bias extends Neuron {
   }
 
   @Override
-  public double getErrorTerm() {
+  public double getGradient() {
     return 0;
   }
   

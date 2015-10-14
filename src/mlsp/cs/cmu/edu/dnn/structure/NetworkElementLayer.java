@@ -46,7 +46,7 @@ public class NetworkElementLayer implements Layer {
 	public double[] getErrorTerm() {
 		double[] e = new double[elements.length];
 		for (int i = 0; i < e.length; i++) {
-			e[i] = elements[i].getErrorTerm();
+			e[i] = elements[i].getGradient();
 		}
 		return e;
 	}

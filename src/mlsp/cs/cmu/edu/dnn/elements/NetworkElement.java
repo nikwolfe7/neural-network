@@ -12,6 +12,6 @@ public interface NetworkElement extends Serializable {
 
   public double getOutput();
   
-  public double getErrorTerm();
+  public double getGradient();
   
 }

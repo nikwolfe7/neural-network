@@ -100,24 +100,22 @@ public class DNNTrainingModule {
 			
 			/* Evaluate convergence */
 			boolean converged = false;
-			if(allowNegativeChangeIterations) {
-			  diff = Math.abs(diff);
+			if (allowNegativeChangeIterations) {
+				diff = Math.abs(diff);
 			}
 			/* min difference reached */
-      if (diff <= minDifference) {
-        if (countDown-- <= 0)
-          converged = true;
-      }
+			if (diff <= minDifference) {
+				if (countDown-- <= 0)
+					converged = true;
+			}
 			/* min squared error criteria override */
-      if (minSquaredError > 0) {
-        if (sumOfSquaredErrors <= minSquaredError)
-          converged = true;
-        else
-          converged = false;
-      }
-      /* convergence criteria met */
-			if(converged)
-			  break;
+			if (minSquaredError > 0) {
+				if (sumOfSquaredErrors <= minSquaredError)
+					converged = true;
+			}
+			/* convergence criteria met */
+			if (converged)
+				break;
 		}
 		/* Converged! Now test... */
 		System.out.println(
