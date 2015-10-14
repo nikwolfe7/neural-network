@@ -22,8 +22,10 @@ public class DNNTrainingModule {
 	private NeuralNetwork net;
 	private List<DataInstance> training;
 	private List<DataInstance> testing;
-	private double minDifference = 0.01;
-	private int numMinIterations = 3;
+	private double minDifference = 0.001;
+	private int numMinChangeIterations = 1;
+	private double minSquaredError = Double.NEGATIVE_INFINITY;
+	private boolean allowNegativeChangeIterations = false;
 	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
 	private boolean printResults = false;
@@ -43,6 +45,13 @@ public class DNNTrainingModule {
 		this.net = network;
 		this.testing = testingSet;
 		this.outputFile = new File("testing-output.csv");
+	}
+	
+	public void setConvergenceCriteria(double minDiff, double minSquaredError, boolean allowNegativeIterations, int numMinChangeIterations) {
+	  this.minDifference = minDiff;
+	  this.minSquaredError = minSquaredError;
+	  this.allowNegativeChangeIterations = allowNegativeIterations;
+	  this.numMinChangeIterations = numMinChangeIterations;
 	}
 	
 	public void setOutputAdapter(OutputAdapter adapter) {
@@ -73,23 +82,42 @@ public class DNNTrainingModule {
 	public void doTrainNetworkUntilConvergence() {
 		System.out.println("Now training network...");
 		double prevSumSqError = Double.POSITIVE_INFINITY;
-		int countDown = numMinIterations;
+		int countDown = numMinChangeIterations;
 		int epoch = 0;
 		/* Train on training data */
 		while (true) {
 			double sumOfSquaredErrors = 0;
 			for (DataInstance x : training)
 				sumOfSquaredErrors += net.trainOnInstance(x);
-			/* Should never be negative */
+			
+			/* Should ideally never be negative */
 			double diff = prevSumSqError - sumOfSquaredErrors; 
+			
 			if (outputOn)
 				System.out.println("Epoch " + (epoch++) + " | Squared Error: " + f.format(sumOfSquaredErrors) + "\tDiff: " + diff);
+			
 			prevSumSqError = sumOfSquaredErrors;
-			if (Math.abs(diff) <= minDifference) {
-			  if(countDown-- <= 0)
-			    break;
+			
+			/* Evaluate convergence */
+			boolean converged = false;
+			if(allowNegativeChangeIterations) {
+			  diff = Math.abs(diff);
 			}
-				
+			/* min difference reached */
+      if (diff <= minDifference) {
+        if (countDown-- <= 0)
+          converged = true;
+      }
+			/* min squared error criteria override */
+      if (minSquaredError > 0) {
+        if (sumOfSquaredErrors <= minSquaredError)
+          converged = true;
+        else
+          converged = false;
+      }
+      /* convergence criteria met */
+			if(converged)
+			  break;
 		}
 		/* Converged! Now test... */
 		System.out.println(

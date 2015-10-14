@@ -18,7 +18,7 @@ import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
-  static boolean printOut = false;
+  static boolean printOut = true;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
   
@@ -41,7 +41,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		CircleDriver(4);
+		DiamondDriver(4);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -98,6 +98,7 @@ public class ShapesDriver {
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
+	    trainingModule.setConvergenceCriteria(0.001, 300, true, 1);
 	    trainingModule.setPrintResults(true, data + "diamond-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
