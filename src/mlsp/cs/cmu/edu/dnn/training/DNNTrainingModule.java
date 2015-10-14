@@ -23,7 +23,7 @@ public class DNNTrainingModule {
 	private List<DataInstance> training;
 	private List<DataInstance> testing;
 	private double minDifference = 0.01;
-	private int numMinIterations = 0;
+	private int numMinIterations = 3;
 	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
 	private boolean printResults = false;
@@ -85,7 +85,7 @@ public class DNNTrainingModule {
 			if (outputOn)
 				System.out.println("Epoch " + (epoch++) + " | Squared Error: " + f.format(sumOfSquaredErrors) + "\tDiff: " + diff);
 			prevSumSqError = sumOfSquaredErrors;
-			if (diff <= minDifference) {
+			if (Math.abs(diff) <= minDifference) {
 			  if(countDown-- <= 0)
 			    break;
 			}
