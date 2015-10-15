@@ -12,10 +12,18 @@ public class ReadSerializedFileDNNFactory implements DNNFactory {
 	private NeuralNetwork network;
 	
 	public ReadSerializedFileDNNFactory(String fileName) {
+		readObject(new File(fileName));
+	}
+	
+	public ReadSerializedFileDNNFactory(File file) {
+		readObject(file);
+	}
+	
+	private void readObject(File file) {
 		FileInputStream inputStream;
 		ObjectInputStream objectStream;
 		try {
-			inputStream = new FileInputStream(new File(fileName));
+			inputStream = new FileInputStream(file);
 			objectStream = new ObjectInputStream(inputStream);
 			this.network = (NeuralNetwork) objectStream.readObject();
 			objectStream.close();
