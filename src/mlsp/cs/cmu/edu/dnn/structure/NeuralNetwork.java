@@ -17,9 +17,9 @@ import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
  * @author Nikolas Wolfe
  */
 public class NeuralNetwork implements Serializable {
-	
+
 	private static final long serialVersionUID = 5761924668947132220L;
-	
+
 	private Input[] inputLayer;
 	private Output[] outputLayer;
 	private List<Layer> layers;
@@ -27,11 +27,11 @@ public class NeuralNetwork implements Serializable {
 	private List<Integer> weightMatrixLayers;
 	/* These are the indices of the neuron layers */
 	private List<Integer> hiddenNeuronLayers;
-	
+
 	/* This produces a "clean" prediction, i.e. smoothed or formatted */
 	/**
-	 * We will infer that the first and last layers
-	 * are the input and output layers, respectively
+	 * We will infer that the first and last layers are the input and output
+	 * layers, respectively
 	 * 
 	 * @param layers
 	 */
@@ -73,19 +73,18 @@ public class NeuralNetwork implements Serializable {
 	 * @return
 	 */
 	public double[] getPrediction(double[] inputVector) {
-		for(int i = 0; i < inputVector.length; i++)
+		for (int i = 0; i < inputVector.length; i++)
 			inputLayer[i].setInputValue(inputVector[i]);
-		for(int i = 0; i < layers.size(); i++) 
+		for (int i = 0; i < layers.size(); i++)
 			layers.get(i).forward();
-		return layers.get(layers.size()-1).getOutput();
+		return layers.get(layers.size() - 1).getOutput();
 	}
-	
+
 	/**************************************************
-	 * FOR RUNNING: returns some smoothed output, i.e. 
-	 * text or a smoothed number, or something like that. 
+	 * FOR RUNNING: returns some smoothed output, i.e. text or a smoothed
+	 * number, or something like that.
 	 * 
-	 * The recipient of this output knows how to cast
-	 * it appropriately
+	 * The recipient of this output knows how to cast it appropriately
 	 * 
 	 * @param inputVector
 	 * @return
@@ -94,66 +93,86 @@ public class NeuralNetwork implements Serializable {
 		double[] output = getPrediction(inputVector);
 		return adapter.getSmoothedPrediction(output);
 	}
-	
+
 	/**************************************************
 	 * Getters
 	 */
 	public double[] getHiddenLayerOutputs(int layer) {
 		return layers.get(layer).getOutput();
 	}
-	
+
 	public double[] getHiddenLayerDerivatives(int layer) {
 		return layers.get(layer).getOutput();
 	}
-	
+
 	public double[] getHiddenLayerErrorTerms(int layer) {
 		return layers.get(layer).getErrorTerm();
 	}
-	
+
 	public Layer getLayer(int layer) {
 		return layers.get(layer);
 	}
-	
+
 	public NetworkElement[] getLayerElements(int layer) {
 		return layers.get(layer).getElements();
 	}
-	
+
 	public int[] getWeightMatrixIndices() {
 		int[] weights = new int[weightMatrixLayers.size()];
-		for(int i = 0; i < weights.length; i++)
+		for (int i = 0; i < weights.length; i++)
 			weights[i] = weightMatrixLayers.get(i);
 		return weights;
 	}
-	
+
 	public int[] getHiddenLayerIndices() {
 		int[] neurons = new int[hiddenNeuronLayers.size()];
-		for(int i = 0; i < neurons.length; i++)
+		for (int i = 0; i < neurons.length; i++)
 			neurons[i] = hiddenNeuronLayers.get(i);
 		return neurons;
 	}
 	
-  public void setBatchUpdate(boolean b) {
-    int[] weightIndices = getWeightMatrixIndices();
-    for (int index : weightIndices) {
-      for (NetworkElement e : getLayerElements(index)) {
-        Edge edge = (Edge) e;
-        edge.setBatchUpdate(b);
-      }
-    }
-  }
+	/**************************************************
+	 * Weight operations
+	 */
+	public void setGlobalLearningRate(double newRate) {
+		for (int index : getWeightMatrixIndices()) {
+			for (NetworkElement e : getLayerElements(index)) {
+				Edge edge = (Edge) e;
+				edge.setLearningRate(newRate);
+			}
+		}
+	}
 	
-  public void batchUpdate() {
-    int[] weightIndices = getWeightMatrixIndices();
-    for (int index : weightIndices) {
-      for (NetworkElement e : getLayerElements(index)) {
-        Edge edge = (Edge) e;
-        edge.batchUpdate();
-      }
-    }
-  }
-	
+	public void reinitializeWeights(double low, double high) {
+		for (int index : getWeightMatrixIndices()) {
+			for (NetworkElement e : getLayerElements(index)) {
+				Edge edge = (Edge) e;
+				edge.reinitializeWeight(low, high);
+			}
+		}
+	}
+
+	public void setBatchUpdate(boolean b) {
+		for (int index : getWeightMatrixIndices()) {
+			for (NetworkElement e : getLayerElements(index)) {
+				Edge edge = (Edge) e;
+				edge.setBatchUpdate(b);
+			}
+		}
+	}
+
+	public void batchUpdate() {
+		int[] weightIndices = getWeightMatrixIndices();
+		for (int index : weightIndices) {
+			for (NetworkElement e : getLayerElements(index)) {
+				Edge edge = (Edge) e;
+				edge.batchUpdate();
+			}
+		}
+	}
+
 	/***************************************************
-	 * TRAINING: 
+	 * TRAINING:
 	 * 
 	 * Returns the error for the instance
 	 * 
@@ -166,10 +185,10 @@ public class NeuralNetwork implements Serializable {
 		// forward propagate
 		double[] prediction = getPrediction(input);
 		// set output
-		for(int i = 0; i < outputLayer.length; i++) 
+		for (int i = 0; i < outputLayer.length; i++)
 			outputLayer[i].setTruthValue(truth[i]);
 		// backward propagate
-		for(int i = layers.size()-1; i >= 0; i--) 
+		for (int i = layers.size() - 1; i >= 0; i--)
 			layers.get(i).backward();
 		// sum error over outputs and return
 		return CostFunction.meanSqError(prediction, truth);

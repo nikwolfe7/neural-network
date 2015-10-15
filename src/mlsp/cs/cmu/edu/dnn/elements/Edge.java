@@ -2,18 +2,18 @@ package mlsp.cs.cmu.edu.dnn.elements;
 
 public class Edge implements NetworkElement {
 
-  private static final long serialVersionUID = -3785529802453031665L;
+	private static final long serialVersionUID = -3785529802453031665L;
 
-  private boolean batchUpdate;
-  
-  private double weight, output, gradient, batchSum;
+	private boolean batchUpdate;
+
+	private double weight, output, gradient, batchSum;
 
 	private NetworkElement incoming, outgoing;
 
 	/* Initializations from Tom Mitchell */
 	private double initLow;
-	private double initHigh; 
-	private double learningRate; 
+	private double initHigh;
+	private double learningRate;
 
 	public Edge() {
 		this.initLow = -0.05;
@@ -25,17 +25,17 @@ public class Edge implements NetworkElement {
 		this.batchUpdate = false;
 		this.weight = initializeWeight(initLow, initHigh);
 	}
-	
+
 	public Edge(double low, double high, double rate) {
-    this.initLow = low;
-    this.initHigh = high;
-    this.learningRate = rate;
-    this.output = 0;
-    this.gradient = 0;
-    this.batchSum = 0;
-    this.batchUpdate = false;
-    this.weight = initializeWeight(initLow, initHigh);
-  }
+		this.initLow = low;
+		this.initHigh = high;
+		this.learningRate = rate;
+		this.output = 0;
+		this.gradient = 0;
+		this.batchSum = 0;
+		this.batchUpdate = false;
+		this.weight = initializeWeight(initLow, initHigh);
+	}
 
 	public Edge(boolean batch, double low, double high, double rate) {
 		this.initLow = low;
@@ -48,8 +48,20 @@ public class Edge implements NetworkElement {
 		this.weight = initializeWeight(initLow, initHigh);
 	}
 
+	public void reinitializeWeight(double low, double high) {
+		weight = initializeWeight(low, high);
+	}
+
 	private double initializeWeight(double low, double high) {
 		return Math.random() * (high - low) + low;
+	}
+
+	public void setLearningRate(double rate) {
+		learningRate = rate;
+	}
+
+	public double getLearningRate() {
+		return learningRate;
 	}
 
 	public void setIncomingElement(NetworkElement element) {
@@ -59,9 +71,9 @@ public class Edge implements NetworkElement {
 	public void setOutgoingElement(NetworkElement element) {
 		this.outgoing = element;
 	}
-	
+
 	public void setBatchUpdate(boolean b) {
-	  this.batchUpdate = b;
+		this.batchUpdate = b;
 	}
 
 	public double getWeight() {
@@ -78,20 +90,20 @@ public class Edge implements NetworkElement {
 		gradient = outgoing.getGradient() * derivative();
 		updateWeight();
 	}
-	
-  private void updateWeight() {
-    if (batchUpdate)
-      batchSum += gradient;
-    else
-      weight = weight - (learningRate * gradient);
-  }
-	
-  public void batchUpdate() {
-    if (batchUpdate) {
-      weight = weight - (learningRate * batchSum);
-      batchSum = 0;
-    }
-  }
+
+	private void updateWeight() {
+		if (batchUpdate)
+			batchSum += gradient;
+		else
+			weight = weight - (learningRate * gradient);
+	}
+
+	public void batchUpdate() {
+		if (batchUpdate) {
+			weight = weight - (learningRate * batchSum);
+			batchSum = 0;
+		}
+	}
 
 	@Override
 	public double derivative() {
