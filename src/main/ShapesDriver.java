@@ -19,6 +19,7 @@ public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = true;
+  static boolean batchUpdate = true;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
   
@@ -41,7 +42,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		DiamondDriver(4);
+		DiamondDriver(8);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -69,6 +70,7 @@ public class ShapesDriver {
 //	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 //	    trainingModule.setOutputOn(printOut);
 //	    trainingModule.setOutputAdapter(adapter);
+//	    trainingModule.setBatchUpdate(batchUpdate);
 //	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 //	    trainingModule.doTrainNetworkUntilConvergence();
 //	    trainingModule.doTestTrainedNetwork();
@@ -98,7 +100,8 @@ public class ShapesDriver {
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
-	    trainingModule.setConvergenceCriteria(0, 300, true, 0);
+	    trainingModule.setBatchUpdate(batchUpdate);
+	    trainingModule.setConvergenceCriteria(-1, 300, true, 0);
 	    trainingModule.setPrintResults(true, data + "diamond-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
@@ -117,6 +120,7 @@ public class ShapesDriver {
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
+	    trainingModule.setBatchUpdate(batchUpdate);
 	    trainingModule.setPrintResults(true, data + "RShape-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
@@ -135,6 +139,7 @@ public class ShapesDriver {
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
+	    trainingModule.setBatchUpdate(batchUpdate);
 	    trainingModule.setPrintResults(true, data + "DRShape-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();

@@ -12,11 +12,11 @@ public class Neuron implements NetworkElement {
   private List<NetworkElement> incoming;
   private List<NetworkElement> outgoing;
   private double output;
-  private double errorTerm;
+  private double gradient;
   
   public Neuron() {
     this.output = 0;
-    this.errorTerm = 0;
+    this.gradient = 0;
     this.incoming = new ArrayList<NetworkElement>();
     this.outgoing = new ArrayList<NetworkElement>();
   }
@@ -42,12 +42,12 @@ public class Neuron implements NetworkElement {
     double sum = 0;
     for(NetworkElement e : outgoing)
       sum += e.getGradient();
-    setErrorTerm(sum * derivative());
+    setGradient(sum * derivative());
   }
   
   /* This is used in subclasses... */
-  protected void setErrorTerm(double e) {
-    errorTerm = e;
+  protected void setGradient(double e) {
+    gradient = e;
   }
 
   @Override
@@ -62,7 +62,7 @@ public class Neuron implements NetworkElement {
 
   @Override
   public double getGradient() {
-    return errorTerm;
+    return gradient;
   }
 
   protected List<NetworkElement> getIncomingElements() {

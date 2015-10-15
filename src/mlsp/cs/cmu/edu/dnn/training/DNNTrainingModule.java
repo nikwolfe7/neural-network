@@ -1,7 +1,6 @@
 package mlsp.cs.cmu.edu.dnn.training;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,6 +28,7 @@ public class DNNTrainingModule {
 	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
 	private boolean printResults = false;
+	private boolean batchUpdate = false;
 	private File outputFile; 
 	private OutputAdapter adapter = new DefaultOutput();
 
@@ -52,6 +52,11 @@ public class DNNTrainingModule {
 	  this.minSquaredError = minSquaredError;
 	  this.allowNegativeChangeIterations = allowNegativeIterations;
 	  this.numMinChangeIterations = numMinChangeIterations;
+	}
+	
+	public void setBatchUpdate(boolean b) {
+	  this.batchUpdate = b;
+	  net.setBatchUpdate(b);
 	}
 	
 	public void setOutputAdapter(OutputAdapter adapter) {
@@ -84,13 +89,20 @@ public class DNNTrainingModule {
 		double prevSumSqError = Double.POSITIVE_INFINITY;
 		int countDown = numMinChangeIterations;
 		int epoch = 0;
+		
 		/* Train on training data */
 		while (true) {
 			double sumOfSquaredErrors = 0;
+			
+			/* One epoch through training data... */
 			for (DataInstance x : training)
 				sumOfSquaredErrors += net.trainOnInstance(x);
 			
-			/* Should ideally never be negative */
+			/* if batch update, then update all weights at once */
+      if(batchUpdate)
+        net.batchUpdate();
+			
+			/* Should ideally never be negative, but no guarantees */
 			double diff = prevSumSqError - sumOfSquaredErrors; 
 			
 			if (outputOn)

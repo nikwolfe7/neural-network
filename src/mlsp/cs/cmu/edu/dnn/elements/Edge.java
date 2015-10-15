@@ -4,7 +4,9 @@ public class Edge implements NetworkElement {
 
   private static final long serialVersionUID = -3785529802453031665L;
 
-  private double weight, output, errorTerm;
+  private boolean batchUpdate;
+  
+  private double weight, output, gradient, batchSum;
 
 	private NetworkElement incoming, outgoing;
 
@@ -18,16 +20,31 @@ public class Edge implements NetworkElement {
 		this.initHigh = 0.05;
 		this.learningRate = 0.05;
 		this.output = 0;
-		this.errorTerm = 0;
+		this.gradient = 0;
+		this.batchSum = 0;
+		this.batchUpdate = false;
 		this.weight = initializeWeight(initLow, initHigh);
 	}
-
+	
 	public Edge(double low, double high, double rate) {
+    this.initLow = low;
+    this.initHigh = high;
+    this.learningRate = rate;
+    this.output = 0;
+    this.gradient = 0;
+    this.batchSum = 0;
+    this.batchUpdate = false;
+    this.weight = initializeWeight(initLow, initHigh);
+  }
+
+	public Edge(boolean batch, double low, double high, double rate) {
 		this.initLow = low;
 		this.initHigh = high;
 		this.learningRate = rate;
 		this.output = 0;
-		this.errorTerm = 0;
+		this.gradient = 0;
+		this.batchSum = 0;
+		this.batchUpdate = batch;
 		this.weight = initializeWeight(initLow, initHigh);
 	}
 
@@ -42,6 +59,10 @@ public class Edge implements NetworkElement {
 	public void setOutgoingElement(NetworkElement element) {
 		this.outgoing = element;
 	}
+	
+	public void setBatchUpdate(boolean b) {
+	  this.batchUpdate = b;
+	}
 
 	public double getWeight() {
 		return weight;
@@ -54,10 +75,23 @@ public class Edge implements NetworkElement {
 
 	@Override
 	public void backward() {
-		errorTerm = outgoing.getGradient() * derivative();
-		double update = weight - learningRate * errorTerm;
-		weight = update;
+		gradient = outgoing.getGradient() * derivative();
+		updateWeight();
 	}
+	
+  private void updateWeight() {
+    if (batchUpdate)
+      batchSum += gradient;
+    else
+      weight = weight - (learningRate * gradient);
+  }
+	
+  public void batchUpdate() {
+    if (batchUpdate) {
+      weight = weight - (learningRate * batchSum);
+      batchSum = 0;
+    }
+  }
 
 	@Override
 	public double derivative() {
@@ -72,7 +106,7 @@ public class Edge implements NetworkElement {
 
 	@Override
 	public double getGradient() {
-		return errorTerm;
+		return gradient;
 	}
 
 }

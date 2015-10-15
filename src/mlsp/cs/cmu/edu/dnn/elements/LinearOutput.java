@@ -24,7 +24,7 @@ public class LinearOutput extends Output {
 
 	@Override
 	public void backward() {
-		setErrorTerm(derivative());
+		setGradient(derivative());
 	}
 
 	@Override

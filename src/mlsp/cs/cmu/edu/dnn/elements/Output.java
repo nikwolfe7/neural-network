@@ -19,8 +19,8 @@ public class Output extends Neuron {
 	@Override
 	public void backward() {
 		double mseDerivative = CostFunction.meanSqErrorDerivative(getOutput(), outputTruthValue);
-		double errorTerm = mseDerivative * derivative();
-		setErrorTerm(errorTerm);
+		double gradient = mseDerivative * derivative();
+		setGradient(gradient);
 	}
 
 	public void setTruthValue(double val) {

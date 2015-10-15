@@ -132,15 +132,26 @@ public class NeuralNetwork implements Serializable {
 		return neurons;
 	}
 	
-	public List<String> getStringRepresentation() {
-		List<String> arr = new ArrayList<>();
-		for(int i : getWeightMatrixIndices()) {
-			Layer l = getLayer(i);
-			StringBuilder sb = new StringBuilder();
-		}
-		return null;
-	}
-
+  public void setBatchUpdate(boolean b) {
+    int[] weightIndices = getWeightMatrixIndices();
+    for (int index : weightIndices) {
+      for (NetworkElement e : getLayerElements(index)) {
+        Edge edge = (Edge) e;
+        edge.setBatchUpdate(b);
+      }
+    }
+  }
+	
+  public void batchUpdate() {
+    int[] weightIndices = getWeightMatrixIndices();
+    for (int index : weightIndices) {
+      for (NetworkElement e : getLayerElements(index)) {
+        Edge edge = (Edge) e;
+        edge.batchUpdate();
+      }
+    }
+  }
+	
 	/***************************************************
 	 * TRAINING: 
 	 * 
