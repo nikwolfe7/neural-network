@@ -22,6 +22,8 @@ public class NeuralNetwork implements Serializable {
 
 	private Input[] inputLayer;
 	private Output[] outputLayer;
+	private int inputDimension;
+	private int outputDimension;
 	private List<Layer> layers;
 	/* These are the indices of the weight matrices */
 	private List<Integer> weightMatrixLayers;
@@ -41,6 +43,8 @@ public class NeuralNetwork implements Serializable {
 		this.hiddenNeuronLayers = new ArrayList<>();
 		Layer input = layers.get(0);
 		Layer output = layers.get(layers.size() - 1);
+		this.inputDimension = input.size();
+		this.outputDimension = output.size();
 		this.inputLayer = new Input[input.size()];
 		this.outputLayer = new Output[output.size()];
 		for (int i = 0; i < input.size(); i++) {
@@ -62,6 +66,14 @@ public class NeuralNetwork implements Serializable {
 				}
 			}
 		}
+	}
+
+	public int getInputDimension() {
+		return inputDimension;
+	}
+
+	public int getOutputDimension() {
+		return outputDimension;
 	}
 
 	/**************************************************
