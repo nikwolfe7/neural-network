@@ -100,7 +100,7 @@ public class ShapesDriver {
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
-	    trainingModule.setBatchUpdate(batchUpdate);
+	    trainingModule.setBatchUpdate(batchUpdate, 10);
 	    trainingModule.setConvergenceCriteria(-1, 300, true, 0);
 	    trainingModule.setPrintResults(true, data + "diamond-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();

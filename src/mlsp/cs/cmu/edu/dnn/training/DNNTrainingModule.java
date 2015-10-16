@@ -21,14 +21,16 @@ public class DNNTrainingModule {
 	private NeuralNetwork net;
 	private List<DataInstance> training;
 	private List<DataInstance> testing;
+	private int maxEpochs = Integer.MAX_VALUE;
 	private double minDifference = 0.001;
 	private int numMinChangeIterations = 1;
 	private double minSquaredError = Double.NEGATIVE_INFINITY;
-	private boolean allowNegativeChangeIterations = false;
+	private boolean allowNegativeChangeIterations = true;
 	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
 	private boolean printResults = false;
 	private boolean batchUpdate = false;
+	private int batchDivisions = 1;
 	private File outputFile; 
 	private OutputAdapter adapter = new DefaultOutput();
 
@@ -47,16 +49,30 @@ public class DNNTrainingModule {
 		this.outputFile = new File("testing-output.csv");
 	}
 	
+	public void setConvergenceCriteria(double minDiff, double minSquaredError, boolean allowNegativeIterations, int numMinChangeIterations, int maxEpochs) {
+		this.minDifference = minDiff;
+		this.minSquaredError = minSquaredError;
+		this.allowNegativeChangeIterations = allowNegativeIterations;
+		this.numMinChangeIterations = numMinChangeIterations;
+		this.maxEpochs = maxEpochs;
+	}
+	
 	public void setConvergenceCriteria(double minDiff, double minSquaredError, boolean allowNegativeIterations, int numMinChangeIterations) {
-	  this.minDifference = minDiff;
-	  this.minSquaredError = minSquaredError;
-	  this.allowNegativeChangeIterations = allowNegativeIterations;
-	  this.numMinChangeIterations = numMinChangeIterations;
+		this.minDifference = minDiff;
+		this.minSquaredError = minSquaredError;
+		this.allowNegativeChangeIterations = allowNegativeIterations;
+		this.numMinChangeIterations = numMinChangeIterations;
+	}
+	
+	public void setBatchUpdate(boolean b, int batchDivisions) {
+		this.batchUpdate = b;
+		this.batchDivisions = batchDivisions;
+		net.setBatchUpdate(b);
 	}
 	
 	public void setBatchUpdate(boolean b) {
-	  this.batchUpdate = b;
-	  net.setBatchUpdate(b);
+		this.batchUpdate = b;
+		net.setBatchUpdate(b);
 	}
 	
 	public void setOutputAdapter(OutputAdapter adapter) {
@@ -88,29 +104,39 @@ public class DNNTrainingModule {
 		System.out.println("Now training network...");
 		double prevSumSqError = Double.POSITIVE_INFINITY;
 		int countDown = numMinChangeIterations;
-		int epoch = 0;
-		
+		int batchSize = Math.floorDiv(training.size(), batchDivisions);
+		int epoch = 1;
+
 		/* Train on training data */
 		while (true) {
 			double sumOfSquaredErrors = 0;
-			
 			/* One epoch through training data... */
-			for (DataInstance x : training)
-				sumOfSquaredErrors += net.trainOnInstance(x);
-			
-			/* if batch update, then update all weights at once */
-      if(batchUpdate)
-        net.batchUpdate();
-			
+			if (batchUpdate) {
+				int count = 1;
+				for (DataInstance x : training) {
+					sumOfSquaredErrors += net.trainOnInstance(x);
+					if (count++ >= batchSize) {
+						net.batchUpdate();
+						count = 1;
+					}
+				}
+				/* final update for any leftovers */
+				net.batchUpdate();
+			} else { /* Stochastic training */
+				for (DataInstance x : training) {
+					sumOfSquaredErrors += net.trainOnInstance(x);
+				}
+			}
+
 			/* Should ideally never be negative, but no guarantees */
-			double diff = prevSumSqError - sumOfSquaredErrors; 
-			
+			double diff = prevSumSqError - sumOfSquaredErrors;
+
 			if (outputOn)
 				System.out.println("Epoch " + (epoch++) + " | Squared Error: " + f.format(sumOfSquaredErrors) + "\tDiff: " + diff);
-			
+
 			prevSumSqError = sumOfSquaredErrors;
-			
-			/* Evaluate convergence */
+
+			/* Evaluate stopping criteria */
 			boolean converged = false;
 			if (allowNegativeChangeIterations) {
 				diff = Math.abs(diff);
@@ -124,6 +150,10 @@ public class DNNTrainingModule {
 			if (minSquaredError > 0) {
 				if (sumOfSquaredErrors <= minSquaredError)
 					converged = true;
+			}
+			/* num epochs */
+			if (epoch >= maxEpochs) {
+				converged = true;
 			}
 			/* convergence criteria met */
 			if (converged)
