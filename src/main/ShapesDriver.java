@@ -20,7 +20,7 @@ public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = true;
-  static boolean batchUpdate = false;
+  static boolean batchUpdate = true;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
   
@@ -102,7 +102,7 @@ public class ShapesDriver {
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.setBatchUpdate(batchUpdate, 10);
-	    trainingModule.setConvergenceCriteria(-1, 300, true, 0);
+	    trainingModule.setConvergenceCriteria(0.00001, 300, true, 0);
 	    trainingModule.setPrintResults(true, data + "diamond-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();
