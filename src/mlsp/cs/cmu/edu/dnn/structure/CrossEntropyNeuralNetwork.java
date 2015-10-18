@@ -19,9 +19,4 @@ public class CrossEntropyNeuralNetwork extends NeuralNetwork {
     return CostFunction.crossEntropy(prediction, truth);
   }
   
-  @Override
-  public double[] getOutputs() {
-    
-  }
-  
 }

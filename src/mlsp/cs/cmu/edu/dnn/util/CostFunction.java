@@ -26,10 +26,10 @@ public class CostFunction {
 	}
 	
 	public static double crossEntropy(double[] prediction, double[] truth) {
-	  double sum = 0;
-    for(int i = 0; i < prediction.length; i++)
-      sum += crossEntropy(prediction[i], truth[i]);
-    return sum;
+		double sum = 0;
+		for (int i = 0; i < prediction.length; i++)
+			sum += crossEntropy(prediction[i], truth[i]);
+		return sum;
 	}
 
 }
