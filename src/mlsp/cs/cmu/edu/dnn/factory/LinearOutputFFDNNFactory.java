@@ -1,5 +1,9 @@
 package mlsp.cs.cmu.edu.dnn.factory;
 
+import java.util.List;
+
+import mlsp.cs.cmu.edu.dnn.structure.Layer;
+import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 
 public class LinearOutputFFDNNFactory extends FeedForwardDNNAbstractFactory {
@@ -11,6 +15,11 @@ public class LinearOutputFFDNNFactory extends FeedForwardDNNAbstractFactory {
   @Override
   protected NetworkElementAbstractFactory getNetworkElementFactory() {
     return new LinearOutputFactory();
+  }
+
+  @Override
+  protected NeuralNetwork getNewNeuralNetwork(List<Layer> layers) {
+    return new NeuralNetwork(layers);
   }
 
 }

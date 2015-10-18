@@ -24,7 +24,7 @@ public class DNNTrainingModule {
 	private int maxEpochs = Integer.MAX_VALUE;
 	private double minDifference = 0.001;
 	private int numMinChangeIterations = 1;
-	private double minSquaredError = Double.NEGATIVE_INFINITY;
+	private double minError = Double.NEGATIVE_INFINITY;
 	private boolean allowNegativeChangeIterations = true;
 	private DecimalFormat f = new DecimalFormat("##.###");
 	private boolean outputOn = false;
@@ -49,17 +49,17 @@ public class DNNTrainingModule {
 		this.outputFile = new File("testing-output.csv");
 	}
 	
-	public void setConvergenceCriteria(double minDiff, double minSquaredError, boolean allowNegativeIterations, int numMinChangeIterations, int maxEpochs) {
+	public void setConvergenceCriteria(double minDiff, double minError, boolean allowNegativeIterations, int numMinChangeIterations, int maxEpochs) {
 		this.minDifference = minDiff;
-		this.minSquaredError = minSquaredError;
+		this.minError = minError;
 		this.allowNegativeChangeIterations = allowNegativeIterations;
 		this.numMinChangeIterations = numMinChangeIterations;
 		this.maxEpochs = maxEpochs;
 	}
 	
-	public void setConvergenceCriteria(double minDiff, double minSquaredError, boolean allowNegativeIterations, int numMinChangeIterations) {
+	public void setConvergenceCriteria(double minDiff, double minError, boolean allowNegativeIterations, int numMinChangeIterations) {
 		this.minDifference = minDiff;
-		this.minSquaredError = minSquaredError;
+		this.minError = minError;
 		this.allowNegativeChangeIterations = allowNegativeIterations;
 		this.numMinChangeIterations = numMinChangeIterations;
 	}
@@ -102,19 +102,19 @@ public class DNNTrainingModule {
 	
 	public void doTrainNetworkUntilConvergence() {
 		System.out.println("Now training network...");
-		double prevSumSqError = Double.POSITIVE_INFINITY;
+		double prevSumError = Double.POSITIVE_INFINITY;
 		int countDown = numMinChangeIterations;
 		int batchSize = Math.floorDiv(training.size(), batchDivisions);
 		int epoch = 1;
 
 		/* Train on training data */
 		while (true) {
-			double sumOfSquaredErrors = 0;
+			double sumError = 0;
 			/* One epoch through training data... */
 			if (batchUpdate) {
 				int count = 1;
 				for (DataInstance x : training) {
-					sumOfSquaredErrors += net.trainOnInstance(x);
+					sumError += net.trainOnInstance(x);
 					if (count++ >= batchSize) {
 						net.batchUpdate();
 						count = 1;
@@ -124,17 +124,17 @@ public class DNNTrainingModule {
 				net.batchUpdate();
 			} else { /* Stochastic training */
 				for (DataInstance x : training) {
-					sumOfSquaredErrors += net.trainOnInstance(x);
+					sumError += net.trainOnInstance(x);
 				}
 			}
 
 			/* Should ideally never be negative, but no guarantees */
-			double diff = prevSumSqError - sumOfSquaredErrors;
+			double diff = prevSumError - sumError;
 
 			if (outputOn)
-				System.out.println("Epoch " + (epoch++) + " | Squared Error: " + f.format(sumOfSquaredErrors) + "\tDiff: " + diff);
+				System.out.println("Epoch " + (epoch++) + " | Error: " + f.format(sumError) + "\tDiff: " + diff);
 
-			prevSumSqError = sumOfSquaredErrors;
+			prevSumError = sumError;
 
 			/* Evaluate stopping criteria */
 			boolean converged = false;
@@ -147,8 +147,8 @@ public class DNNTrainingModule {
 					converged = true;
 			}
 			/* min squared error criteria override */
-			if (minSquaredError > 0) {
-				if (sumOfSquaredErrors <= minSquaredError)
+			if (minError > 0) {
+				if (sumError <= minError)
 					converged = true;
 			}
 			/* num epochs */
@@ -203,9 +203,9 @@ public class DNNTrainingModule {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Squared Error:  " + f.format(sumOfSquaredErrors));
-		System.out.println("Mean Sq Error:  " + f.format(sumOfSquaredErrors/testing.size()));
-		System.out.println("     Accuracy:  " + f.format(numCorrect/testing.size()));
+		System.out.println("Total Error:  " + f.format(sumOfSquaredErrors));
+		System.out.println(" Mean Error:  " + f.format(sumOfSquaredErrors/testing.size()));
+		System.out.println("   Accuracy:  " + f.format(numCorrect/testing.size()));
 	}
 	
 	public void saveNetworkToFile(String fileName) {

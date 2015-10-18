@@ -2,6 +2,7 @@ package main;
 
 import java.util.List;
 
+import mlsp.cs.cmu.edu.dnn.factory.CrossEntropyFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.DNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.ReadSerializedFileDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFFDNNFactory;
@@ -19,7 +20,7 @@ public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = true;
-  static boolean batchUpdate = true;
+  static boolean batchUpdate = false;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
   
@@ -42,7 +43,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		DiamondDriver(8);
+		DiamondDriver(2);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -94,7 +95,7 @@ public class ShapesDriver {
 		DataReader reader = new ReadCSVTrainingData();
 	    List<DataInstance> training = reader.getDataFromFile(data + "diamond-train.csv", 2, 1);
 	    List<DataInstance> testing = reader.getDataFromFile(data + "diamond-test.csv", 2, 1);
-	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+	    DNNFactory factory = new CrossEntropyFFDNNFactory(training.get(0), structure);
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);

@@ -6,8 +6,8 @@ public class ActivationFunction {
 		return 1.0 / (1.0 + Math.exp(-input));
 	}
 
-	public static double linear(double input) {
-		return input;
+	public static double exp(double input) {
+	  return Math.exp(input);
 	}
 
 	public static double tanh(double input) {
@@ -19,8 +19,8 @@ public class ActivationFunction {
 		return output * (1 - output);
 	}
 
-	public static double linearDerivative(double output) {
-		return output;
+	public static double expDerivative(double output) {
+	  return output;
 	}
 
 	public static double tanhDerivative(double output) {

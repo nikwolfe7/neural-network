@@ -5,6 +5,7 @@ import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.Input;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
+import mlsp.cs.cmu.edu.dnn.elements.TanhNeuron;
 import mlsp.cs.cmu.edu.dnn.util.DefaultOutput;
 import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
@@ -22,7 +23,7 @@ public class SigmoidNetworkFactory implements NetworkElementAbstractFactory {
 
 	@Override
 	public Neuron getNewNeuron() {
-		return new Neuron();
+		return new TanhNeuron();
 	}
 
 	@Override

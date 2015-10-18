@@ -59,7 +59,7 @@ public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 		layers.add(weightMatrix);
 		layers.add(outputLayer);
 		/* build the network object */
-		this.network = new NeuralNetwork(layers);
+		this.network = getNewNeuralNetwork(layers);
 	}
 
   private Layer connect(Layer prev, Layer hiddenLayer) {
@@ -90,6 +90,8 @@ public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 	public NeuralNetwork getInitializedNeuralNetwork() {
 		return network;
 	}
+	
+	protected abstract NeuralNetwork getNewNeuralNetwork(List<Layer> layers);
 	
 	protected abstract NetworkElementAbstractFactory getNetworkElementFactory();
 

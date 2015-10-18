@@ -14,7 +14,7 @@ public interface Layer extends Serializable {
 
 	public double[] getOutput();
 
-	public double[] getErrorTerm();
+	public double[] getGradient();
 	
 	public NetworkElement[] getElements();
 	

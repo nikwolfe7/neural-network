@@ -25,6 +25,7 @@ public class NeuralNetwork implements Serializable {
 	private int inputDimension;
 	private int outputDimension;
 	private List<Layer> layers;
+	
 	/* These are the indices of the weight matrices */
 	private List<Integer> weightMatrixLayers;
 	/* These are the indices of the neuron layers */
@@ -89,7 +90,7 @@ public class NeuralNetwork implements Serializable {
 			inputLayer[i].setInputValue(inputVector[i]);
 		for (int i = 0; i < layers.size(); i++)
 			layers.get(i).forward();
-		return layers.get(layers.size() - 1).getOutput();
+		return getOutputs();
 	}
 
 	/**************************************************
@@ -109,21 +110,33 @@ public class NeuralNetwork implements Serializable {
 	/**************************************************
 	 * Getters
 	 */
-	public double[] getHiddenLayerOutputs(int layer) {
+  public double[] getOutputs() {
+    return getLastLayer().getOutput();
+  }
+	
+	public double[] getLayerOutputs(int layer) {
 		return layers.get(layer).getOutput();
 	}
 
-	public double[] getHiddenLayerDerivatives(int layer) {
-		return layers.get(layer).getOutput();
+	public double[] getLayerDerivatives(int layer) {
+		return layers.get(layer).derivative();
 	}
 
-	public double[] getHiddenLayerErrorTerms(int layer) {
-		return layers.get(layer).getErrorTerm();
+	public double[] getLayerGradients(int layer) {
+		return layers.get(layer).getGradient();
 	}
 
 	public Layer getLayer(int layer) {
 		return layers.get(layer);
 	}
+	
+	public Layer getFirstLayer() {
+	  return layers.get(0);
+	}
+	
+  public Layer getLastLayer() {
+    return layers.get(layers.size() - 1);
+  }
 
 	public NetworkElement[] getLayerElements(int layer) {
 		return layers.get(layer).getElements();
@@ -203,7 +216,12 @@ public class NeuralNetwork implements Serializable {
 		for (int i = layers.size() - 1; i >= 0; i--)
 			layers.get(i).backward();
 		// sum error over outputs and return
-		return CostFunction.meanSqError(prediction, truth);
+		return getErrorTerm(prediction, truth); 
+	}
+	
+	/* Override in a sublcass to do cross entropy */
+	protected double getErrorTerm(double[] prediction, double[] truth) {
+	  return CostFunction.meanSqError(prediction, truth);
 	}
 
 }
