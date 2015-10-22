@@ -23,12 +23,12 @@ public class SigmoidNetworkElementFactory implements NetworkElementAbstractFacto
 
 	@Override
 	public Neuron getNewNeuron() {
-		return new TanhNeuron();
+		return new Neuron();
 	}
 
 	@Override
 	public Edge getNewEdge() {
-		return new Edge(-1,1,0.00125);
+		return new Edge();
 	}
 
 	@Override
