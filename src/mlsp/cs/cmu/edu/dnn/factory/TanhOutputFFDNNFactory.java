@@ -14,7 +14,7 @@ public class TanhOutputFFDNNFactory extends FeedForwardDNNAbstractFactory {
 
 	@Override
 	protected NetworkElementAbstractFactory getNetworkElementFactory() {
-		return new TanhOutputFactory();
+		return new TanhOutputElementFactory();
 	}
 
   @Override

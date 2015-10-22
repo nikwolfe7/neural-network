@@ -20,7 +20,7 @@ public class CrossEntropyFFDNNFactory extends FeedForwardDNNAbstractFactory {
 
   @Override
   protected NetworkElementAbstractFactory getNetworkElementFactory() {
-    return new CrossEntropyNetworkFactory();
+    return new CrossEntropyNetworkElementFactory();
   }
 
 }

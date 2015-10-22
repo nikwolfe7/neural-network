@@ -9,7 +9,7 @@ import mlsp.cs.cmu.edu.dnn.elements.TanhNeuron;
 import mlsp.cs.cmu.edu.dnn.util.DefaultOutput;
 import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
-public class SigmoidNetworkFactory implements NetworkElementAbstractFactory {
+public class SigmoidNetworkElementFactory implements NetworkElementAbstractFactory {
 
 	@Override
 	public Input getNewInput() {

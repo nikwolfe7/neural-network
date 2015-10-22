@@ -14,7 +14,7 @@ public class ThresholdOutputFFDNNFactory extends FeedForwardDNNAbstractFactory {
 
   @Override
   protected NetworkElementAbstractFactory getNetworkElementFactory() {
-    return new ThresholdOutputFactory();
+    return new ThresholdOutputElementFactory();
   }
 
   @Override

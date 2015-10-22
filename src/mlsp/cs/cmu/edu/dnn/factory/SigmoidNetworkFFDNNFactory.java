@@ -14,7 +14,7 @@ public class SigmoidNetworkFFDNNFactory extends FeedForwardDNNAbstractFactory {
 
   @Override
   protected NetworkElementAbstractFactory getNetworkElementFactory() {
-    return new SigmoidNetworkFactory();
+    return new SigmoidNetworkElementFactory();
   }
 
   @Override

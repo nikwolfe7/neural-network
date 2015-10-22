@@ -7,7 +7,7 @@ import java.util.Random;
 import mlsp.cs.cmu.edu.dnn.factory.DNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.FeedForwardDNNAbstractFactory;
 import mlsp.cs.cmu.edu.dnn.factory.LinearOutputFFDNNFactory;
-import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFactory;
+import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkElementFactory;
 import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.ThresholdOutputFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;

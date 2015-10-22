@@ -1,37 +1,41 @@
 package mlsp.cs.cmu.edu.dnn.factory;
 
 import mlsp.cs.cmu.edu.dnn.elements.Bias;
-import mlsp.cs.cmu.edu.dnn.elements.CrossEntropySoftmaxOutput;
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.Input;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
 
-public class CrossEntropyNetworkFactory implements NetworkElementAbstractFactory {
+public class CrossEntropyNetworkElementFactory implements NetworkElementAbstractFactory {
 
   @Override
   public Input getNewInput() {
-    return new Input();
+    // TODO Auto-generated method stub
+    return null;
   }
 
   @Override
   public Output getNewOutput() {
-    return new CrossEntropySoftmaxOutput();
+    // TODO Auto-generated method stub
+    return null;
   }
 
   @Override
   public Neuron getNewNeuron() {
-    return new Neuron();
+    // TODO Auto-generated method stub
+    return null;
   }
 
   @Override
   public Edge getNewEdge() {
-    return new Edge();
+    // TODO Auto-generated method stub
+    return null;
   }
 
   @Override
   public Bias getNewBias() {
-    return new Bias();
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

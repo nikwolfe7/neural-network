@@ -2,8 +2,6 @@ package mlsp.cs.cmu.edu.dnn.structure;
 
 import java.util.List;
 
-import mlsp.cs.cmu.edu.dnn.elements.CrossEntropySoftmaxOutput;
-import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
 import mlsp.cs.cmu.edu.dnn.util.CostFunction;
 
 public class CrossEntropyNeuralNetwork extends NeuralNetwork {

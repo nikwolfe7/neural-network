@@ -4,7 +4,7 @@ import mlsp.cs.cmu.edu.dnn.elements.*;
 import mlsp.cs.cmu.edu.dnn.util.DefaultOutput;
 import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
-public class TanhOutputFactory implements NetworkElementAbstractFactory {
+public class TanhOutputElementFactory implements NetworkElementAbstractFactory {
 
 	@Override
 	public Input getNewInput() {
