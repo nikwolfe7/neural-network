@@ -25,7 +25,7 @@ public class NeuralNetwork implements Serializable {
 	private int inputDimension;
 	private int outputDimension;
 	private List<Layer> layers;
-	
+
 	/* These are the indices of the weight matrices */
 	private List<Integer> weightMatrixLayers;
 	/* These are the indices of the neuron layers */
@@ -110,10 +110,10 @@ public class NeuralNetwork implements Serializable {
 	/**************************************************
 	 * Getters
 	 */
-  public double[] getOutputs() {
-    return getLastLayer().getOutput();
-  }
-	
+	public double[] getOutputs() {
+		return getLastLayer().getOutput();
+	}
+
 	public double[] getLayerOutputs(int layer) {
 		return layers.get(layer).getOutput();
 	}
@@ -129,14 +129,14 @@ public class NeuralNetwork implements Serializable {
 	public Layer getLayer(int layer) {
 		return layers.get(layer);
 	}
-	
+
 	public Layer getFirstLayer() {
-	  return layers.get(0);
+		return layers.get(0);
 	}
-	
-  public Layer getLastLayer() {
-    return layers.get(layers.size() - 1);
-  }
+
+	public Layer getLastLayer() {
+		return layers.get(layers.size() - 1);
+	}
 
 	public NetworkElement[] getLayerElements(int layer) {
 		return layers.get(layer).getElements();
@@ -155,7 +155,7 @@ public class NeuralNetwork implements Serializable {
 			neurons[i] = hiddenNeuronLayers.get(i);
 		return neurons;
 	}
-	
+
 	/**************************************************
 	 * Weight operations
 	 */
@@ -167,7 +167,7 @@ public class NeuralNetwork implements Serializable {
 			}
 		}
 	}
-	
+
 	public void reinitializeWeights(double low, double high) {
 		for (int index : getWeightMatrixIndices()) {
 			for (NetworkElement e : getLayerElements(index)) {
@@ -216,12 +216,12 @@ public class NeuralNetwork implements Serializable {
 		for (int i = layers.size() - 1; i >= 0; i--)
 			layers.get(i).backward();
 		// sum error over outputs and return
-		return getErrorTerm(prediction, truth); 
+		return getErrorTerm(prediction, truth);
 	}
-	
+
 	/* Override in a sublcass to do cross entropy */
 	protected double getErrorTerm(double[] prediction, double[] truth) {
-	  return CostFunction.meanSqError(prediction, truth);
+		return CostFunction.meanSqError(prediction, truth);
 	}
 
 }
