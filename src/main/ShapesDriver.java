@@ -11,6 +11,7 @@ import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 import mlsp.cs.cmu.edu.dnn.training.DataReader;
+import mlsp.cs.cmu.edu.dnn.training.ReadBinaryCSVTrainingDataForCrossEntropy;
 import mlsp.cs.cmu.edu.dnn.training.ReadCSVTrainingData;
 import mlsp.cs.cmu.edu.dnn.util.BinaryThresholdOutput;
 import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
@@ -20,7 +21,7 @@ public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = true;
-  static boolean batchUpdate = false;
+  static boolean batchUpdate = true;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
   
@@ -43,7 +44,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		RShapeDriver(8);
+		DiamondDriver(8);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -92,17 +93,17 @@ public class ShapesDriver {
 		System.out.println("---------------------------------------------------");
 		System.out.println("                    Diamond                        ");
 		System.out.println("---------------------------------------------------");
-		DataReader reader = new ReadCSVTrainingData();
+		DataReader reader = new ReadBinaryCSVTrainingDataForCrossEntropy();
 	    List<DataInstance> training = reader.getDataFromFile(data + "diamond-train.csv", 2, 1);
 	    List<DataInstance> testing = reader.getDataFromFile(data + "diamond-test.csv", 2, 1);
-	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+	    DNNFactory factory = new CrossEntropyFFDNNFactory(training.get(0), structure);
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.setBatchUpdate(batchUpdate, 10);
-	    trainingModule.setConvergenceCriteria(0.00001, -1, true, 0, 1200);
+	    trainingModule.setConvergenceCriteria(0.01, -1, true, 0);
 	    trainingModule.setPrintResults(true, data + "diamond-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork();

@@ -44,18 +44,26 @@ public class NeuralNetwork implements Serializable {
 		this.hiddenNeuronLayers = new ArrayList<>();
 		Layer input = layers.get(0);
 		Layer output = layers.get(layers.size() - 1);
-		this.inputDimension = input.size();
-		this.outputDimension = output.size();
-		this.inputLayer = new Input[input.size()];
-		this.outputLayer = new Output[output.size()];
+		this.inputDimension = 0;
+		this.outputDimension = 0;
+		Input[] in = new Input[input.size()];
+		Output[] out = new Output[output.size()];
 		for (int i = 0; i < input.size(); i++) {
-			if (input.getElements()[i] instanceof Input)
-				inputLayer[i] = (Input) input.getElements()[i];
+			if (input.getElements()[i] instanceof Input) {
+				in[i] = (Input) input.getElements()[i];
+				inputDimension++;
+			}
 		}
 		for (int i = 0; i < output.size(); i++) {
-			if (output.getElements()[i] instanceof Output)
-				outputLayer[i] = (Output) output.getElements()[i];
+			if (output.getElements()[i] instanceof Output) {
+				out[i] = (Output) output.getElements()[i];
+				outputDimension++;
+			}
 		}
+		this.inputLayer = new Input[inputDimension];
+		this.outputLayer = new Output[outputDimension];
+		System.arraycopy(in, 0, inputLayer, 0, inputLayer.length);
+		System.arraycopy(out, 0, outputLayer, 0, outputLayer.length);
 		for (int i = 1; i < layers.size() - 1; i++) {
 			for (NetworkElement e : layers.get(i).getElements()) {
 				if (e instanceof Edge) {
