@@ -8,9 +8,7 @@ public class CrossEntropyOutput extends LinearOutput {
   
   @Override
   public double derivative() {
-    return CostFunction.crossEntropy(getOutput(), getTruthValue());
+    return CostFunction.crossEntropyDerivative(getOutput(), getTruthValue());
   }
-  
-  
 
 }

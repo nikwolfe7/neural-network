@@ -195,6 +195,23 @@ public class NeuralNetwork implements Serializable {
 			}
 		}
 	}
+	
+	/***************************************************
+	 * Layer Operations - allows an existing Layer in 
+	 * the network to be replaced...  Assumes connections 
+	 * have been already established. 
+	 * 
+	 * Use with caution.
+	 * 
+	 * No guarantees that anything will work if you don't
+	 * know explicitly what you are doing. 
+	 * 
+	 * @param i
+	 * @param modified
+	 */
+	public void modifyExistingLayer(Layer oldLayer, Layer newLayer) {
+		layers.set(layers.indexOf(oldLayer), newLayer);
+	}
 
 	/***************************************************
 	 * TRAINING:

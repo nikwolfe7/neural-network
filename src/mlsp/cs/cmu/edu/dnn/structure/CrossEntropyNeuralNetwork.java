@@ -10,6 +10,8 @@ public class CrossEntropyNeuralNetwork extends NeuralNetwork {
 
   public CrossEntropyNeuralNetwork(List<Layer> layers) {
     super(layers);
+    /* Create softmax layer on the outside */
+    Layer softMaxLayer = new SoftMaxLayer(getLastLayer());
   }
   
   @Override
