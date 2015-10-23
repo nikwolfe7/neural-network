@@ -6,6 +6,7 @@ import java.util.List;
 import mlsp.cs.cmu.edu.dnn.elements.*;
 import mlsp.cs.cmu.edu.dnn.structure.*;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
+import mlsp.cs.cmu.edu.dnn.util.LayerElementUtils;
 
 public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 
@@ -61,37 +62,17 @@ public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 		this.network = getNewNeuralNetwork(layers);
 	}
 
-  private Layer connect(Layer prev, Layer hiddenLayer) {
-		int rows, cols;
-		rows = hiddenLayer.size();
-		cols = prev.size();
-		Edge[] weightMatrix = new Edge[rows * cols];
-		for (int row = 0; row < rows; row++) {
-			for (int col = 0; col < cols; col++) {
-				Neuron out = (Neuron) hiddenLayer.getElements()[row];
-				Neuron in = (Neuron) prev.getElements()[col];
-				Edge w = factory.getNewEdge();
-				attachElements(in, w, out);
-				weightMatrix[row * cols + col] = w;
-			}
-		}
-		return new NetworkElementLayer(weightMatrix);
-	}
-
-	private void attachElements(Neuron in, Edge w, Neuron out) {
-		w.setIncomingElement(in);
-		w.setOutgoingElement(out);
-		in.addOutgoingElement(w);
-		out.addIncomingElement(w);
+	private Layer connect(Layer prev, Layer hiddenLayer) {
+		return LayerElementUtils.connect(prev, hiddenLayer, factory);
 	}
 
 	@Override
 	public NeuralNetwork getInitializedNeuralNetwork() {
 		return network;
 	}
-	
+
 	protected abstract NeuralNetwork getNewNeuralNetwork(List<Layer> layers);
-	
+
 	protected abstract NetworkElementAbstractFactory getNetworkElementFactory();
 
 }
