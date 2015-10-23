@@ -17,10 +17,15 @@ public class Output extends Neuron {
   private volatile double outputTruthValue = 0;
 
 	@Override
-	public void backward() {
-		double mseDerivative = CostFunction.meanSqErrorDerivative(getOutput(), outputTruthValue);
-		double gradient = mseDerivative * derivative();
-		setGradient(gradient);
+  public void backward() {
+    setGradient(derivative());
+  }
+	
+	@Override
+	public double derivative() {
+	  double costFuncDerivative = CostFunction.meanSqErrorDerivative(getOutput(), outputTruthValue);
+	  double sigmoidDerivative = super.derivative(); /* Default neurons use sigmoid outputs */
+	  return costFuncDerivative * sigmoidDerivative;
 	}
 
 	public void setTruthValue(double val) {

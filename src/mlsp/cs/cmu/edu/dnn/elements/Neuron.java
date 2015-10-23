@@ -46,7 +46,7 @@ public class Neuron implements NetworkElement {
   }
   
   /* This is used in subclasses... */
-  protected void setGradient(double e) {
+  public void setGradient(double e) {
     gradient = e;
   }
 
@@ -65,11 +65,11 @@ public class Neuron implements NetworkElement {
     return gradient;
   }
 
-  protected List<NetworkElement> getIncomingElements() {
+  public List<NetworkElement> getIncomingElements() {
     return incoming;
   }
 
-  protected void setOutput(double output) {
+  public void setOutput(double output) {
     this.output = output;
   }
 

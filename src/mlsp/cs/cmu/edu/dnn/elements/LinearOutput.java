@@ -23,11 +23,6 @@ public class LinearOutput extends Output {
 	}
 
 	@Override
-	public void backward() {
-		setGradient(derivative());
-	}
-
-	@Override
 	public double derivative() {
 		return CostFunction.meanSqErrorDerivative(getOutput(), getTruthValue());
 	}

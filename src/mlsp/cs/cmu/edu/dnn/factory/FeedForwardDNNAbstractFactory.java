@@ -6,7 +6,6 @@ import java.util.List;
 import mlsp.cs.cmu.edu.dnn.elements.*;
 import mlsp.cs.cmu.edu.dnn.structure.*;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
-import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public abstract class FeedForwardDNNAbstractFactory implements DNNFactory {
 

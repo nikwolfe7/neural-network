@@ -14,7 +14,7 @@ public class LinearOutputFFDNNFactory extends FeedForwardDNNAbstractFactory {
 
   @Override
   protected NetworkElementAbstractFactory getNetworkElementFactory() {
-    return new LinearOutputFactory();
+    return new LinearOutputElementFactory();
   }
 
   @Override
