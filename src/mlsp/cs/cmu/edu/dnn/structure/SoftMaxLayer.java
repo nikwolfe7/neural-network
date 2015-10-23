@@ -1,5 +1,6 @@
 package mlsp.cs.cmu.edu.dnn.structure;
 
+import mlsp.cs.cmu.edu.dnn.elements.CrossEntropyOutput;
 import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
 
 public class SoftMaxLayer implements Layer {
@@ -15,6 +16,17 @@ public class SoftMaxLayer implements Layer {
 	@Override
 	public void forward() {
 		layer.forward();
+		double sum = 0;
+		for(double d : getOutput())
+			sum += Math.exp(d);
+		sum = (sum > 0) ? sum : Double.MIN_NORMAL;
+		for(NetworkElement e : getElements()) {
+			CrossEntropyOutput output;
+			output = (CrossEntropyOutput) e;
+			double o = output.getOutput();
+			double softMax = Math.exp(o) / sum;
+			output.setOutput(softMax);
+		}
 	}
 
 	@Override

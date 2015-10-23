@@ -17,7 +17,7 @@ public class LayerElementUtils {
 	 * col = element in the previous layer, i.e. "from"
 	 * 
 	 * Edge get(int row, int col, int numcols) {
-	 *	return weightMatrix[row * cols + col];
+	 *	return weightMatrix[row * numcols + col];
 	 * }
 	 * 
 	 * @param fromLayer
@@ -51,7 +51,7 @@ public class LayerElementUtils {
 	 * col = element in the previous layer, i.e. "from"
 	 * 
 	 * Edge get(int row, int col, int numcols) {
-	 *	return weightMatrix[row * cols + col];
+	 *	return weightMatrix[row * numcols + col];
 	 * }
 	 * 
 	 * @param fromLayer
