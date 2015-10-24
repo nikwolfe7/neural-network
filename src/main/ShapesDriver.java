@@ -11,6 +11,7 @@ import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 import mlsp.cs.cmu.edu.dnn.training.DataReader;
+import mlsp.cs.cmu.edu.dnn.training.GainSwitchPruningTool;
 import mlsp.cs.cmu.edu.dnn.training.ReadBinaryCSVTrainingDataForCrossEntropy;
 import mlsp.cs.cmu.edu.dnn.training.ReadCSVTrainingData;
 import mlsp.cs.cmu.edu.dnn.util.BinaryThresholdOutput;
@@ -20,8 +21,8 @@ import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
-  static boolean printOut = true;
-  static boolean batchUpdate = true;
+  static boolean printOut = false;
+  static boolean batchUpdate = false;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
   
@@ -44,7 +45,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		DiamondDriver(8);
+		  RShapeDriver(25,25);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -75,7 +76,7 @@ public class ShapesDriver {
 //	    trainingModule.setBatchUpdate(batchUpdate);
 //	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 //	    trainingModule.doTrainNetworkUntilConvergence();
-//	    trainingModule.doTestTrainedNetwork();
+//	    trainingModule.doTestTrainedNetwork(); 
 //	    trainingModule.saveNetworkToFile("network.dnn");
 	    
 	    /* Test */
@@ -93,20 +94,36 @@ public class ShapesDriver {
 		System.out.println("---------------------------------------------------");
 		System.out.println("                    Diamond                        ");
 		System.out.println("---------------------------------------------------");
-		DataReader reader = new ReadBinaryCSVTrainingDataForCrossEntropy();
+		DataReader reader = new ReadCSVTrainingData();
 	    List<DataInstance> training = reader.getDataFromFile(data + "diamond-train.csv", 2, 1);
 	    List<DataInstance> testing = reader.getDataFromFile(data + "diamond-test.csv", 2, 1);
-	    DNNFactory factory = new CrossEntropyFFDNNFactory(training.get(0), structure);
+	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-	    trainingModule.setOutputOn(printOut);
+	    trainingModule.setOutputOn(true);
 	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.setBatchUpdate(batchUpdate, 10);
-	    trainingModule.setConvergenceCriteria(0.01, -1, true, 0);
+	    trainingModule.setConvergenceCriteria(0.1, 300, true, 0);
 	    trainingModule.setPrintResults(true, data + "diamond-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
+	    trainingModule.setOutputOn(false);
+	    System.out.println("Test:\n");
 	    trainingModule.doTestTrainedNetwork();
+	    trainingModule.saveNetworkToFile(data + "network.dnn");
+	    double remove = 0.1;
+	    while(remove <= 1) {
+  	    System.out.println("\n\nWith remove: " + remove);
+  	    System.out.println("De-serializing the network..");
+        factory = new ReadSerializedFileDNNFactory(data + "network.dnn");
+        net = factory.getInitializedNeuralNetwork();
+        trainingModule = new DNNTrainingModule(net, testing);
+        trainingModule.setOutputOn(printOut);
+        trainingModule.setOutputAdapter(adapter);
+  	    net = GainSwitchPruningTool.doPruning(net, training, remove);
+  	    trainingModule.doTestTrainedNetwork();
+  	    remove += 0.1;
+	    }
 	}
 	
 	public static void RShapeDriver(int... structure) {
@@ -120,13 +137,31 @@ public class ShapesDriver {
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-	    trainingModule.setOutputOn(printOut);
+	    trainingModule.setOutputOn(true);
 	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.setBatchUpdate(batchUpdate);
 	    trainingModule.setConvergenceCriteria(0.00001, -1, true, 0, 1200);
 	    trainingModule.setPrintResults(true, data + "RShape-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
-	    trainingModule.doTestTrainedNetwork();
+	    
+	    System.out.println("Test:\n");
+      trainingModule.doTestTrainedNetwork();
+      trainingModule.saveNetworkToFile(data + "network.dnn");
+      
+      double remove = 0.01;
+      while(remove <= 1) {
+        System.out.println("\n\nWith remove: " + remove);
+        factory = new ReadSerializedFileDNNFactory(data + "network.dnn");
+        net = factory.getInitializedNeuralNetwork();
+        trainingModule = new DNNTrainingModule(net, testing);
+        trainingModule.setOutputOn(printOut);
+        trainingModule.setOutputAdapter(adapter);
+        net = GainSwitchPruningTool.doPruning(net, training, remove);
+        trainingModule.doTestTrainedNetwork();
+        remove += 0.01;
+      }
+	    
+	    
 	}
 	
 	public static void DRShapeDriver(int... structure) {

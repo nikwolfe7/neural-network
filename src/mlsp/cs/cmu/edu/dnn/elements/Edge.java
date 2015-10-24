@@ -67,9 +67,17 @@ public class Edge implements NetworkElement {
 	public void setIncomingElement(NetworkElement element) {
 		this.incoming = element;
 	}
+	
+	protected NetworkElement getIncomingElement() {
+	  return incoming;
+	}
 
 	public void setOutgoingElement(NetworkElement element) {
 		this.outgoing = element;
+	}
+	
+	protected NetworkElement getOutgoingElement() {
+	  return outgoing;
 	}
 
 	public void setBatchUpdate(boolean b) {
@@ -87,11 +95,11 @@ public class Edge implements NetworkElement {
 
 	@Override
 	public void backward() {
-		gradient = outgoing.getGradient() * derivative();
+		setGradient(outgoing.getGradient() * derivative());
 		updateWeight();
 	}
 
-	private void updateWeight() {
+	protected void updateWeight() {
 		if (batchUpdate)
 			batchSum += gradient;
 		else
@@ -119,6 +127,10 @@ public class Edge implements NetworkElement {
 	@Override
 	public double getGradient() {
 		return gradient;
+	}
+	
+	public void setGradient(double g) {
+	  gradient = g;
 	}
 
 }
