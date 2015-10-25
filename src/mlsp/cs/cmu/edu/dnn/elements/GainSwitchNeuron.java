@@ -11,14 +11,12 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
   private boolean switchOff;
   
   private double gainSum;
-  private double gradientSum;
   private int count;
 
   public GainSwitchNeuron(Neuron n) {
     this.neuron = n;
     this.switchOff = false;
     this.gainSum = 0;
-    this.gradientSum = 0;
     this.count = 0;
   }
 
@@ -32,11 +30,10 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
   public void reset() {
     count = 0;
     gainSum = 0;
-    gradientSum = 0;
   }
   
   public double getTotalGain() {
-    return gainSum * gradientSum;
+    return gainSum;
   }
   
   public double getAverageGain() {
@@ -47,8 +44,6 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
   public void forward() {
     if (!switchOff) {
       neuron.forward();
-      gainSum += getOutput();
-      count++;
     }
   }
 
@@ -56,7 +51,8 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
   public void backward() {
     if (!switchOff) {
       neuron.backward();
-      gradientSum += getGradient();
+      count++;
+      gainSum += (getGradient() * getOutput());
     }
   }
 

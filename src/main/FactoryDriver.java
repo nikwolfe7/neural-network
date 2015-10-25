@@ -23,7 +23,7 @@ import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
 public class FactoryDriver {
 
   static DataInstanceGenerator dataGen = new CosineGenerator();
-  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(), 150);
+  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(),8,8);
   
   public static void main(String[] args) {
     
