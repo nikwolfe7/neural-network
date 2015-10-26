@@ -45,7 +45,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		  DRShapeDriver(100,50);
+		  DiamondDriver(50,50);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -101,29 +101,29 @@ public class ShapesDriver {
 
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-		trainingModule.setOutputOn(true);
-		trainingModule.setOutputAdapter(adapter);
-		trainingModule.setBatchUpdate(batchUpdate, 10);
-		trainingModule.setConvergenceCriteria(0.1, 300, true, 0);
-		trainingModule.setPrintResults(true,
-				data + "diamond-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
-		trainingModule.doTrainNetworkUntilConvergence();
-		trainingModule.setOutputOn(false);
-		System.out.println("Test:\n");
-		trainingModule.doTestTrainedNetwork();
-		trainingModule.saveNetworkToFile(data + "network.dnn");
-		double remove = 0.1;
+//		trainingModule.setOutputOn(true);
+//		trainingModule.setOutputAdapter(adapter);
+//		trainingModule.setBatchUpdate(batchUpdate, 10);
+//		trainingModule.setConvergenceCriteria(0.01, 100, true, 0);
+//		trainingModule.setPrintResults(true,
+//				data + "diamond-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
+//		trainingModule.doTrainNetworkUntilConvergence();
+//		trainingModule.setOutputOn(false);
+//		System.out.println("Test:\n");
+//		trainingModule.doTestTrainedNetwork();
+//		trainingModule.saveNetworkToFile(data + "network.dnn");
+		double remove = 0.0;
 		while (remove <= 1) {
 			System.out.println("\n\nWith remove: " + remove);
 			System.out.println("De-serializing the network..");
 			factory = new ReadSerializedFileDNNFactory(data + "network.dnn");
 			net = factory.getInitializedNeuralNetwork();
 			trainingModule = new DNNTrainingModule(net, testing);
-			trainingModule.setOutputOn(printOut);
+			trainingModule.setOutputOn(false);
 			trainingModule.setOutputAdapter(adapter);
 			net = GainSwitchPruningTool.doPruning(net, training, remove);
 			trainingModule.doTestTrainedNetwork();
-			remove += 0.1;
+			remove += 0.01;
 		}
 	}
 	
