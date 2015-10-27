@@ -203,16 +203,15 @@ public class NeuralNetwork implements Serializable {
 			}
 		}
 	}
-	
+
 	/***************************************************
-	 * Layer Operations - allows an existing Layer in 
-	 * the network to be replaced...  Assumes connections 
-	 * have been already established. 
+	 * Layer Operations - allows an existing Layer in the network to be
+	 * replaced... Assumes connections have been already established.
 	 * 
 	 * Use with caution.
 	 * 
-	 * No guarantees that anything will work if you don't
-	 * know explicitly what you are doing. 
+	 * No guarantees that anything will work if you don't know explicitly what
+	 * you are doing.
 	 * 
 	 * @param i
 	 * @param modified
@@ -220,42 +219,43 @@ public class NeuralNetwork implements Serializable {
 	public void modifyExistingLayer(Layer oldLayer, Layer newLayer) {
 		layers.set(layers.indexOf(oldLayer), newLayer);
 	}
-	
+
 	/**
-	 * Extricates the elements in the list from the network, cleans up
-	 * any artifacts that may be left over... 
+	 * Extricates the elements in the list from the network, cleans up any
+	 * artifacts that may be left over...
 	 * 
 	 * @param elements
 	 */
-  public void removeElements(List<NetworkElement> elements) {
-    /* Remove neurons in the hidden layers */
-    for (int i : getHiddenLayerIndices()) {
-      Layer layer = getLayer(i);
-      for (NetworkElement e : elements)
-        layer.removeNetworkElement(e);
-    }
-    /* remove weights if listed or dead after 
-     * previous operation */
-    for (int i : getWeightMatrixIndices()) {
-      Layer layer = getLayer(i);
-      /* if the weight is in the list */
-      for (NetworkElement e : elements)
-        layer.removeNetworkElement(e);
-      /* if the weight is dead */
-      for (NetworkElement e : layer.getElements()) {
-        Edge edge = (Edge) e;
-        if (edge.getIncomingElement() == null)
-          layer.removeNetworkElement(edge);
-        else if (edge.getOutgoingElement() == null)
-          layer.removeNetworkElement(edge);
-      }
-    }
-  }
+	public void removeElements(List<NetworkElement> elements) {
+		/* Remove neurons in the hidden layers */
+		for (int i : getHiddenLayerIndices()) {
+			Layer layer = getLayer(i);
+			for (NetworkElement e : elements)
+				layer.removeNetworkElement(e);
+		}
+		/* Remove the weights which are now */
+		for (int i : getWeightMatrixIndices()) {
+			Layer layer = getLayer(i);
+			for (NetworkElement e : elements)
+				layer.removeNetworkElement(e);
+			for (NetworkElement el : layer.getElements()) {
+				Edge edge = (Edge) el;
+				NetworkElement in, out;
+				in = edge.getIncomingElement();
+				out = edge.getOutgoingElement();
+				if (in == null || out == null)
+					layer.removeNetworkElement(edge);
+			}
+		}
+	}
 
-	/***************************************************
+	/***************************************************	 * 
 	 * TRAINING:
 	 * 
 	 * Returns the error for the instance
+	 * 
+	 * Watch this while it's training:
+	 * https://www.youtube.com/watch?v=2olBE4C5_Gk&list=RDFMC-4xDK8gk
 	 * 
 	 * @param instance
 	 * @return

@@ -12,18 +12,17 @@ import mlsp.cs.cmu.edu.dnn.structure.Layer;
 import mlsp.cs.cmu.edu.dnn.structure.NetworkElementLayer;
 
 public class LayerElementUtils {
-	
+
 	/**
 	 * Returns the weight matrix between two layers after fully connecting them
-	 * Matrix is returned as a 1D array which can be indexed as a 2D array as 
+	 * Matrix is returned as a 1D array which can be indexed as a 2D array as
 	 * follows:
 	 * 
-	 * row = neuron in the layer, i.e. "to"
-	 * col = element in the previous layer, i.e. "from"
+	 * row = neuron in the layer, i.e. "to" col = element in the previous layer,
+	 * i.e. "from"
 	 * 
-	 * Edge get(int row, int col, int numcols) {
-	 *	return weightMatrix[row * numcols + col];
-	 * }
+	 * Edge get(int row, int col, int numcols) { return weightMatrix[row *
+	 * numcols + col]; }
 	 * 
 	 * @param fromLayer
 	 * @param toLayer
@@ -46,18 +45,17 @@ public class LayerElementUtils {
 		}
 		return new NetworkElementLayer(weightMatrix);
 	}
-	
+
 	/**
 	 * Returns the weight matrix between two layers after fully connecting them
-	 * Matrix is returned as a 1D array which can be indexed as a 2D array as 
+	 * Matrix is returned as a 1D array which can be indexed as a 2D array as
 	 * follows:
 	 * 
-	 * row = neuron in the layer, i.e. "to"
-	 * col = element in the previous layer, i.e. "from"
+	 * row = neuron in the layer, i.e. "to" col = element in the previous layer,
+	 * i.e. "from"
 	 * 
-	 * Edge get(int row, int col, int numcols) {
-	 *	return weightMatrix[row * numcols + col];
-	 * }
+	 * Edge get(int row, int col, int numcols) { return weightMatrix[row *
+	 * numcols + col]; }
 	 * 
 	 * @param fromLayer
 	 * @param toLayer
@@ -79,9 +77,9 @@ public class LayerElementUtils {
 		}
 		return new NetworkElementLayer(weightMatrix);
 	}
-	
+
 	/**
-	 * Attach two individual neurons together with an Edge 
+	 * Attach two individual neurons together with an Edge
 	 * 
 	 * @param in
 	 * @param w
@@ -94,21 +92,46 @@ public class LayerElementUtils {
 		out.addIncomingElement(w);
 	}
 
-  public static NetworkElement[] removeLayerElement(Layer networkElementLayer, NetworkElement e) {
-    List<NetworkElement> elements = Arrays.asList(networkElementLayer.getElements());
-    if (!elements.contains(e)) {
-      return networkElementLayer.getElements(); /* unchanged */
-    } else {
-      e.remove();
-      int i = 0, size = Math.max(0, elements.size()-1);
-      NetworkElement[] newElements = new NetworkElement[size];
-      for(NetworkElement element : elements) {
-        if(element != e) {
-          newElements[i++] = element;
-        }
-      }
-      return newElements;
-    }
-  }
+	public static NetworkElement[] removeLayerElement(Layer networkElementLayer, NetworkElement e) {
+		List<NetworkElement> elements = Arrays.asList(networkElementLayer.getElements());
+		if (!elements.contains(e)) {
+			return networkElementLayer.getElements(); /* unchanged */
+		} else {
+			int i = 0, size = Math.max(0, elements.size() - 1);
+			NetworkElement[] newElements = new NetworkElement[size];
+			for (NetworkElement element : elements) {
+				if (element != e) {
+					newElements[i++] = element;
+				} else {
+					if (e instanceof Neuron) {
+						List<NetworkElement> incoming = ((Neuron) e).getIncomingElements();
+						List<NetworkElement> outgoing = ((Neuron) e).getOutgoingElements();
+						for (NetworkElement elem : incoming) {
+							Edge edge = (Edge) elem;
+							Neuron n = (Neuron) edge.getIncomingElement();
+							n.getOutgoingElements().remove(edge);
+							edge.setIncomingElement(null);
+							edge.setOutgoingElement(null);
+						}
+						for (NetworkElement elem : outgoing) {
+							Edge edge = (Edge) elem;
+							Neuron n = (Neuron) edge.getOutgoingElement();
+							n.getIncomingElements().remove(edge);
+							edge.setIncomingElement(null);
+							edge.setOutgoingElement(null);
+						}
+					} else if (e instanceof Edge) {
+						Neuron next = (Neuron) ((Edge) e).getOutgoingElement();
+						Neuron prev = (Neuron) ((Edge) e).getIncomingElement();
+						if (prev != null && next != null) {
+							next.getIncomingElements().remove(e);
+							prev.getOutgoingElements().remove(e);
+						}
+					}
+				}
+			}
+			return newElements;
+		}
+	}
 
 }

@@ -52,20 +52,4 @@ public interface NetworkElement extends Serializable {
    */
   public double getGradient();
   
-  /**
-   * Remove this element from the network... the operation
-   * will be defined differently for different network elements
-   * 
-   */
-  public void remove();
-  
-  /**
-   * Given a NetworkElement argument, removes the 
-   * specified element from the connections of 
-   * the current NetworkElement
-   * 
-   * @param e
-   */
-  public void remove(NetworkElement e);
-  
 }

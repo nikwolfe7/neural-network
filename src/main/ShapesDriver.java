@@ -46,7 +46,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		  DiamondDriver(50,50);
+		  DiamondDriver(10);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -102,17 +102,17 @@ public class ShapesDriver {
 
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
+		
 //		trainingModule.setOutputOn(true);
 //		trainingModule.setOutputAdapter(adapter);
 //		trainingModule.setBatchUpdate(batchUpdate, 10);
 //		trainingModule.setConvergenceCriteria(0.01, 100, true, 0);
-//		trainingModule.setPrintResults(true,
-//				data + "diamond-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
 //		trainingModule.doTrainNetworkUntilConvergence();
 //		trainingModule.setOutputOn(false);
 //		System.out.println("Test:\n");
 //		trainingModule.doTestTrainedNetwork();
-//		trainingModule.saveNetworkToFile(data + "network.dnn");
+//		trainingModule.saveNetworkToFile(data + "test.network.dnn");
+		
 		double remove = 0.0;
 		while (remove <= 1) {
 			System.out.println("\n\nWith remove: " + remove);

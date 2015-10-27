@@ -135,22 +135,4 @@ public class Edge implements NetworkElement {
     gradient = g;
   }
 
-  @Override
-  public void remove() {
-    if (incoming != null) {
-      incoming = null;
-    }
-    if (outgoing != null) {
-      outgoing = null;
-    }
-  }
-
-  @Override
-  public void remove(NetworkElement e) {
-    /* Edge removes itself from both ends... */
-    if (e == incoming || e == outgoing) {
-      remove();
-    }
-  }
-
 }
