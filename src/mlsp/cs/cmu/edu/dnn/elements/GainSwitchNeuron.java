@@ -78,5 +78,15 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
     else
       return 0;
   }
+  
+  @Override
+  public void remove() {
+    neuron.remove();
+  }
+  
+  @Override
+  public void remove(NetworkElement e) {
+    neuron.remove(e);
+  }
 
 }

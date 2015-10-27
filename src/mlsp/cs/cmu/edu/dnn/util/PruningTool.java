@@ -33,8 +33,8 @@ public class PruningTool {
     int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
     List<NetworkElement> switchOff = doRankedPruning(sortedNeurons, neuronsToRemove);
 //    List<Switchable> switchOff = doRandomPruning(sortedNeurons, neuronsToRemove);
-    switchElements(switchOff, true);
-//    removeElementsAndPruneLayers(net, switchOff);
+//    switchElements(switchOff, true);
+    removeElementsAndPruneLayers(net, switchOff);
     return net;
   }
   

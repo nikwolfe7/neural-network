@@ -138,11 +138,9 @@ public class Edge implements NetworkElement {
   @Override
   public void remove() {
     if (incoming != null) {
-      incoming.remove(this);
       incoming = null;
     }
     if (outgoing != null) {
-      outgoing.remove(this);
       outgoing = null;
     }
   }

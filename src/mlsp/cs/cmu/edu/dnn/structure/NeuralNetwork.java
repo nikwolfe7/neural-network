@@ -234,11 +234,21 @@ public class NeuralNetwork implements Serializable {
       for (NetworkElement e : elements)
         layer.removeNetworkElement(e);
     }
-    /* Remove weights in the hidden layers */
+    /* remove weights if listed or dead after 
+     * previous operation */
     for (int i : getWeightMatrixIndices()) {
       Layer layer = getLayer(i);
+      /* if the weight is in the list */
       for (NetworkElement e : elements)
         layer.removeNetworkElement(e);
+      /* if the weight is dead */
+      for (NetworkElement e : layer.getElements()) {
+        Edge edge = (Edge) e;
+        if (edge.getIncomingElement() == null)
+          layer.removeNetworkElement(edge);
+        else if (edge.getOutgoingElement() == null)
+          layer.removeNetworkElement(edge);
+      }
     }
   }
 

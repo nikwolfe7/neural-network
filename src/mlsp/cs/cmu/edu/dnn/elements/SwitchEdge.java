@@ -55,5 +55,15 @@ public class SwitchEdge extends Edge implements Switchable {
   public double getGradient() {
     return edge.getGradient();
   }
+  
+  @Override
+  public void remove() {
+    edge.remove();
+  }
+  
+  @Override
+  public void remove(NetworkElement e) {
+    edge.remove(e);
+  }
 
 }

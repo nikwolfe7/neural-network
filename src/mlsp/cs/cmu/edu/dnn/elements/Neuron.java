@@ -2,6 +2,7 @@ package mlsp.cs.cmu.edu.dnn.elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import mlsp.cs.cmu.edu.dnn.util.ActivationFunction;
 
@@ -79,10 +80,13 @@ public class Neuron implements NetworkElement {
 
   @Override
   public void remove() {
-    for(NetworkElement e : getIncomingElements())
-      e.remove(this);
-    for(NetworkElement e : getOutgoingElements())
-      e.remove(this);
+    ListIterator<NetworkElement> iter;
+    iter = getIncomingElements().listIterator();
+    while(iter.hasNext())
+      iter.next().remove(this);
+    iter = getOutgoingElements().listIterator();
+    while(iter.hasNext())
+      iter.next().remove(this);
   }
 
   @Override
