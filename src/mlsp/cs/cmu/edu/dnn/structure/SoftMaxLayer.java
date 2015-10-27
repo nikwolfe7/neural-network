@@ -64,4 +64,9 @@ public class SoftMaxLayer implements Layer {
 		return layer.size();
 	}
 
+  @Override
+  public void removeNetworkElement(NetworkElement e) {
+    layer.removeNetworkElement(e);
+  }
+
 }

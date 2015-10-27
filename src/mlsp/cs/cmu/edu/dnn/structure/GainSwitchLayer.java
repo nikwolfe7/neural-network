@@ -7,6 +7,7 @@ import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
 import mlsp.cs.cmu.edu.dnn.elements.SwitchEdge;
+import mlsp.cs.cmu.edu.dnn.elements.Switchable;
 
 public class GainSwitchLayer implements Layer {
 
@@ -88,6 +89,11 @@ public class GainSwitchLayer implements Layer {
   @Override
   public int size() {
     return layer.size();
+  }
+
+  @Override
+  public void removeNetworkElement(NetworkElement e) {
+    layer.removeNetworkElement(e);
   }
 
 }

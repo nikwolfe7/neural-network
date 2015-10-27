@@ -20,6 +20,8 @@ public interface Layer extends Serializable {
 	
 	public void addNetworkElements(NetworkElement... elements);
 	
+	public void removeNetworkElement(NetworkElement e);
+	
 	public int size();
 
 }

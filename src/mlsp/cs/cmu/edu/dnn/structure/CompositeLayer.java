@@ -105,4 +105,11 @@ public class CompositeLayer implements Layer {
 		return totalSize;
 	}
 
+  @Override
+  public void removeNetworkElement(NetworkElement e) {
+    for(Layer layer : subLayers) {
+      layer.removeNetworkElement(e);
+    }
+  }
+
 }

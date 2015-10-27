@@ -1,6 +1,11 @@
 package mlsp.cs.cmu.edu.dnn.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
+import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.factory.NetworkElementAbstractFactory;
 import mlsp.cs.cmu.edu.dnn.structure.Layer;
@@ -88,5 +93,22 @@ public class LayerElementUtils {
 		in.addOutgoingElement(w);
 		out.addIncomingElement(w);
 	}
+
+  public static NetworkElement[] removeLayerElement(Layer networkElementLayer, NetworkElement e) {
+    List<NetworkElement> elements = Arrays.asList(networkElementLayer.getElements());
+    if (!elements.contains(e)) {
+      return networkElementLayer.getElements(); /* unchanged */
+    } else {
+      e.remove();
+      int i = 0, size = Math.max(0, elements.size()-1);
+      NetworkElement[] newElements = new NetworkElement[size];
+      for(NetworkElement element : elements) {
+        if(element != e) {
+          newElements[i++] = element;
+        }
+      }
+      return newElements;
+    }
+  }
 
 }

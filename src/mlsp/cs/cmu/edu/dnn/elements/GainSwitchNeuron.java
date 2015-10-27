@@ -1,6 +1,5 @@
 package mlsp.cs.cmu.edu.dnn.elements;
 
-import mlsp.cs.cmu.edu.dnn.structure.Switchable;
 
 public class GainSwitchNeuron extends Neuron implements Switchable {
 

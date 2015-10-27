@@ -2,135 +2,157 @@ package mlsp.cs.cmu.edu.dnn.elements;
 
 public class Edge implements NetworkElement {
 
-	private static final long serialVersionUID = -3785529802453031665L;
+  private static final long serialVersionUID = -3785529802453031665L;
 
-	private boolean batchUpdate;
+  private boolean batchUpdate;
 
-	private double weight, output, gradient, batchSum;
+  private double weight, output, gradient, batchSum;
 
-	private NetworkElement incoming, outgoing;
+  private NetworkElement incoming, outgoing;
 
-	/* Initializations from Tom Mitchell */
-	private double initLow;
-	private double initHigh;
-	private double learningRate;
+  /* Initializations from Tom Mitchell */
+  private double initLow;
 
-	public Edge() {
-		this.initLow = -0.05;
-		this.initHigh = 0.05;
-		this.learningRate = 0.05;
-		this.output = 0;
-		this.gradient = 0;
-		this.batchSum = 0;
-		this.batchUpdate = false;
-		this.weight = initializeWeight(initLow, initHigh);
-	}
+  private double initHigh;
 
-	public Edge(double low, double high, double rate) {
-		this.initLow = low;
-		this.initHigh = high;
-		this.learningRate = rate;
-		this.output = 0;
-		this.gradient = 0;
-		this.batchSum = 0;
-		this.batchUpdate = false;
-		this.weight = initializeWeight(initLow, initHigh);
-	}
+  private double learningRate;
 
-	public Edge(boolean batch, double low, double high, double rate) {
-		this.initLow = low;
-		this.initHigh = high;
-		this.learningRate = rate;
-		this.output = 0;
-		this.gradient = 0;
-		this.batchSum = 0;
-		this.batchUpdate = batch;
-		this.weight = initializeWeight(initLow, initHigh);
-	}
+  public Edge() {
+    this.initLow = -0.05;
+    this.initHigh = 0.05;
+    this.learningRate = 0.05;
+    this.output = 0;
+    this.gradient = 0;
+    this.batchSum = 0;
+    this.batchUpdate = false;
+    this.weight = initializeWeight(initLow, initHigh);
+  }
 
-	public void reinitializeWeight(double low, double high) {
-		weight = initializeWeight(low, high);
-	}
+  public Edge(double low, double high, double rate) {
+    this.initLow = low;
+    this.initHigh = high;
+    this.learningRate = rate;
+    this.output = 0;
+    this.gradient = 0;
+    this.batchSum = 0;
+    this.batchUpdate = false;
+    this.weight = initializeWeight(initLow, initHigh);
+  }
 
-	private double initializeWeight(double low, double high) {
-		return Math.random() * (high - low) + low;
-	}
+  public Edge(boolean batch, double low, double high, double rate) {
+    this.initLow = low;
+    this.initHigh = high;
+    this.learningRate = rate;
+    this.output = 0;
+    this.gradient = 0;
+    this.batchSum = 0;
+    this.batchUpdate = batch;
+    this.weight = initializeWeight(initLow, initHigh);
+  }
 
-	public void setLearningRate(double rate) {
-		learningRate = rate;
-	}
+  public void reinitializeWeight(double low, double high) {
+    weight = initializeWeight(low, high);
+  }
 
-	public double getLearningRate() {
-		return learningRate;
-	}
+  private double initializeWeight(double low, double high) {
+    return Math.random() * (high - low) + low;
+  }
 
-	public void setIncomingElement(NetworkElement element) {
-		this.incoming = element;
-	}
-	
-	protected NetworkElement getIncomingElement() {
-	  return incoming;
-	}
+  public void setLearningRate(double rate) {
+    learningRate = rate;
+  }
 
-	public void setOutgoingElement(NetworkElement element) {
-		this.outgoing = element;
-	}
-	
-	protected NetworkElement getOutgoingElement() {
-	  return outgoing;
-	}
+  public double getLearningRate() {
+    return learningRate;
+  }
 
-	public void setBatchUpdate(boolean b) {
-		this.batchUpdate = b;
-	}
+  public void setIncomingElement(NetworkElement element) {
+    this.incoming = element;
+  }
 
-	public double getWeight() {
-		return weight;
-	}
+  public NetworkElement getIncomingElement() {
+    return incoming;
+  }
 
-	@Override
-	public void forward() {
-		output = weight * incoming.getOutput();
-	}
+  public void setOutgoingElement(NetworkElement element) {
+    this.outgoing = element;
+  }
 
-	@Override
-	public void backward() {
-		setGradient(outgoing.getGradient() * derivative());
-		updateWeight();
-	}
+  public NetworkElement getOutgoingElement() {
+    return outgoing;
+  }
 
-	protected void updateWeight() {
-		if (batchUpdate)
-			batchSum += gradient;
-		else
-			weight = weight - (learningRate * gradient);
-	}
+  public void setBatchUpdate(boolean b) {
+    this.batchUpdate = b;
+  }
 
-	public void batchUpdate() {
-		if (batchUpdate) {
-			weight = weight - (learningRate * batchSum);
-			batchSum = 0;
-		}
-	}
+  public double getWeight() {
+    return weight;
+  }
 
-	@Override
-	public double derivative() {
-		/* w.r.t. the weights, (w * x), derivative is x */
-		return incoming.getOutput();
-	}
+  @Override
+  public void forward() {
+    output = weight * incoming.getOutput();
+  }
 
-	@Override
-	public double getOutput() {
-		return output;
-	}
+  @Override
+  public void backward() {
+    setGradient(outgoing.getGradient() * derivative());
+    updateWeight();
+  }
 
-	@Override
-	public double getGradient() {
-		return gradient;
-	}
-	
-	public void setGradient(double g) {
-	  gradient = g;
-	}
+  protected void updateWeight() {
+    if (batchUpdate)
+      batchSum += gradient;
+    else
+      weight = weight - (learningRate * gradient);
+  }
+
+  public void batchUpdate() {
+    if (batchUpdate) {
+      weight = weight - (learningRate * batchSum);
+      batchSum = 0;
+    }
+  }
+
+  @Override
+  public double derivative() {
+    /* w.r.t. the weights, (w * x), derivative is x */
+    return incoming.getOutput();
+  }
+
+  @Override
+  public double getOutput() {
+    return output;
+  }
+
+  @Override
+  public double getGradient() {
+    return gradient;
+  }
+
+  public void setGradient(double g) {
+    gradient = g;
+  }
+
+  @Override
+  public void remove() {
+    if (incoming != null) {
+      incoming.remove(this);
+      incoming = null;
+    }
+    if (outgoing != null) {
+      outgoing.remove(this);
+      outgoing = null;
+    }
+  }
+
+  @Override
+  public void remove(NetworkElement e) {
+    /* Edge removes itself from both ends... */
+    if (e == incoming || e == outgoing) {
+      remove();
+    }
+  }
 
 }

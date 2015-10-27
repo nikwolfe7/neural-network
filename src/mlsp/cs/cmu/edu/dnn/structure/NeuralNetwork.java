@@ -220,6 +220,27 @@ public class NeuralNetwork implements Serializable {
 	public void modifyExistingLayer(Layer oldLayer, Layer newLayer) {
 		layers.set(layers.indexOf(oldLayer), newLayer);
 	}
+	
+	/**
+	 * Extricates the elements in the list from the network, cleans up
+	 * any artifacts that may be left over... 
+	 * 
+	 * @param elements
+	 */
+  public void removeElements(List<NetworkElement> elements) {
+    /* Remove neurons in the hidden layers */
+    for (int i : getHiddenLayerIndices()) {
+      Layer layer = getLayer(i);
+      for (NetworkElement e : elements)
+        layer.removeNetworkElement(e);
+    }
+    /* Remove weights in the hidden layers */
+    for (int i : getWeightMatrixIndices()) {
+      Layer layer = getLayer(i);
+      for (NetworkElement e : elements)
+        layer.removeNetworkElement(e);
+    }
+  }
 
 	/***************************************************
 	 * TRAINING:

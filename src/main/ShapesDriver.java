@@ -11,11 +11,11 @@ import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 import mlsp.cs.cmu.edu.dnn.training.DataReader;
-import mlsp.cs.cmu.edu.dnn.training.GainSwitchPruningTool;
 import mlsp.cs.cmu.edu.dnn.training.ReadBinaryCSVTrainingDataForCrossEntropy;
 import mlsp.cs.cmu.edu.dnn.training.ReadCSVTrainingData;
 import mlsp.cs.cmu.edu.dnn.util.BinaryThresholdOutput;
 import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
+import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public class ShapesDriver {
@@ -23,6 +23,7 @@ public class ShapesDriver {
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = true;
   static boolean batchUpdate = false;
+  static boolean removeElements = true;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
   
@@ -121,10 +122,11 @@ public class ShapesDriver {
 			trainingModule = new DNNTrainingModule(net, testing);
 			trainingModule.setOutputOn(false);
 			trainingModule.setOutputAdapter(adapter);
-			net = GainSwitchPruningTool.doPruning(net, training, remove);
+			net = PruningTool.doPruning(net, training, remove, removeElements);
 			trainingModule.doTestTrainedNetwork();
 			remove += 0.01;
 		}
+		trainingModule.saveNetworkToFile(data + "reduced.network.dnn");
 	}
 	
 	public static void RShapeDriver(int... structure) {
@@ -157,7 +159,7 @@ public class ShapesDriver {
 			trainingModule = new DNNTrainingModule(net, testing);
 			trainingModule.setOutputOn(printOut);
 			trainingModule.setOutputAdapter(adapter);
-			net = GainSwitchPruningTool.doPruning(net, training, remove);
+			net = PruningTool.doPruning(net, training, remove, removeElements);
 			trainingModule.doTestTrainedNetwork();
 			remove += 0.01;
 		}
@@ -195,7 +197,7 @@ public class ShapesDriver {
 			trainingModule = new DNNTrainingModule(net, testing);
 			trainingModule.setOutputOn(false);
 			trainingModule.setOutputAdapter(adapter);
-			net = GainSwitchPruningTool.doPruning(net, training, remove);
+			net = PruningTool.doPruning(net, training, remove, removeElements);
 			trainingModule.doTestTrainedNetwork();
 			remove += 0.01;
 		}

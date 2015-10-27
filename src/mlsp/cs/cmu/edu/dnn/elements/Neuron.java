@@ -68,9 +68,27 @@ public class Neuron implements NetworkElement {
   public List<NetworkElement> getIncomingElements() {
     return incoming;
   }
+  
+  public List<NetworkElement> getOutgoingElements() {
+    return outgoing;
+  }
 
   public void setOutput(double output) {
     this.output = output;
+  }
+
+  @Override
+  public void remove() {
+    for(NetworkElement e : getIncomingElements())
+      e.remove(this);
+    for(NetworkElement e : getOutgoingElements())
+      e.remove(this);
+  }
+
+  @Override
+  public void remove(NetworkElement e) {
+    getIncomingElements().remove(e);
+    getOutgoingElements().remove(e);
   }
 
 }

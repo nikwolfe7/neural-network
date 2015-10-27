@@ -1,7 +1,7 @@
-package mlsp.cs.cmu.edu.dnn.structure;
+package mlsp.cs.cmu.edu.dnn.elements;
 
 public interface Switchable {
   
   public void setSwitchOff(boolean b);
-
+  
 }

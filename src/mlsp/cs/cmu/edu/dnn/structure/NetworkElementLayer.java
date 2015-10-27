@@ -1,6 +1,9 @@
 package mlsp.cs.cmu.edu.dnn.structure;
 
+import javax.swing.plaf.LayerUI;
+
 import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
+import mlsp.cs.cmu.edu.dnn.util.LayerElementUtils;
 
 public class NetworkElementLayer implements Layer {
 
@@ -68,5 +71,10 @@ public class NetworkElementLayer implements Layer {
 		System.arraycopy(newElements, 0, newElementArray, elements.length, newElements.length);
 		elements = newElementArray;
 	}
+
+  @Override
+  public void removeNetworkElement(NetworkElement e) { 
+    elements = LayerElementUtils.removeLayerElement(this, e);
+  }
 
 }
