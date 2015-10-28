@@ -3,6 +3,10 @@ package mlsp.cs.cmu.edu.dnn.elements;
 public class Edge implements NetworkElement {
 
   private static final long serialVersionUID = -3785529802453031665L;
+  
+  private double eps = Double.MIN_VALUE;
+  
+  private boolean adaGrad = true;
 
   private boolean batchUpdate;
 
@@ -16,27 +20,31 @@ public class Edge implements NetworkElement {
   private double initHigh;
 
   private double learningRate;
+  
+  private double adaGradientSum;
 
   public Edge() {
     this.initLow = -0.05;
     this.initHigh = 0.05;
-    this.learningRate = 0.05;
     this.output = 0;
     this.gradient = 0;
     this.batchSum = 0;
     this.batchUpdate = false;
+    this.adaGradientSum = eps;
     this.weight = initializeWeight(initLow, initHigh);
+    setLearningRate(0.05);
   }
 
   public Edge(double low, double high, double rate) {
     this.initLow = low;
     this.initHigh = high;
-    this.learningRate = rate;
     this.output = 0;
     this.gradient = 0;
     this.batchSum = 0;
     this.batchUpdate = false;
+    this.adaGradientSum = eps;
     this.weight = initializeWeight(initLow, initHigh);
+    setLearningRate(rate);
   }
 
   public Edge(boolean batch, double low, double high, double rate) {
@@ -47,7 +55,9 @@ public class Edge implements NetworkElement {
     this.gradient = 0;
     this.batchSum = 0;
     this.batchUpdate = batch;
+    this.adaGradientSum = eps;
     this.weight = initializeWeight(initLow, initHigh);
+    setLearningRate(rate);
   }
 
   public void reinitializeWeight(double low, double high) {
@@ -59,7 +69,7 @@ public class Edge implements NetworkElement {
   }
 
   public void setLearningRate(double rate) {
-    learningRate = rate;
+    this.learningRate = (adaGrad) ? 1 : rate;
   }
 
   public double getLearningRate() {
@@ -105,13 +115,27 @@ public class Edge implements NetworkElement {
     if (batchUpdate)
       batchSum += gradient;
     else
-      weight = weight - (learningRate * gradient);
+      weight = weight - (newLearningRate() * gradient);
   }
 
+  /**
+   * Adagrad is for stochastic grad descent. We don't use it here
+   */
   public void batchUpdate() {
     if (batchUpdate) {
       weight = weight - (learningRate * batchSum);
       batchSum = 0;
+    }
+  }
+  
+  private double newLearningRate() {
+    if (adaGrad) {
+      adaGradientSum += Math.pow(gradient, 2);
+      double denom = Math.sqrt(Math.max(adaGradientSum, eps));
+      double newLearningRate = learningRate / denom;
+      return newLearningRate;
+    } else {
+      return learningRate;
     }
   }
 

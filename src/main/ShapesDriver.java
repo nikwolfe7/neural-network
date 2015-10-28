@@ -46,7 +46,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) {
-		  DiamondDriver(4);
+		  DiamondDriver(8);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -113,20 +113,20 @@ public class ShapesDriver {
 		trainingModule.doTestTrainedNetwork();
 		trainingModule.saveNetworkToFile(data + "test.network.dnn");
 		
-		double remove = 0.0;
-		while (remove <= 1) {
-			System.out.println("\n\nWith remove: " + remove);
-			System.out.println("De-serializing the network..");
-			factory = new ReadSerializedFileDNNFactory(data + "test.network.dnn");
-			net = factory.getInitializedNeuralNetwork();
-			trainingModule = new DNNTrainingModule(net, testing);
-			trainingModule.setOutputOn(false);
-			trainingModule.setOutputAdapter(adapter);
-			net = PruningTool.doPruning(net, training, remove, removeElements);
-			trainingModule.doTestTrainedNetwork();
-			remove += 0.25;
-		}
-		trainingModule.saveNetworkToFile(data + "reduced.network.dnn");
+//		double remove = 0.0;
+//		while (remove <= 1) {
+//			System.out.println("\n\nWith remove: " + remove);
+//			System.out.println("De-serializing the network..");
+//			factory = new ReadSerializedFileDNNFactory(data + "test.network.dnn");
+//			net = factory.getInitializedNeuralNetwork();
+//			trainingModule = new DNNTrainingModule(net, testing);
+//			trainingModule.setOutputOn(false);
+//			trainingModule.setOutputAdapter(adapter);
+//			net = PruningTool.doPruning(net, training, remove, removeElements);
+//			trainingModule.doTestTrainedNetwork();
+//			remove += 0.25;
+//		}
+//		trainingModule.saveNetworkToFile(data + "reduced.network.dnn");
 	}
 	
 	public static void RShapeDriver(int... structure) {
