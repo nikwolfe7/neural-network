@@ -1,6 +1,7 @@
 package mlsp.cs.cmu.edu.dnn.elements;
 
 import mlsp.cs.cmu.edu.dnn.util.ActivationFunction;
+import mlsp.cs.cmu.edu.dnn.util.CostFunction;
 
 public class TanhOutput extends Output {
 
@@ -8,7 +9,9 @@ public class TanhOutput extends Output {
 
   @Override
 	public double derivative() {
-		return ActivationFunction.tanhDerivative(getOutput());
+    double costFuncDerivative = CostFunction.meanSqErrorDerivative(getOutput(), getTruthValue());
+    double tanhDerivative = ActivationFunction.tanhDerivative(getOutput());
+    return costFuncDerivative * tanhDerivative;
 	}
 
 }

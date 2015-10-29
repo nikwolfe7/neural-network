@@ -6,7 +6,15 @@ public class Edge implements NetworkElement {
   
   private double eps = Double.MIN_VALUE;
   
-  private boolean adaGrad = true;
+  private boolean adaGrad = false;
+  
+  private boolean rProp = true;
+  
+  private double nPlus = 1.2;
+  
+  private double nMinus = -0.5;
+  
+  private int prevSign = 1;
 
   private boolean batchUpdate;
 
@@ -38,13 +46,13 @@ public class Edge implements NetworkElement {
   public Edge(double low, double high, double rate) {
     this.initLow = low;
     this.initHigh = high;
+    this.learningRate = rate;
     this.output = 0;
     this.gradient = 0;
     this.batchSum = 0;
     this.batchUpdate = false;
     this.adaGradientSum = eps;
     this.weight = initializeWeight(initLow, initHigh);
-    setLearningRate(rate);
   }
 
   public Edge(boolean batch, double low, double high, double rate) {
@@ -57,7 +65,6 @@ public class Edge implements NetworkElement {
     this.batchUpdate = batch;
     this.adaGradientSum = eps;
     this.weight = initializeWeight(initLow, initHigh);
-    setLearningRate(rate);
   }
 
   public void reinitializeWeight(double low, double high) {
@@ -115,7 +122,8 @@ public class Edge implements NetworkElement {
     if (batchUpdate)
       batchSum += gradient;
     else
-      weight = weight - (newLearningRate() * gradient);
+      weight = weight - getUpdate();
+    prevSign = ((gradient >= 0) ? 1 : -1);
   }
 
   /**
@@ -123,20 +131,34 @@ public class Edge implements NetworkElement {
    */
   public void batchUpdate() {
     if (batchUpdate) {
-      weight = weight - (learningRate * batchSum);
+      double update = (learningRate * batchSum);
+      if(rProp) 
+        update = rPropUpdate(update);
+      weight = weight - update;
       batchSum = 0;
     }
   }
   
-  private double newLearningRate() {
-    if (adaGrad) {
-      adaGradientSum += Math.pow(gradient, 2);
-      double denom = Math.sqrt(Math.max(adaGradientSum, eps));
-      double newLearningRate = learningRate / denom;
-      return newLearningRate;
+  private double getUpdate() {
+    if(adaGrad) {
+      return (newLearningRate() * gradient);
+    } else if(rProp) {
+      return rPropUpdate(learningRate * gradient);
     } else {
-      return learningRate;
+      return learningRate * gradient;
     }
+  }
+  
+  private double rPropUpdate(double update) {
+    int sign = ((gradient >= 0) ? 1 : -1);
+    return (sign != prevSign) ? (update * nMinus) : (update * nPlus);
+  }
+  
+  private double newLearningRate() {
+    adaGradientSum += Math.pow(gradient, 2);
+    double denom = Math.sqrt(Math.max(adaGradientSum, eps));
+    double newLearningRate = learningRate / denom;
+    return newLearningRate;
   }
 
   @Override

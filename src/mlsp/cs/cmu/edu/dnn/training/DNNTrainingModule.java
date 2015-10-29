@@ -26,7 +26,7 @@ public class DNNTrainingModule {
 	private int numMinChangeIterations = 1;
 	private double minError = Double.NEGATIVE_INFINITY;
 	private boolean allowNegativeChangeIterations = true;
-	private DecimalFormat f = new DecimalFormat("##.###");
+	private DecimalFormat f = new DecimalFormat("##.######");
 	private boolean outputOn = false;
 	private boolean printResults = false;
 	private boolean batchUpdate = false;
@@ -127,12 +127,15 @@ public class DNNTrainingModule {
 					sumError += net.trainOnInstance(x);
 				}
 			}
-
+			
+			/* Mean squared error */
+			sumError = sumError / training.size();
+			
 			/* Should ideally never be negative, but no guarantees */
 			double diff = prevSumError - sumError;
 
 			if (outputOn)
-				System.out.println("Epoch " + (epoch++) + " | Error: " + f.format(sumError) + "\tDiff: " + diff);
+				System.out.println("Epoch " + (epoch++) + " | Avg Error: " + f.format(sumError) + "\tDiff: " + diff);
 
 			prevSumError = sumError;
 
