@@ -4,32 +4,35 @@ public class Edge implements NetworkElement {
 
   private static final long serialVersionUID = -3785529802453031665L;
   
-  private double eps = Double.MIN_VALUE;
-  
+  /* Optimization 1: AdaGrad */
   private boolean adaGrad = false;
+  private double eps = Double.MIN_VALUE;
+  private double adaGradientSum = eps;
   
-  private boolean rProp = true;
-  
+  /* Optimization 2: R-Prop */
+  private boolean rProp = false;
   private double nPlus = 1.2;
-  
   private double nMinus = -0.5;
-  
   private int prevSign = 1;
+  
+  /* Optimization 3: Momentum */
+  private boolean momentum = false;
+  private double alpha = 0;
+  private double prevUpdate = 0;
 
-  private boolean batchUpdate;
-
-  private double weight, output, gradient, batchSum;
-
-  private NetworkElement incoming, outgoing;
+  /* Optimization 4: Batch Training */
+  private boolean batchUpdate = false;
+  private double batchSum = 0;
+  
+  /* Edge parameters */
+  private double weight, output, gradient;
 
   /* Initializations from Tom Mitchell */
   private double initLow;
-
   private double initHigh;
-
   private double learningRate;
   
-  private double adaGradientSum;
+  private NetworkElement incoming, outgoing;
 
   public Edge() {
     this.initLow = -0.05;
@@ -37,8 +40,6 @@ public class Edge implements NetworkElement {
     this.output = 0;
     this.gradient = 0;
     this.batchSum = 0;
-    this.batchUpdate = false;
-    this.adaGradientSum = eps;
     this.weight = initializeWeight(initLow, initHigh);
     setLearningRate(0.05);
   }
@@ -50,21 +51,30 @@ public class Edge implements NetworkElement {
     this.output = 0;
     this.gradient = 0;
     this.batchSum = 0;
-    this.batchUpdate = false;
-    this.adaGradientSum = eps;
     this.weight = initializeWeight(initLow, initHigh);
   }
 
-  public Edge(boolean batch, double low, double high, double rate) {
-    this.initLow = low;
-    this.initHigh = high;
-    this.learningRate = rate;
-    this.output = 0;
-    this.gradient = 0;
-    this.batchSum = 0;
-    this.batchUpdate = batch;
+  public void setMomentum(boolean b, double alpha) {
+    this.momentum = b;
+    this.alpha = alpha;
+    this.prevUpdate = 0;
+  }
+  
+  public void setAdaGrad(boolean b) {
+    this.adaGrad = b;
+    this.rProp = !b;
     this.adaGradientSum = eps;
-    this.weight = initializeWeight(initLow, initHigh);
+  }
+  
+  public void setRProp(boolean b) {
+    this.rProp = b;
+    this.adaGrad = !b;
+    this.prevSign = 1;
+  }
+  
+  public void setBatchUpdate(boolean b) {
+    this.batchUpdate = b;
+    this.batchSum = 0;
   }
 
   public void reinitializeWeight(double low, double high) {
@@ -76,7 +86,7 @@ public class Edge implements NetworkElement {
   }
 
   public void setLearningRate(double rate) {
-    this.learningRate = (adaGrad) ? 1 : rate;
+    this.learningRate = rate;
   }
 
   public double getLearningRate() {
@@ -97,10 +107,6 @@ public class Edge implements NetworkElement {
 
   public NetworkElement getOutgoingElement() {
     return outgoing;
-  }
-
-  public void setBatchUpdate(boolean b) {
-    this.batchUpdate = b;
   }
 
   public double getWeight() {
@@ -134,19 +140,25 @@ public class Edge implements NetworkElement {
       double update = (learningRate * batchSum);
       if(rProp) 
         update = rPropUpdate(update);
+      if(momentum)
+        update = addMomentum(update);
       weight = weight - update;
       batchSum = 0;
     }
   }
   
   private double getUpdate() {
+    double update;
     if(adaGrad) {
-      return (newLearningRate() * gradient);
+      update = (newLearningRate() * gradient);
     } else if(rProp) {
-      return rPropUpdate(learningRate * gradient);
+      update = rPropUpdate(learningRate * gradient);
     } else {
-      return learningRate * gradient;
+      update = learningRate * gradient;
     }
+    if(momentum)
+      update = addMomentum(update);
+    return update;
   }
   
   private double rPropUpdate(double update) {
@@ -159,6 +171,13 @@ public class Edge implements NetworkElement {
     double denom = Math.sqrt(Math.max(adaGradientSum, eps));
     double newLearningRate = learningRate / denom;
     return newLearningRate;
+  }
+  
+  private double addMomentum(double update) {
+    double momentum = alpha * prevUpdate;
+    update = update + momentum;
+    prevUpdate = update;
+    return update;
   }
 
   @Override

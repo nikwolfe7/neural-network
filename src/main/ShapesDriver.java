@@ -142,8 +142,8 @@ public class ShapesDriver {
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 		trainingModule.setOutputOn(true);
 		trainingModule.setOutputAdapter(adapter);
-		trainingModule.setBatchUpdate(batchUpdate);
-		trainingModule.setConvergenceCriteria(1.0e-7, -1, false, 0, 1200);
+		trainingModule.setBatchUpdate(batchUpdate,10);
+		trainingModule.setConvergenceCriteria(1.0e-7, -1, true, 0, 100);
 		trainingModule.setPrintResults(true, data + "RShape-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
 		trainingModule.doTrainNetworkUntilConvergence();
 
@@ -180,7 +180,7 @@ public class ShapesDriver {
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
     trainingModule.setOutputOn(printOut);
     trainingModule.setOutputAdapter(adapter);
-    trainingModule.setBatchUpdate(batchUpdate, 10);
+    trainingModule.setBatchUpdate(batchUpdate,15);
     trainingModule.setConvergenceCriteria(1.0e-7, -1, true, 0);
     trainingModule.setPrintResults(true, data + "DRShape-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
     trainingModule.doTrainNetworkUntilConvergence();
