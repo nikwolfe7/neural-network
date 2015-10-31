@@ -58,21 +58,18 @@ public class Edge implements NetworkElement {
     this.momentum = b;
     this.alpha = alpha;
     this.prevUpdate = 0;
-    this.rProp = (momentum) ? false : rProp;
   }
   
   public void setAdaGrad(boolean b) {
     this.adaGrad = b;
+    this.rProp = !b;
     this.adaGradientSum = eps;
-    this.rProp = (adaGrad) ? false : rProp;
   }
   
   public void setRProp(boolean b) {
     this.rProp = b;
-    this.prevSign = 0;
-    this.prevUpdate = 1;
-    this.adaGrad = (rProp) ? false : adaGrad;
-    this.momentum = (rProp) ? false : momentum;
+    this.adaGrad = !b;
+    this.prevSign = 1;
   }
   
   public void setBatchUpdate(boolean b) {
@@ -128,51 +125,45 @@ public class Edge implements NetworkElement {
   }
 
   protected void updateWeight() {
-    prevSign = (prevSign == 0) ? sign(gradient) : prevSign;
     if (batchUpdate)
       batchSum += gradient;
     else
       weight = weight - getUpdate();
+    prevSign = ((gradient >= 0) ? 1 : -1);
   }
 
-  /* Adagrad is for stochastic grad descent. We don't use it here */
+  /**
+   * Adagrad is for stochastic grad descent. We don't use it here
+   */
   public void batchUpdate() {
     if (batchUpdate) {
       double update = (learningRate * batchSum);
       if(rProp) 
-        update = rPropUpdate(batchSum);
-      else if(momentum)
+        update = rPropUpdate(update);
+      if(momentum)
         update = addMomentum(update);
       weight = weight - update;
-      prevUpdate = update;
-      prevSign = sign(batchSum);
       batchSum = 0;
     }
   }
   
-  /* Only ever called for SGD */
   private double getUpdate() {
     double update;
     if(adaGrad) {
       update = (newLearningRate() * gradient);
     } else if(rProp) {
-      update = rPropUpdate(gradient);
+      update = rPropUpdate(learningRate * gradient);
     } else {
       update = learningRate * gradient;
     }
     if(momentum)
       update = addMomentum(update);
-    prevUpdate = update;
-    prevSign = sign(gradient);
     return update;
   }
   
-  private double rPropUpdate(double grad) {
-    return (sign(grad) != prevSign) ? (prevUpdate * nMinus) : (prevUpdate * nPlus);
-  }
-  
-  private int sign(double val) {
-    return (val >= 0) ? 1 : -1;
+  private double rPropUpdate(double update) {
+    int sign = ((gradient >= 0) ? 1 : -1);
+    return (sign != prevSign) ? (update * nMinus) : (update * nPlus);
   }
   
   private double newLearningRate() {
@@ -184,7 +175,9 @@ public class Edge implements NetworkElement {
   
   private double addMomentum(double update) {
     double momentum = alpha * prevUpdate;
-    return update + momentum;
+    update = update + momentum;
+    prevUpdate = update;
+    return update;
   }
 
   @Override
