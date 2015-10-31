@@ -66,11 +66,11 @@ public class Edge implements NetworkElement {
     this.adaGradientSum = eps;
   }
   
-  public void setRProp(boolean b) {
-    this.rProp = b;
-    this.adaGrad = !b;
-    this.prevSign = 1;
-  }
+//  public void setRProp(boolean b) {
+//    this.rProp = b;
+//    this.adaGrad = !b;
+//    this.prevSign = 1;
+//  }
   
   public void setBatchUpdate(boolean b) {
     this.batchUpdate = b;
