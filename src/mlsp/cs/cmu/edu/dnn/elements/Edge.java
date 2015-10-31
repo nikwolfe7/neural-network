@@ -70,7 +70,7 @@ public class Edge implements NetworkElement {
   public void setRProp(boolean b) {
     this.rProp = b;
     this.prevSign = 0;
-    this.prevUpdate = 0.001;
+    this.prevUpdate = 1;
     this.adaGrad = (rProp) ? false : adaGrad;
     this.momentum = (rProp) ? false : momentum;
   }
@@ -133,7 +133,6 @@ public class Edge implements NetworkElement {
       batchSum += gradient;
     else
       weight = weight - getUpdate();
-    prevSign = (batchUpdate) ? sign(batchSum) : sign(gradient);
   }
 
   /* Adagrad is for stochastic grad descent. We don't use it here */
@@ -146,6 +145,7 @@ public class Edge implements NetworkElement {
         update = addMomentum(update);
       weight = weight - update;
       prevUpdate = update;
+      prevSign = sign(batchSum);
       batchSum = 0;
     }
   }
@@ -163,6 +163,7 @@ public class Edge implements NetworkElement {
     if(momentum)
       update = addMomentum(update);
     prevUpdate = update;
+    prevSign = sign(gradient);
     return update;
   }
   
