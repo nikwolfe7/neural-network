@@ -1,24 +1,14 @@
 package mlsp.cs.cmu.edu.dnn.elements;
 
-public class Edge implements NetworkElement {
+public abstract class Edge implements NetworkElement {
 
   private static final long serialVersionUID = -3785529802453031665L;
-  
-  /* Optimization 1: AdaGrad */
-  private boolean adaGrad = false;
-  private double eps = Double.MIN_VALUE;
-  private double adaGradientSum = eps;
   
   /* Optimization 2: R-Prop */
   private boolean rProp = false;
   private double nPlus = 1.2;
   private double nMinus = -0.5;
   private int prevSign = 1;
-  
-  /* Optimization 3: Momentum */
-  private boolean momentum = false;
-  private double alpha = 0;
-  private double prevUpdate = 0;
 
   /* Optimization 4: Batch Training */
   private boolean batchUpdate = false;
@@ -54,17 +44,7 @@ public class Edge implements NetworkElement {
     this.weight = initializeWeight(initLow, initHigh);
   }
 
-  public void setMomentum(boolean b, double alpha) {
-    this.momentum = b;
-    this.alpha = alpha;
-    this.prevUpdate = 0;
-  }
   
-  public void setAdaGrad(boolean b) {
-    this.adaGrad = b;
-    this.rProp = !b;
-    this.adaGradientSum = eps;
-  }
   
 //  public void setRProp(boolean b) {
 //    this.rProp = b;
@@ -73,10 +53,18 @@ public class Edge implements NetworkElement {
 //  }
   
   public void setBatchUpdate(boolean b) {
-    this.batchUpdate = b;
-    this.batchSum = 0;
+    batchUpdate = b;
+    batchSum = 0;
   }
-
+  
+  public boolean isBatchUpdate() {
+	  return batchUpdate;
+  }
+  
+  public void resetBatchGradient() {
+	  batchSum = 0;
+  }
+  
   public void reinitializeWeight(double low, double high) {
     weight = initializeWeight(low, high);
   }
@@ -86,7 +74,7 @@ public class Edge implements NetworkElement {
   }
 
   public void setLearningRate(double rate) {
-    this.learningRate = rate;
+    learningRate = rate;
   }
 
   public double getLearningRate() {
@@ -94,7 +82,7 @@ public class Edge implements NetworkElement {
   }
 
   public void setIncomingElement(NetworkElement element) {
-    this.incoming = element;
+    incoming = element;
   }
 
   public NetworkElement getIncomingElement() {
@@ -102,7 +90,7 @@ public class Edge implements NetworkElement {
   }
 
   public void setOutgoingElement(NetworkElement element) {
-    this.outgoing = element;
+    outgoing = element;
   }
 
   public NetworkElement getOutgoingElement() {
@@ -112,7 +100,11 @@ public class Edge implements NetworkElement {
   public double getWeight() {
     return weight;
   }
-
+  
+  public void setWeight(double w) {
+	  weight = w;
+  }
+  
   @Override
   public void forward() {
     output = weight * incoming.getOutput();
@@ -124,18 +116,15 @@ public class Edge implements NetworkElement {
     updateWeight();
   }
 
-  protected void updateWeight() {
-    if (batchUpdate)
-      batchSum += gradient;
-    else
+  public abstract void updateWeight(); {
       weight = weight - getUpdate();
     prevSign = ((gradient >= 0) ? 1 : -1);
   }
-
-  /**
+  
+/**
    * Adagrad is for stochastic grad descent. We don't use it here
    */
-  public void batchUpdate() {
+  public abstract void batchUpdate(); {
     if (batchUpdate) {
       double update = (learningRate * batchSum);
       if(rProp) 
@@ -149,12 +138,8 @@ public class Edge implements NetworkElement {
   
   private double getUpdate() {
     double update;
-    if(adaGrad) {
-      update = (newLearningRate() * gradient);
-    } else if(rProp) {
+    if(rProp) {
       update = rPropUpdate(learningRate * gradient);
-    } else {
-      update = learningRate * gradient;
     }
     if(momentum)
       update = addMomentum(update);
@@ -164,13 +149,6 @@ public class Edge implements NetworkElement {
   private double rPropUpdate(double update) {
     int sign = ((gradient >= 0) ? 1 : -1);
     return (sign != prevSign) ? (update * nMinus) : (update * nPlus);
-  }
-  
-  private double newLearningRate() {
-    adaGradientSum += Math.pow(gradient, 2);
-    double denom = Math.sqrt(Math.max(adaGradientSum, eps));
-    double newLearningRate = learningRate / denom;
-    return newLearningRate;
   }
   
   private double addMomentum(double update) {
@@ -195,9 +173,13 @@ public class Edge implements NetworkElement {
   public double getGradient() {
     return gradient;
   }
+  
+  public double getBatchGradient() {
+		return batchSum;
+	}
 
-  public void setGradient(double g) {
-    gradient = g;
-  }
-
+	public void setGradient(double g) {
+		batchSum += g;
+		gradient = g;
+	}
 }

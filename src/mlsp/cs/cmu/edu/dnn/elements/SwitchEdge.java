@@ -16,65 +16,15 @@ public class SwitchEdge extends Edge implements Switchable {
 	public void setSwitchOff(boolean b) {
 		switchOff = b;
 	}
-	
-	@Override
-	public void reinitializeWeight(double low, double high) {
-		edge.reinitializeWeight(low, high);
-	}
-	
-	@Override
-	public void setLearningRate(double rate) {
-		edge.setLearningRate(rate);
-	}
-	
-	@Override
-	public double getLearningRate() {
-		return edge.getLearningRate();
-	}
-	
-	@Override
-	public void setIncomingElement(NetworkElement element) {
-		edge.setIncomingElement(element);
-	}
-	
-	@Override
-	public NetworkElement getIncomingElement() {
-		return edge.getIncomingElement();
-	}
-	
-	@Override
-	public void setOutgoingElement(NetworkElement element) {
-		edge.setOutgoingElement(element);
-	}
-	
-	@Override
-	public NetworkElement getOutgoingElement() {
-		return edge.getOutgoingElement();
-	}
-	
-	@Override
-	public void setBatchUpdate(boolean b) {
-		edge.setBatchUpdate(b);
-	}
-	
-	@Override
-	public double getWeight() {
-		return edge.getWeight();
-	}
-	
-	@Override
-	public void forward() {
-		edge.forward();
-	}
-	
+
 	@Override
 	public void backward() {
-		setGradient(getOutgoingElement().getGradient() * edge.derivative());
+		setGradient(getOutgoingElement().getGradient() * derivative());
 		updateWeight();
 	}
-	
+
 	@Override
-	protected void updateWeight() {
+	public void updateWeight() {
 		if (!switchOff)
 			edge.updateWeight();
 	}
@@ -83,6 +33,71 @@ public class SwitchEdge extends Edge implements Switchable {
 	public void batchUpdate() {
 		if (!switchOff)
 			edge.batchUpdate();
+	}
+
+	@Override
+	public void setBatchUpdate(boolean b) {
+		edge.setBatchUpdate(b);
+	}
+
+	@Override
+	public boolean isBatchUpdate() {
+		return edge.isBatchUpdate();
+	}
+
+	@Override
+	public void resetBatchGradient() {
+		edge.resetBatchGradient();
+	}
+
+	@Override
+	public void reinitializeWeight(double low, double high) {
+		edge.reinitializeWeight(low, high);
+	}
+
+	@Override
+	public void setLearningRate(double rate) {
+		edge.setLearningRate(rate);
+	}
+
+	@Override
+	public double getLearningRate() {
+		return edge.getLearningRate();
+	}
+
+	@Override
+	public void setIncomingElement(NetworkElement element) {
+		edge.setIncomingElement(element);
+	}
+
+	@Override
+	public NetworkElement getIncomingElement() {
+		return edge.getIncomingElement();
+	}
+
+	@Override
+	public void setOutgoingElement(NetworkElement element) {
+		edge.setOutgoingElement(element);
+	}
+
+	@Override
+	public NetworkElement getOutgoingElement() {
+		return edge.getOutgoingElement();
+	}
+
+	@Override
+	public double getWeight() {
+		return edge.getWeight();
+	}
+
+	@Override
+	public void setWeight(double w) {
+		edge.setWeight(w);
+	}
+
+	@Override
+	public void forward() {
+		edge.forward();
 	}
 
 	@Override
@@ -99,7 +114,12 @@ public class SwitchEdge extends Edge implements Switchable {
 	public double getGradient() {
 		return edge.getGradient();
 	}
-	
+
+	@Override
+	public double getBatchGradient() {
+		return edge.getBatchGradient();
+	}
+
 	@Override
 	public void setGradient(double g) {
 		edge.setGradient(g);
