@@ -37,7 +37,7 @@ public class PruningTool {
     int neuronsToRemove = (int) Math.floor(neuronsToSort.size() * percentReduce);
     sortByGain(neuronsToSort);
     List<GainSwitchNeuron> groundTruthSortedNeurons = getGroundTruthError(neuronsToSort, trainingModule);
-    FileWriter writer = new FileWriter(new File("result.txt"));
+    FileWriter writer = new FileWriter(new File("result.csv"));
     for(int i = 0; i < neuronsToSort.size(); i++) {
       String s = neuronsToSort.get(i).getIdNum() + "," + groundTruthSortedNeurons.get(i).getIdNum();
       writer.write(s + "\n");

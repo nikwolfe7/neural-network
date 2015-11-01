@@ -47,7 +47,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) throws IOException {
-		  RShapeDriver(50,50);
+		  RShapeDriver(500,500);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
