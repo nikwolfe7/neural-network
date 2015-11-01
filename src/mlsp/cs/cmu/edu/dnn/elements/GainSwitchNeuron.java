@@ -5,15 +5,24 @@ import java.util.List;
 public class GainSwitchNeuron extends Neuron implements Switchable {
 
 	private static final long serialVersionUID = 6087613637614963686L;
+	
+	private static int IDNumber = 0;
 
 	private Neuron neuron;
 
 	private boolean switchOff;
 
 	private double gainSum;
+	
+	private double groundTruthError;
+	
 	private int count;
+	
+	private int idNum;
 
 	public GainSwitchNeuron(Neuron n) {
+	  GainSwitchNeuron.IDNumber++;
+	  this.idNum = IDNumber; 
 		this.neuron = n;
 		this.switchOff = false;
 		this.gainSum = 0;
@@ -30,6 +39,18 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
 	public void reset() {
 		count = 0;
 		gainSum = 0;
+	}
+	
+	public int getIdNum() {
+	  return idNum;
+	}
+	
+	public void setGroundTruthError(double val) {
+	  groundTruthError = val;
+	}
+	
+	public double getGroundTruthError() {
+	  return groundTruthError;
 	}
 
 	public double getTotalGain() {

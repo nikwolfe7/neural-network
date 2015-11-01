@@ -169,7 +169,7 @@ public class DNNTrainingModule {
 				"==========================\n");
 	}
 
-	public void doTestTrainedNetwork() {
+	public double doTestTrainedNetwork() {
 		System.out.println("Now testing network...");
 		double sumOfSquaredErrors = 0;
 		double numCorrect = 0;
@@ -209,6 +209,7 @@ public class DNNTrainingModule {
 		System.out.println("Total Error:  " + f.format(sumOfSquaredErrors));
 		System.out.println(" Mean Error:  " + f.format(sumOfSquaredErrors/testing.size()));
 		System.out.println("   Accuracy:  " + f.format(numCorrect/testing.size()));
+		return sumOfSquaredErrors;
 	}
 	
 	public void saveNetworkToFile(String fileName) {

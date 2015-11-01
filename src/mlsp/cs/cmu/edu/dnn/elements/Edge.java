@@ -37,11 +37,11 @@ public class Edge implements NetworkElement {
   public Edge() {
     this.initLow = -0.05;
     this.initHigh = 0.05;
+    this.learningRate = 0.05;
     this.output = 0;
     this.gradient = 0;
     this.batchSum = 0;
     this.weight = initializeWeight(initLow, initHigh);
-    setLearningRate(0.05);
   }
 
   public Edge(double low, double high, double rate) {
