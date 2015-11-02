@@ -12,6 +12,7 @@ import mlsp.cs.cmu.edu.dnn.elements.LinearOutput;
 import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
+import mlsp.cs.cmu.edu.dnn.elements.SimpleEdge;
 
 public class Driver {
 
@@ -35,19 +36,19 @@ public class Driver {
     Output o = new LinearOutput();
 
     Edge e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13;
-    e1 = new Edge();
-    e2 = new Edge();
-    e3 = new Edge();
-    e4 = new Edge();
-    e5 = new Edge();
-    e6 = new Edge();
-    e7 = new Edge();
-    e8 = new Edge();
-    e9 = new Edge();
-    e10 = new Edge();
-    e11 = new Edge();
-    e12 = new Edge();
-    e13 = new Edge();
+    e1 = new SimpleEdge();
+    e2 = new SimpleEdge();
+    e3 = new SimpleEdge();
+    e4 = new SimpleEdge();
+    e5 = new SimpleEdge();
+    e6 = new SimpleEdge();
+    e7 = new SimpleEdge();
+    e8 = new SimpleEdge();
+    e9 = new SimpleEdge();
+    e10 = new SimpleEdge();
+    e11 = new SimpleEdge();
+    e12 = new SimpleEdge();
+    e13 = new SimpleEdge();
     
     connect(x1, e1, z1);
     connect(x1, e2, z2);

@@ -23,7 +23,7 @@ public class TanhOutputElementFactory implements NetworkElementAbstractFactory {
 
 	@Override
 	public Edge getNewEdge() {
-		return new Edge(-1,1,0.1);
+		return new SimpleEdge(-1,1,0.1);
 	}
 
 	@Override

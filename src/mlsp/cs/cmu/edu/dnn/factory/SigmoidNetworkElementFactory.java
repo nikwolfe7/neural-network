@@ -1,5 +1,6 @@
 package mlsp.cs.cmu.edu.dnn.factory;
 
+import mlsp.cs.cmu.edu.dnn.elements.AdaGradEdge;
 import mlsp.cs.cmu.edu.dnn.elements.Bias;
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.Input;
@@ -28,9 +29,7 @@ public class SigmoidNetworkElementFactory implements NetworkElementAbstractFacto
 
 	@Override
 	public Edge getNewEdge() {
-	  Edge edge = new Edge(-1,1,0.5);
-	  edge.setAdaGrad(true);
-	  edge.setMomentum(true, 0.25);
+	  Edge edge = new AdaGradEdge(-1,1,0.5);
 	  return edge;
 	}
 

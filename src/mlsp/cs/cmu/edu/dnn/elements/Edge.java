@@ -4,13 +4,7 @@ public abstract class Edge implements NetworkElement {
 
   private static final long serialVersionUID = -3785529802453031665L;
   
-  /* Optimization 2: R-Prop */
-  private boolean rProp = false;
-  private double nPlus = 1.2;
-  private double nMinus = -0.5;
-  private int prevSign = 1;
-
-  /* Optimization 4: Batch Training */
+  /* Batch Training */
   private boolean batchUpdate = false;
   private double batchSum = 0;
   
@@ -18,39 +12,25 @@ public abstract class Edge implements NetworkElement {
   private double weight, output, gradient;
 
   /* Initializations from Tom Mitchell */
-  private double initLow;
-  private double initHigh;
   private double learningRate;
   
   private NetworkElement incoming, outgoing;
 
   public Edge() {
-    this.initLow = -0.05;
-    this.initHigh = 0.05;
     this.learningRate = 0.05;
     this.output = 0;
     this.gradient = 0;
     this.batchSum = 0;
-    this.weight = initializeWeight(initLow, initHigh);
+    this.weight = initializeWeight(-0.05, 0.05);
   }
 
   public Edge(double low, double high, double rate) {
-    this.initLow = low;
-    this.initHigh = high;
     this.learningRate = rate;
     this.output = 0;
     this.gradient = 0;
     this.batchSum = 0;
-    this.weight = initializeWeight(initLow, initHigh);
+    this.weight = initializeWeight(low, high);
   }
-
-  
-  
-//  public void setRProp(boolean b) {
-//    this.rProp = b;
-//    this.adaGrad = !b;
-//    this.prevSign = 1;
-//  }
   
   public void setBatchUpdate(boolean b) {
     batchUpdate = b;
@@ -116,48 +96,10 @@ public abstract class Edge implements NetworkElement {
     updateWeight();
   }
 
-  public abstract void updateWeight(); {
-      weight = weight - getUpdate();
-    prevSign = ((gradient >= 0) ? 1 : -1);
-  }
+  public abstract void updateWeight(); 
   
-/**
-   * Adagrad is for stochastic grad descent. We don't use it here
-   */
-  public abstract void batchUpdate(); {
-    if (batchUpdate) {
-      double update = (learningRate * batchSum);
-      if(rProp) 
-        update = rPropUpdate(update);
-      if(momentum)
-        update = addMomentum(update);
-      weight = weight - update;
-      batchSum = 0;
-    }
-  }
+  public abstract void batchUpdate(); 
   
-  private double getUpdate() {
-    double update;
-    if(rProp) {
-      update = rPropUpdate(learningRate * gradient);
-    }
-    if(momentum)
-      update = addMomentum(update);
-    return update;
-  }
-  
-  private double rPropUpdate(double update) {
-    int sign = ((gradient >= 0) ? 1 : -1);
-    return (sign != prevSign) ? (update * nMinus) : (update * nPlus);
-  }
-  
-  private double addMomentum(double update) {
-    double momentum = alpha * prevUpdate;
-    update = update + momentum;
-    prevUpdate = update;
-    return update;
-  }
-
   @Override
   public double derivative() {
     /* w.r.t. the weights, (w * x), derivative is x */

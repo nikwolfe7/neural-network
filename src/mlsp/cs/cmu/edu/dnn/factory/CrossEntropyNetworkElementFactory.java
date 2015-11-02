@@ -3,6 +3,7 @@ package mlsp.cs.cmu.edu.dnn.factory;
 import mlsp.cs.cmu.edu.dnn.elements.CrossEntropyOutput;
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
+import mlsp.cs.cmu.edu.dnn.elements.SimpleEdge;
 
 
 public class CrossEntropyNetworkElementFactory extends SigmoidNetworkElementFactory {
@@ -14,10 +15,7 @@ public class CrossEntropyNetworkElementFactory extends SigmoidNetworkElementFact
 
 	@Override
 	public Edge getNewEdge() {
-	  Edge edge = new Edge(-1,1,1);
-	  edge.setAdaGrad(true);
-	  edge.setMomentum(true, 0.9);
-		return edge;
+		return new SimpleEdge(-1,1,1);
 	}
 
 }

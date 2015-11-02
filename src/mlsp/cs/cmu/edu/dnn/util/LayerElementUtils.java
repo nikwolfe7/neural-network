@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.text.SimpleAttributeSet;
+
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
+import mlsp.cs.cmu.edu.dnn.elements.SimpleEdge;
 import mlsp.cs.cmu.edu.dnn.factory.NetworkElementAbstractFactory;
 import mlsp.cs.cmu.edu.dnn.structure.Layer;
 import mlsp.cs.cmu.edu.dnn.structure.NetworkElementLayer;
@@ -70,12 +73,22 @@ public class LayerElementUtils {
 			for (int col = 0; col < cols; col++) {
 				Neuron out = (Neuron) toLayer.getElements()[row];
 				Neuron in = (Neuron) fromLayer.getElements()[col];
-				Edge w = new Edge();
+				Edge w = new SimpleEdge();
 				attachElements(in, w, out);
 				weightMatrix[row * cols + col] = w;
 			}
 		}
 		return new NetworkElementLayer(weightMatrix);
+	}
+	
+	public Edge convertEdge(Edge convertFrom, Edge convertTo) {
+	  convertTo.setBatchUpdate(convertFrom.isBatchUpdate());
+	  convertTo.setGradient(convertFrom.getGradient());
+	  convertTo.setIncomingElement(convertFrom.getIncomingElement());
+	  convertTo.setOutgoingElement(convertFrom.getOutgoingElement());
+	  convertTo.setLearningRate(convertFrom.getLearningRate());
+	  convertTo.setWeight(convertFrom.getWeight());
+	  return convertTo;
 	}
 
 	/**
