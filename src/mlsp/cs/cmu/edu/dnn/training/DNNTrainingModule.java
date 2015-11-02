@@ -26,7 +26,7 @@ public class DNNTrainingModule {
 	private int numMinChangeIterations = 1;
 	private double minError = Double.NEGATIVE_INFINITY;
 	private boolean allowNegativeChangeIterations = true;
-	private DecimalFormat f = new DecimalFormat("##.######");
+	private DecimalFormat f = new DecimalFormat("##.#######");
 	private boolean outputOn = false;
 	private boolean printResults = false;
 	private boolean batchUpdate = false;
@@ -106,9 +106,12 @@ public class DNNTrainingModule {
 		int countDown = numMinChangeIterations;
 		int batchSize = Math.floorDiv(training.size(), batchDivisions);
 		int epoch = 1;
+		long startEpoch, endEpoch, startTrain, endTrain;
+		startTrain = System.currentTimeMillis();
 
 		/* Train on training data */
 		while (true) {
+			startEpoch = System.currentTimeMillis();
 			double sumError = 0;
 			/* One epoch through training data... */
 			if (batchUpdate) {
@@ -127,7 +130,8 @@ public class DNNTrainingModule {
 					sumError += net.trainOnInstance(x);
 				}
 			}
-			
+			endEpoch = System.currentTimeMillis();
+			double duration = Math.abs(endEpoch-startEpoch) * 0.001;
 			/* Mean squared error */
 			sumError = sumError / training.size();
 			
@@ -135,7 +139,7 @@ public class DNNTrainingModule {
 			double diff = prevSumError - sumError;
 
 			if (outputOn)
-				System.out.println("Epoch " + (epoch++) + " | Avg Error: " + f.format(sumError) + "\tDiff: " + diff);
+				System.out.println("Epoch " + (epoch++) + " | Avg Error: " + f.format(sumError) + "\tDiff: " + diff + "\ttime: " + f.format(duration) + "s");
 
 			prevSumError = sumError;
 
@@ -163,10 +167,13 @@ public class DNNTrainingModule {
 				break;
 		}
 		/* Converged! Now test... */
+		endTrain = System.currentTimeMillis();
+		double duration = Math.abs(endTrain-startTrain) * 0.001;
 		System.out.println(
-				"==========================\n" + 
-				"NETWORK WEIGHTS CONVERGED!\n" + 
-				"==========================\n");
+				"===========================\n" + 
+				"NETWORK WEIGHTS CONVERGED! \n" + 
+				"===========================\n" +
+				"Elapsed Time: " + f.format(duration) + "s\n");
 	}
 
 	public double doTestTrainedNetwork() {

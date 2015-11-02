@@ -81,6 +81,14 @@ public class LayerElementUtils {
 		return new NetworkElementLayer(weightMatrix);
 	}
 	
+	/**
+	 * Converts an edge from one type to another given two instantiated
+	 * Edges of potentially different subclasses
+	 * 
+	 * @param convertFrom
+	 * @param convertTo
+	 * @return
+	 */
 	public Edge convertEdge(Edge convertFrom, Edge convertTo) {
 	  convertTo.setBatchUpdate(convertFrom.isBatchUpdate());
 	  convertTo.setGradient(convertFrom.getGradient());

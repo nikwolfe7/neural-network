@@ -4,8 +4,11 @@ import mlsp.cs.cmu.edu.dnn.elements.AdaGradEdge;
 import mlsp.cs.cmu.edu.dnn.elements.Bias;
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.Input;
+import mlsp.cs.cmu.edu.dnn.elements.MomentumEdge;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
+import mlsp.cs.cmu.edu.dnn.elements.RPropEdge;
+import mlsp.cs.cmu.edu.dnn.elements.SimpleEdge;
 import mlsp.cs.cmu.edu.dnn.elements.TanhNeuron;
 import mlsp.cs.cmu.edu.dnn.util.DefaultOutput;
 import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
@@ -29,7 +32,7 @@ public class SigmoidNetworkElementFactory implements NetworkElementAbstractFacto
 
 	@Override
 	public Edge getNewEdge() {
-	  Edge edge = new AdaGradEdge(-1,1,0.5);
+	  Edge edge = new RPropEdge(-1, 1, 0.1);
 	  return edge;
 	}
 

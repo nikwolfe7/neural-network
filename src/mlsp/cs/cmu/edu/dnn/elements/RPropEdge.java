@@ -8,7 +8,7 @@ public class RPropEdge extends Edge {
 
   private double nPlus = 1.2;
 
-  private double nMinus = -0.5;
+  private double nMinus = 0.5;
 
   private int prevSign = 1;
 
@@ -35,7 +35,7 @@ public class RPropEdge extends Edge {
       int currSign = sign(getGradient());
       double update = prevUpdate * ((currSign == prevSign) ? nPlus : nMinus);
       prevUpdate = update;
-      prevSign = sign(getGradient());
+      prevSign = currSign;
       double w = getWeight() - update;
       setWeight(w);
     }
@@ -55,6 +55,8 @@ public class RPropEdge extends Edge {
     double w = getWeight() - update;
     setWeight(w);
   }
+  
+ 
 
   private int sign(double d) {
     return (d >= 0) ? 1 : -1;

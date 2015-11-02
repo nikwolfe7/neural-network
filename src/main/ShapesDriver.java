@@ -47,7 +47,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) throws IOException {
-		  DiamondDriver(8);
+		  RShapeDriver(8,8);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -107,7 +107,7 @@ public class ShapesDriver {
 		trainingModule.setOutputOn(true);
 		trainingModule.setOutputAdapter(adapter);
 		trainingModule.setBatchUpdate(batchUpdate,10);
-		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0);
+		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 1000);
 		trainingModule.doTrainNetworkUntilConvergence();
 		trainingModule.setOutputOn(false);
 		System.out.println("Test:\n");
