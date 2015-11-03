@@ -23,7 +23,7 @@ public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = true;
-  static boolean batchUpdate = false;
+  static boolean batchUpdate = true;
   static boolean removeElements = false;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
@@ -47,7 +47,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) throws IOException {
-		  RShapeDriver(8,8);
+		  DiamondDriver(16);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -96,18 +96,18 @@ public class ShapesDriver {
 		System.out.println("---------------------------------------------------");
 		System.out.println("                    Diamond                        ");
 		System.out.println("---------------------------------------------------");
-		DataReader reader = new ReadCSVTrainingData();
+		DataReader reader = new ReadBinaryCSVTrainingDataForCrossEntropy();
 		List<DataInstance> training = reader.getDataFromFile(data + "diamond-train.csv", 2, 1);
 		List<DataInstance> testing = reader.getDataFromFile(data + "diamond-test.csv", 2, 1);
-		DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+		DNNFactory factory = new CrossEntropyFFDNNFactory(training.get(0), structure);
 
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 		
 		trainingModule.setOutputOn(true);
 		trainingModule.setOutputAdapter(adapter);
-		trainingModule.setBatchUpdate(batchUpdate,10);
-		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 1000);
+		trainingModule.setBatchUpdate(batchUpdate);
+		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 500);
 		trainingModule.doTrainNetworkUntilConvergence();
 		trainingModule.setOutputOn(false);
 		System.out.println("Test:\n");
@@ -134,17 +134,17 @@ public class ShapesDriver {
 		System.out.println("---------------------------------------------------");
 		System.out.println("                    RShape                         ");
 		System.out.println("---------------------------------------------------");
-		DataReader reader = new ReadCSVTrainingData();
+		DataReader reader = new ReadBinaryCSVTrainingDataForCrossEntropy();
 		List<DataInstance> training = reader.getDataFromFile(data + "RShape-train.csv", 2, 1);
 		List<DataInstance> testing = reader.getDataFromFile(data + "RShape-test.csv", 2, 1);
-		DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+		DNNFactory factory = new CrossEntropyFFDNNFactory(training.get(0), structure);
 
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 		trainingModule.setOutputOn(true);
 		trainingModule.setOutputAdapter(adapter);
 		trainingModule.setBatchUpdate(batchUpdate,10);
-		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0);
+		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 100);
 		trainingModule.setPrintResults(true, data + "RShape-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
 		trainingModule.doTrainNetworkUntilConvergence();
 
@@ -172,17 +172,17 @@ public class ShapesDriver {
     System.out.println("---------------------------------------------------");
     System.out.println("                    DRShape                        ");
     System.out.println("---------------------------------------------------");
-    DataReader reader = new ReadCSVTrainingData();
+    DataReader reader = new ReadBinaryCSVTrainingDataForCrossEntropy();
     List<DataInstance> training = reader.getDataFromFile(data + "DRShape-train.csv", 2, 1);
     List<DataInstance> testing = reader.getDataFromFile(data + "DRShape-test.csv", 2, 1);
-    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+    DNNFactory factory = new CrossEntropyFFDNNFactory(training.get(0), structure);
 
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
     trainingModule.setOutputOn(printOut);
     trainingModule.setOutputAdapter(adapter);
     trainingModule.setBatchUpdate(batchUpdate,15);
-    trainingModule.setConvergenceCriteria(1.0e-7, -1, true, 0);
+    trainingModule.setConvergenceCriteria(1.0e-7, -1, true, 0, 100);
     trainingModule.setPrintResults(true, data + "DRShape-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
     trainingModule.doTrainNetworkUntilConvergence();
 
