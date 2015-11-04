@@ -23,7 +23,7 @@ public class ShapesDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = true;
-  static boolean batchUpdate = true;
+  static boolean batchUpdate = false;
   static boolean removeElements = false;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
@@ -47,7 +47,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) throws IOException {
-		  DiamondDriver(16);
+		  RShapeDriver(10,10);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -134,37 +134,37 @@ public class ShapesDriver {
 		System.out.println("---------------------------------------------------");
 		System.out.println("                    RShape                         ");
 		System.out.println("---------------------------------------------------");
-		DataReader reader = new ReadBinaryCSVTrainingDataForCrossEntropy();
+		DataReader reader = new ReadCSVTrainingData();
 		List<DataInstance> training = reader.getDataFromFile(data + "RShape-train.csv", 2, 1);
 		List<DataInstance> testing = reader.getDataFromFile(data + "RShape-test.csv", 2, 1);
-		DNNFactory factory = new CrossEntropyFFDNNFactory(training.get(0), structure);
+		DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
 
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 		trainingModule.setOutputOn(true);
 		trainingModule.setOutputAdapter(adapter);
 		trainingModule.setBatchUpdate(batchUpdate,10);
-		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 100);
+		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0);
 		trainingModule.setPrintResults(true, data + "RShape-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
 		trainingModule.doTrainNetworkUntilConvergence();
 
 		System.out.println("Test:\n");
 		trainingModule.setOutputOn(false);
 		trainingModule.doTestTrainedNetwork();
-		trainingModule.saveNetworkToFile(data + "network.dnn");
+		trainingModule.saveNetworkToFile(data + "rshape.network.dnn");
 
-		double remove = 0.0;
-		while (remove <= 1) {
-			System.out.println("\n\nWith remove: " + remove);
-			factory = new ReadSerializedFileDNNFactory(data + "network.dnn");
-			net = factory.getInitializedNeuralNetwork();
-			trainingModule = new DNNTrainingModule(net, testing);
-			trainingModule.setOutputOn(false);
-			trainingModule.setOutputAdapter(adapter);
-			net = PruningTool.doPruning(net, training, remove, removeElements);
-			trainingModule.doTestTrainedNetwork();
-			remove += 2;
-		}
+//		double remove = 0.0;
+//		while (remove <= 1) {
+//			System.out.println("\n\nWith remove: " + remove);
+//			factory = new ReadSerializedFileDNNFactory(data + "rshape.network.dnn");
+//			net = factory.getInitializedNeuralNetwork();
+//			trainingModule = new DNNTrainingModule(net, testing);
+//			trainingModule.setOutputOn(false);
+//			trainingModule.setOutputAdapter(adapter);
+//			net = PruningTool.doPruning(net, training, remove, removeElements);
+//			trainingModule.doTestTrainedNetwork();
+//			remove += 2;
+//		}
 
 	}
 	
