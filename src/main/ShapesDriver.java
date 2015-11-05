@@ -47,7 +47,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) throws IOException {
-		  RShapeDriver(10,10);
+		  RShapeDriver(50,50);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -141,17 +141,17 @@ public class ShapesDriver {
 
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-		trainingModule.setOutputOn(true);
-		trainingModule.setOutputAdapter(adapter);
-		trainingModule.setBatchUpdate(batchUpdate,10);
-		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0);
-		trainingModule.setPrintResults(true, data + "RShape-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
-		trainingModule.doTrainNetworkUntilConvergence();
-
-		System.out.println("Test:\n");
-		trainingModule.setOutputOn(false);
-		trainingModule.doTestTrainedNetwork();
-		trainingModule.saveNetworkToFile(data + "rshape.network.dnn");
+//		trainingModule.setOutputOn(true);
+//		trainingModule.setOutputAdapter(adapter);
+//		trainingModule.setBatchUpdate(batchUpdate,10);
+//		trainingModule.setConvergenceCriteria(-1, 0.004, true, 0);
+//		trainingModule.setPrintResults(true, data + "RShape-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
+//		trainingModule.doTrainNetworkUntilConvergence();
+//
+//		System.out.println("Test:\n");
+//		trainingModule.setOutputOn(false);
+//		trainingModule.doTestTrainedNetwork();
+//		trainingModule.saveNetworkToFile(data + "network.dnn");
 
 //		double remove = 0.0;
 //		while (remove <= 1) {
