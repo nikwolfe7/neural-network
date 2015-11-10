@@ -7,7 +7,6 @@ import mlsp.cs.cmu.edu.dnn.factory.CrossEntropyFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.DNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.ReadSerializedFileDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFFDNNFactory;
-import mlsp.cs.cmu.edu.dnn.factory.TanhOutputFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
@@ -149,22 +148,23 @@ public class ShapesDriver {
 //		trainingModule.doTrainNetworkUntilConvergence();
 //
 //		System.out.println("Test:\n");
+		
 //		trainingModule.setOutputOn(false);
 //		trainingModule.doTestTrainedNetwork();
 //		trainingModule.saveNetworkToFile(data + "network.dnn");
 
-//		double remove = 0.0;
-//		while (remove <= 1) {
-//			System.out.println("\n\nWith remove: " + remove);
-//			factory = new ReadSerializedFileDNNFactory(data + "rshape.network.dnn");
-//			net = factory.getInitializedNeuralNetwork();
-//			trainingModule = new DNNTrainingModule(net, testing);
-//			trainingModule.setOutputOn(false);
-//			trainingModule.setOutputAdapter(adapter);
-//			net = PruningTool.doPruning(net, training, remove, removeElements);
-//			trainingModule.doTestTrainedNetwork();
-//			remove += 2;
-//		}
+		double remove = 0.0;
+		while (remove <= 1) {
+			System.out.println("\n\nWith remove: " + remove);
+			factory = new ReadSerializedFileDNNFactory(data + "rshape.network.dnn");
+			net = factory.getInitializedNeuralNetwork();
+			trainingModule = new DNNTrainingModule(net, testing);
+			trainingModule.setOutputOn(false);
+			trainingModule.setOutputAdapter(adapter);
+			net = PruningTool.doPruning(net, training, remove, removeElements);
+			trainingModule.doTestTrainedNetwork();
+			remove += 2;
+		}
 
 	}
 	
