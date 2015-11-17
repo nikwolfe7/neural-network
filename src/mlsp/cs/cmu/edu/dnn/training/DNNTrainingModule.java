@@ -108,6 +108,7 @@ public class DNNTrainingModule {
 		int epoch = 1;
 		long startEpoch, endEpoch, startTrain, endTrain;
 		startTrain = System.currentTimeMillis();
+		double divisor = 1.0/training.size();
 
 		/* Train on training data */
 		while (true) {
@@ -133,7 +134,7 @@ public class DNNTrainingModule {
 			endEpoch = System.currentTimeMillis();
 			double duration = Math.abs(endEpoch-startEpoch) * 0.001;
 			/* Mean squared error */
-			sumError = sumError / training.size();
+			sumError = sumError * divisor;
 			
 			/* Should ideally never be negative, but no guarantees */
 			double diff = prevSumError - sumError;
@@ -182,20 +183,18 @@ public class DNNTrainingModule {
 		double numCorrect = 0;
 		List<String> results = new ArrayList<>();
 		for(DataInstance x : testing) {
-			double[] output = (double[]) net.getSmoothedPrediction(x.getInputVector(), adapter);
+			double[] output = net.getPrediction(x.getInputVector());
 			double[] truth = x.getOutputTruthValue();
 			double error = CostFunction.meanSqError(output, truth);
 			sumOfSquaredErrors += error;
-			
-			if(adapter.isCorrect(output, truth))
+			if(adapter.isCorrect(output, truth)) {
 			  numCorrect++;
-			
+			}
 			if(outputOn) {
 				System.out.println("Network:  " + DNNUtils.printVector(output));
 				System.out.println("Truth  :  " + DNNUtils.printVector(truth));
 				System.out.println("-----------------------------------------");
 			}
-			
 			if (printResults) {
 				double[] vec = new double[x.getInputDimension() + x.getOutputDimension()];
 				System.arraycopy(output, 0, vec, 0, output.length);

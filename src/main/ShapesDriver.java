@@ -46,7 +46,8 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) throws IOException {
-		  RShapeDriver(50,50);
+//		  RShapeDriver(50,50);
+		  DiamondDriver(8);
 //		for(int[] config : configs) {
 //			CircleDriver(config);
 //			DiamondDriver(config);
@@ -98,7 +99,7 @@ public class ShapesDriver {
 		DataReader reader = new ReadBinaryCSVTrainingDataForCrossEntropy();
 		List<DataInstance> training = reader.getDataFromFile(data + "diamond-train.csv", 2, 1);
 		List<DataInstance> testing = reader.getDataFromFile(data + "diamond-test.csv", 2, 1);
-		DNNFactory factory = new CrossEntropyFFDNNFactory(training.get(0), structure);
+		DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
 
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
