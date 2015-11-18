@@ -89,7 +89,7 @@ public class LayerElementUtils {
 	 * @param convertTo
 	 * @return
 	 */
-	public Edge convertEdge(Edge convertFrom, Edge convertTo) {
+	public static Edge convertEdge(Edge convertFrom, Edge convertTo) {
 	  convertTo.setBatchUpdate(convertFrom.isBatchUpdate());
 	  convertTo.setGradient(convertFrom.getGradient());
 	  convertTo.setIncomingElement(convertFrom.getIncomingElement());

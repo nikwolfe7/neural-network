@@ -3,6 +3,8 @@ package main;
 import java.io.IOException;
 import java.util.List;
 
+import mlsp.cs.cmu.edu.dnn.elements.Edge;
+import mlsp.cs.cmu.edu.dnn.elements.MomentumEdge;
 import mlsp.cs.cmu.edu.dnn.factory.CrossEntropyFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.DNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.ReadSerializedFileDNNFactory;
@@ -45,8 +47,9 @@ public class ShapesDriver {
 		{7},
 	};
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 		  RShapeDriver(50,50);
+		  
 //		  DiamondDriver(8);
 //		for(int[] config : configs) {
 //			CircleDriver(config);

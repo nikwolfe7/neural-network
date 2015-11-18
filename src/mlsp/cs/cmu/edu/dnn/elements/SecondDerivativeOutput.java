@@ -14,7 +14,6 @@ public class SecondDerivativeOutput extends Output implements SecondDerivativeNe
   
   public SecondDerivativeOutput(Output output) {
      this.output = output;
-     for(NetworkEle)
   }
   
   @Override
