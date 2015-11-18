@@ -23,9 +23,7 @@ import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 public class PruningTool {
 
   public static NeuralNetwork doPruning(NeuralNetwork net, List<DataInstance> validationSet, double percentReduce, boolean removeElements) throws IOException {
-    DNNTrainingModule trainingModule = new DNNTrainingModule(modifyLayers(net), validationSet, validationSet);
-    trainingModule.setOutputAdapter(new BinaryThresholdOutput());
-    trainingModule.setConvergenceCriteria(-1, -1, true, 0, 1);
+    DNNTrainingModule trainingModule = initTrainingModule(net, validationSet);
     trainingModule.doTrainNetworkUntilConvergence();
     List<GainSwitchNeuron> neuronsToSort = new ArrayList<GainSwitchNeuron>();
     for(int i : net.getHiddenLayerIndices()) {
@@ -54,6 +52,11 @@ public class PruningTool {
   }
   
   
+  
+  
+  
+  
+  
   private static List<GainSwitchNeuron> getGroundTruthError(List<GainSwitchNeuron> neuronsToSort, DNNTrainingModule trainingModule) {
     double initialError = trainingModule.doTestTrainedNetwork();
     List<GainSwitchNeuron> copyList = new ArrayList<GainSwitchNeuron>();
@@ -69,15 +72,6 @@ public class PruningTool {
     return copyList;
   }
 
-  public static void switchElements(List<NetworkElement> switchOff, boolean b) {
-    for(NetworkElement s : switchOff) 
-      ((Switchable) s).setSwitchOff(b);
-  }
-  
-  public static void removeElementsAndPruneLayers(NeuralNetwork net, List<NetworkElement> elementsToRemove) {
-    net.removeElements(elementsToRemove);
-  }
-  
   private static List<NetworkElement> doRandomPruning(List<GainSwitchNeuron> sortedNeurons, int neuronsToRemove) {
     List<Integer> randomIndices = new ArrayList<Integer>();
     for(int i = 0; i < sortedNeurons.size(); i++)
@@ -100,6 +94,23 @@ public class PruningTool {
     return switchOffs;
   }
   
+  
+  /* ====================== HELPER METHODS ====================== */
+  /* ====================== HELPER METHODS ====================== */
+  /* ====================== HELPER METHODS ====================== */
+  
+  public static void switchElements(List<NetworkElement> switchOff, boolean b) {
+    for(NetworkElement s : switchOff) 
+      ((Switchable) s).setSwitchOff(b);
+  }
+  
+  private static DNNTrainingModule initTrainingModule(NeuralNetwork net, List<DataInstance> validationSet) {
+    DNNTrainingModule trainingModule = new DNNTrainingModule(modifyLayers(net), validationSet, validationSet);
+    trainingModule.setOutputAdapter(new BinaryThresholdOutput());
+    trainingModule.setConvergenceCriteria(-1, -1, true, 0, 1);
+    return trainingModule;
+  }
+  
   private static void sortByGroundTruthError(List<GainSwitchNeuron> neuronsToSort) {
     Collections.sort(neuronsToSort, new Comparator<GainSwitchNeuron>() {
       @Override
@@ -119,9 +130,24 @@ public class PruningTool {
     Collections.sort(neuronsToSort, new Comparator<GainSwitchNeuron>() {
       @Override
       public int compare(GainSwitchNeuron o1, GainSwitchNeuron o2) {
-        if (o1.getAverageGain() > o2.getAverageGain()) {
+        if (o1.getTotalGain() > o2.getTotalGain()) {
           return -1;
-        } else if (o1.getAverageGain() < o2.getAverageGain()) {
+        } else if (o1.getTotalGain() < o2.getTotalGain()) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+    });
+  }
+  
+  private static void sortBySecondGain(List<GainSwitchNeuron> neuronsToSort) {
+    Collections.sort(neuronsToSort, new Comparator<GainSwitchNeuron>() {
+      @Override
+      public int compare(GainSwitchNeuron o1, GainSwitchNeuron o2) {
+        if (o1.getTotalSecondGain() > o2.getTotalSecondGain()) {
+          return -1;
+        } else if (o1.getTotalSecondGain() < o2.getTotalSecondGain()) {
           return 1;
         } else {
           return 0;
@@ -133,6 +159,9 @@ public class PruningTool {
   private static NeuralNetwork modifyLayers(NeuralNetwork net) {
     int[] hiddenLayerIndices = net.getHiddenLayerIndices();
     int[] edgeLayerIndices = net.getWeightMatrixIndices();
+    Layer outputLayer = net.getLastLayer();
+    GainSwitchLayer newOutputLayer = new GainSwitchLayer(outputLayer);
+    net.modifyExistingLayer(outputLayer, newOutputLayer);
     for (int i : hiddenLayerIndices) {
       Layer oldLayer = net.getLayer(i);
       GainSwitchLayer newLayer = new GainSwitchLayer(oldLayer);
@@ -148,4 +177,9 @@ public class PruningTool {
     return net;
   }
 
+  //public static void removeElementsAndPruneLayers(NeuralNetwork net, List<NetworkElement> elementsToRemove) {
+  //net.removeElements(elementsToRemove);
+  //}
+  
+  
 }

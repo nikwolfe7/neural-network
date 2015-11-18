@@ -2,7 +2,9 @@ package mlsp.cs.cmu.edu.dnn.elements;
 
 import java.util.List;
 
-public class GainSwitchNeuron extends Neuron implements Switchable {
+import mlsp.cs.cmu.edu.dnn.util.ActivationFunction;
+
+public class GainSwitchNeuron extends Neuron implements Switchable, SecondDerivativeNetworkElement {
 
 	private static final long serialVersionUID = 6087613637614963686L;
 	
@@ -14,7 +16,11 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
 
 	private double gainSum;
 	
+	private double secondGainSum;
+	
 	private double groundTruthError;
+	
+	private double secondGradient;
 	
 	private int count;
 	
@@ -26,7 +32,9 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
 		this.neuron = n;
 		this.switchOff = false;
 		this.gainSum = 0;
+		this.secondGainSum = 0;
 		this.count = 0;
+		this.secondGradient = 0;
 	}
 
 	@Override
@@ -34,11 +42,13 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
 		switchOff = b;
 		setOutput(0);
 		setGradient(0);
+		setSecondGradient(0);
 	}
 
-	public void reset() {
+  public void reset() {
 		count = 0;
 		gainSum = 0;
+		secondGainSum = 0;
 	}
 	
 	public int getIdNum() {
@@ -56,9 +66,17 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
 	public double getTotalGain() {
 		return gainSum;
 	}
+	
+	public double getTotalSecondGain() {
+	  return secondGainSum * 0.5 - gainSum;
+	}
 
 	public double getAverageGain() {
 		return getTotalGain() / count;
+	}
+	
+	public double getAverageSecondGain() {
+	  return getTotalSecondGain() / count;
 	}
 	
 	@Override
@@ -82,12 +100,24 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
 	public void backward() {
 		if (!switchOff) {
 			neuron.backward();
+			double secondGradSum = 0;
+			for(NetworkElement e : getOutgoingElements()) {
+			  SecondDerivativeNetworkElement elem = (SecondDerivativeNetworkElement) e;
+			  secondGradSum += elem.getSecondGradient();
+			}
+			double secondGrad = secondGradSum * Math.pow(derivative(), 2) + getGradient() * secondDerivative();
+			setSecondGradient(secondGrad);
 			count++;
 			gainSum += (getGradient() * getOutput());
+			secondGainSum += (secondGradSum * Math.pow(getOutput(), 2));
 		}
 	}
-	
-	@Override
+
+  private void setSecondGradient(double val) {
+    secondGradient = val;
+  }
+
+  @Override
 	public void setGradient(double e) {
 		if (!switchOff)
 			neuron.setGradient(e);
@@ -131,5 +161,19 @@ public class GainSwitchNeuron extends Neuron implements Switchable {
 	public void setOutput(double output) {
 		neuron.setOutput(output);
 	}
+	
+  @Override
+  public double secondDerivative() {
+    return ActivationFunction.sigmoidSecondDerivative(getOutput());
+  }
+
+  @Override
+  public double getSecondGradient() {
+    return secondGradient;
+  }
+  
+  private void setSecondGradient(int g) {
+    this.secondGradient = g;
+  }
 
 }

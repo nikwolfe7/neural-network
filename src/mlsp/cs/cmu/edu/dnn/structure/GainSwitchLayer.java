@@ -6,6 +6,7 @@ import mlsp.cs.cmu.edu.dnn.elements.Input;
 import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
+import mlsp.cs.cmu.edu.dnn.elements.SecondDerivativeOutput;
 import mlsp.cs.cmu.edu.dnn.elements.SwitchEdge;
 import mlsp.cs.cmu.edu.dnn.elements.Switchable;
 
@@ -24,6 +25,9 @@ public class GainSwitchLayer implements Layer {
         if(!(e instanceof Output) && !(e instanceof Input)) {
           GainSwitchNeuron neuron = new GainSwitchNeuron((Neuron) e);
           newElements[i] = neuron;
+        } else if(e instanceof Output) {
+          SecondDerivativeOutput output = new SecondDerivativeOutput((Output) e);
+          newElements[i] = output;
         }
       } else if(e instanceof Edge) {
         SwitchEdge edge  = new SwitchEdge((Edge) e);

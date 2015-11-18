@@ -18,6 +18,11 @@ public class ActivationFunction {
 	public static double sigmoidDerivative(double output) {
 		return output * (1 - output);
 	}
+	
+	 public static double sigmoidSecondDerivative(double output) {
+	    /* s'(x)*(1 - 2*s(x)) */
+	    return sigmoidDerivative(output) * (1 - 2 * output);
+	  }
 
 	public static double expDerivative(double output) {
 	  return output;
@@ -27,5 +32,7 @@ public class ActivationFunction {
 //		return 1.0 - Math.pow(output, 2);
 		 return 1.14393333333 - Math.pow((0.66666666666 * output), 2);
 	}
+
+ 
 
 }
