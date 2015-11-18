@@ -1,15 +1,17 @@
 package mlsp.cs.cmu.edu.dnn.elements;
 
-public class SwitchEdge extends Edge implements Switchable {
+public class SwitchEdge extends Edge implements Switchable, SecondDerivativeNetworkElement {
 
 	private static final long serialVersionUID = 1338100192118401076L;
 
 	private Edge edge;
 	private boolean switchOff;
+	private double secondGradient;
 
 	public SwitchEdge(Edge e) {
 		this.edge = e;
 		this.switchOff = false;
+		this.secondGradient = 0;
 	}
 
 	@Override
@@ -20,10 +22,16 @@ public class SwitchEdge extends Edge implements Switchable {
 	@Override
 	public void backward() {
 		setGradient(getOutgoingElement().getGradient() * derivative());
+		SecondDerivativeNetworkElement elem = (SecondDerivativeNetworkElement) getOutgoingElement();
+		setSecondGradient(elem.getSecondGradient() * Math.pow(getWeight(),2));
 		updateWeight();
 	}
 
-	@Override
+	private void setSecondGradient(double d) {
+	  secondGradient = d;
+  }
+
+  @Override
 	public void updateWeight() {
 		if (!switchOff)
 			edge.updateWeight();
@@ -124,5 +132,15 @@ public class SwitchEdge extends Edge implements Switchable {
 	public void setGradient(double g) {
 		edge.setGradient(g);
 	}
+
+  @Override
+  public double secondDerivative() {
+    return 1;
+  }
+
+  @Override
+  public double getSecondGradient() {
+     return secondGradient;
+  }
 
 }

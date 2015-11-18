@@ -20,8 +20,6 @@ public class NeuralNetwork implements Serializable {
 
 	private static final long serialVersionUID = 5761924668947132220L;
 
-	private Input[] inputLayer;
-	private Output[] outputLayer;
 	private int inputDimension;
 	private int outputDimension;
 	private List<Layer> layers;
@@ -60,10 +58,6 @@ public class NeuralNetwork implements Serializable {
 				outputDimension++;
 			}
 		}
-		this.inputLayer = new Input[inputDimension];
-		this.outputLayer = new Output[outputDimension];
-		System.arraycopy(in, 0, inputLayer, 0, inputLayer.length);
-		System.arraycopy(out, 0, outputLayer, 0, outputLayer.length);
 		for (int i = 1; i < layers.size() - 1; i++) {
 			for (NetworkElement e : layers.get(i).getElements()) {
 				if (e instanceof Edge) {
@@ -95,7 +89,7 @@ public class NeuralNetwork implements Serializable {
 	 */
 	public double[] getPrediction(double[] inputVector) {
 		for (int i = 0; i < inputVector.length; i++)
-			inputLayer[i].setInputValue(inputVector[i]);
+			((Input) getFirstLayer().getElements()[i]).setInputValue(inputVector[i]);
 		for (int i = 0; i < layers.size(); i++)
 			layers.get(i).forward();
 		return getOutputs();
@@ -226,28 +220,28 @@ public class NeuralNetwork implements Serializable {
 	 * 
 	 * @param elements
 	 */
-	public void removeElements(List<NetworkElement> elements) {
-		/* Remove neurons in the hidden layers */
-		for (int i : getHiddenLayerIndices()) {
-			Layer layer = getLayer(i);
-			for (NetworkElement e : elements)
-				layer.removeNetworkElement(e);
-		}
-		/* Remove the weights which are now */
-		for (int i : getWeightMatrixIndices()) {
-			Layer layer = getLayer(i);
-			for (NetworkElement e : elements)
-				layer.removeNetworkElement(e);
-			for (NetworkElement el : layer.getElements()) {
-				Edge edge = (Edge) el;
-				NetworkElement in, out;
-				in = edge.getIncomingElement();
-				out = edge.getOutgoingElement();
-				if (in == null || out == null)
-					layer.removeNetworkElement(edge);
-			}
-		}
-	}
+//	public void removeElements(List<NetworkElement> elements) {
+//		/* Remove neurons in the hidden layers */
+//		for (int i : getHiddenLayerIndices()) {
+//			Layer layer = getLayer(i);
+//			for (NetworkElement e : elements)
+//				layer.removeNetworkElement(e);
+//		}
+//		/* Remove the weights which are now */
+//		for (int i : getWeightMatrixIndices()) {
+//			Layer layer = getLayer(i);
+//			for (NetworkElement e : elements)
+//				layer.removeNetworkElement(e);
+//			for (NetworkElement el : layer.getElements()) {
+//				Edge edge = (Edge) el;
+//				NetworkElement in, out;
+//				in = edge.getIncomingElement();
+//				out = edge.getOutgoingElement();
+//				if (in == null || out == null)
+//					layer.removeNetworkElement(edge);
+//			}
+//		}
+//	}
 
 	/***************************************************	 * 
 	 * TRAINING:
@@ -266,8 +260,8 @@ public class NeuralNetwork implements Serializable {
 		// forward propagate
 		double[] prediction = getPrediction(input);
 		// set output
-		for (int i = 0; i < outputLayer.length; i++)
-			outputLayer[i].setTruthValue(truth[i]);
+		for (int i = 0; i < getLastLayer().size(); i++)
+			((Output) getLastLayer().getElements()[i]).setTruthValue(truth[i]);
 		// backward propagate
 		for (int i = layers.size() - 1; i >= 0; i--)
 			layers.get(i).backward();
