@@ -187,12 +187,14 @@ public class DNNTrainingModule {
 			double[] truth = x.getOutputTruthValue();
 			double error = CostFunction.meanSqError(output, truth);
 			sumOfSquaredErrors += error;
-			if(adapter.isCorrect(output, truth)) {
+			boolean correct = adapter.isCorrect(output, truth); 
+			if(correct) {
 			  numCorrect++;
 			}
 			if(outputOn) {
 				System.out.println("Network:  " + DNNUtils.printVector(output));
 				System.out.println("Truth  :  " + DNNUtils.printVector(truth));
+				System.out.println("Label  :  " + ((correct) ? "Correct!" : "Incorrect"));
 				System.out.println("-----------------------------------------");
 			}
 			if (printResults) {
@@ -227,6 +229,7 @@ public class DNNTrainingModule {
 			outputStream.writeObject(net);
 			outputStream.close();
 			writer.close();
+			System.out.println("Network written to file: " + fileName);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
