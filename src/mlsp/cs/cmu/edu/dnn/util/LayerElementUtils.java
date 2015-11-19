@@ -1,10 +1,7 @@
 package mlsp.cs.cmu.edu.dnn.util;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.swing.text.SimpleAttributeSet;
 
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;

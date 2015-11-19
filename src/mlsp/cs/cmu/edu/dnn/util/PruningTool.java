@@ -23,24 +23,37 @@ import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 public class PruningTool {
 
   public static NeuralNetwork doPruning(NeuralNetwork net, List<DataInstance> validationSet, double percentReduce, boolean removeElements) throws IOException {
+    /* Get training module and run through the validation set once */
     DNNTrainingModule trainingModule = initTrainingModule(net, validationSet);
     trainingModule.doTrainNetworkUntilConvergence();
+    
+    /* Get the GainSwitch neurons out */
     List<GainSwitchNeuron> neuronsToSort = new ArrayList<GainSwitchNeuron>();
     for(int i : net.getHiddenLayerIndices()) {
       Layer l = net.getLayer(i);
       for(NetworkElement e : l.getElements()) {
-        neuronsToSort.add((GainSwitchNeuron) e);
+        if(e instanceof GainSwitchNeuron) 
+          neuronsToSort.add((GainSwitchNeuron) e);
       }
     }
-    int neuronsToRemove = (int) Math.floor(neuronsToSort.size() * percentReduce);
-    sortByGain(neuronsToSort);
+    
+    /* Get the ground truth for the change in error resulting from turning the neurons on and off */
     List<GainSwitchNeuron> groundTruthSortedNeurons = getGroundTruthError(neuronsToSort, trainingModule);
+    
+    /* If reducing by percentage, get the number of neurons to remove */
+    int neuronsToRemove = (int) Math.floor(neuronsToSort.size() * percentReduce);
+    
+    /* Sort the list by the different metrics */
+    int[] groundTruthRankings = sortByGroundTruthError(neuronsToSort);
+    int[] gainSumRankings = sortByGain(neuronsToSort);
+    int[] secondGainSumRankings = sortBySecondGain(neuronsToSort);
+    
+    int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
+    String result = printMatrix(combined);
+    System.out.println(result);
+    
     FileWriter writer = new FileWriter(new File("result.csv"));
-    for(int i = 0; i < neuronsToSort.size(); i++) {
-      String s = neuronsToSort.get(i).getIdNum() + "," + groundTruthSortedNeurons.get(i).getIdNum();
-      writer.write(s + "\n");
-      System.out.println(s);
-    }
+    
     writer.close();
 //    List<NetworkElement> switchOff = doRankedPruning(neuronsToSort, neuronsToRemove);
 //    List<NetworkElement> switchOff = doRandomPruning(sortedNeurons, neuronsToRemove);
@@ -57,20 +70,7 @@ public class PruningTool {
   
   
   
-  private static List<GainSwitchNeuron> getGroundTruthError(List<GainSwitchNeuron> neuronsToSort, DNNTrainingModule trainingModule) {
-    double initialError = trainingModule.doTestTrainedNetwork();
-    List<GainSwitchNeuron> copyList = new ArrayList<GainSwitchNeuron>();
-    for(GainSwitchNeuron neuron : neuronsToSort) {
-      neuron.setSwitchOff(true);
-      double newError = trainingModule.doTestTrainedNetwork();
-      neuron.setSwitchOff(false);
-      double diff = newError - initialError;
-      neuron.setGroundTruthError(diff);
-      copyList.add(neuron);
-    }
-    sortByGroundTruthError(copyList);
-    return copyList;
-  }
+  
 
   private static List<NetworkElement> doRandomPruning(List<GainSwitchNeuron> sortedNeurons, int neuronsToRemove) {
     List<Integer> randomIndices = new ArrayList<Integer>();
@@ -99,6 +99,18 @@ public class PruningTool {
   /* ====================== HELPER METHODS ====================== */
   /* ====================== HELPER METHODS ====================== */
   
+  private static List<GainSwitchNeuron> getGroundTruthError(List<GainSwitchNeuron> neuronsToSort, DNNTrainingModule trainingModule) {
+    double initialError = trainingModule.doTestTrainedNetwork();
+    for(GainSwitchNeuron neuron : neuronsToSort) {
+      neuron.setSwitchOff(true);
+      double newError = trainingModule.doTestTrainedNetwork();
+      neuron.setSwitchOff(false);
+      double diff = newError - initialError;
+      neuron.setGroundTruthError(diff);
+    }
+    return neuronsToSort;
+  }
+  
   public static void switchElements(List<NetworkElement> switchOff, boolean b) {
     for(NetworkElement s : switchOff) 
       ((Switchable) s).setSwitchOff(b);
@@ -112,7 +124,8 @@ public class PruningTool {
     return trainingModule;
   }
   
-  private static void sortByGroundTruthError(List<GainSwitchNeuron> neuronsToSort) {
+  /* Sort by the real ground truth error...  */
+  private static int[] sortByGroundTruthError(List<GainSwitchNeuron> neuronsToSort) {
     Collections.sort(neuronsToSort, new Comparator<GainSwitchNeuron>() {
       @Override
       public int compare(GainSwitchNeuron o1, GainSwitchNeuron o2) {
@@ -125,9 +138,11 @@ public class PruningTool {
         }
       }
     });
+    return getRankedIds(neuronsToSort);
   }
   
-  private static void sortByGain(List<GainSwitchNeuron> neuronsToSort) {
+  /* Sort by first derivative gain */
+  private static int[] sortByGain(List<GainSwitchNeuron> neuronsToSort) {
     Collections.sort(neuronsToSort, new Comparator<GainSwitchNeuron>() {
       @Override
       public int compare(GainSwitchNeuron o1, GainSwitchNeuron o2) {
@@ -140,9 +155,11 @@ public class PruningTool {
         }
       }
     });
+    return getRankedIds(neuronsToSort);
   }
   
-  private static void sortBySecondGain(List<GainSwitchNeuron> neuronsToSort) {
+  /* Sort by the second gain terms: E(0) - E(o1) */
+  private static int[] sortBySecondGain(List<GainSwitchNeuron> neuronsToSort) {
     Collections.sort(neuronsToSort, new Comparator<GainSwitchNeuron>() {
       @Override
       public int compare(GainSwitchNeuron o1, GainSwitchNeuron o2) {
@@ -155,8 +172,33 @@ public class PruningTool {
         }
       }
     });
+    return getRankedIds(neuronsToSort);
   }
   
+  private static int[] getRankedIds(List<GainSwitchNeuron> neuronsToSort) {
+    int[] rankings = new int[neuronsToSort.size()];
+    for(int i = 0; i < rankings.length; i++) 
+      rankings[i] = neuronsToSort.get(i).getIdNum();
+    return rankings; 
+  }
+  
+  private static int[][] getRankingsMatrix(int[]... rankings) {
+    return rankings;
+  }
+  
+  private static String printMatrix(int[][] matrix) {
+    StringBuffer sb = new StringBuffer();
+    for(int i = 0; i < matrix.length; i++) {
+      String[] arr = new String[matrix[i].length];
+      for(int j = 0; j < matrix[0].length; j++) {
+        arr[j] = "" + matrix[i][j];
+      }
+      sb.append(String.join(",", arr));
+      sb.append("\n");
+    }
+    return sb.toString();
+  }
+
   private static NeuralNetwork modifyLayers(NeuralNetwork net) {
     int[] hiddenLayerIndices = net.getHiddenLayerIndices();
     int[] edgeLayerIndices = net.getWeightMatrixIndices();
