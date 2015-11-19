@@ -213,12 +213,13 @@ public class PruningTool {
 
   private static String printMatrix(int[][] matrix) {
     StringBuffer sb = new StringBuffer();
-    for (int i = 0; i < matrix.length; i++) {
-      String[] arr = new String[matrix[i].length];
-      for (int j = 0; j < matrix[0].length; j++) {
-        arr[j] = "" + matrix[i][j];
+    for (int i = 0; i < matrix[0].length; i++) {
+      String[] arr = new String[matrix.length];
+      for (int j = 0; j < matrix.length; j++) {
+        arr[j] = "" + matrix[j][i];
       }
-      sb.append(String.join(",", arr));
+      String s = String.join(",", arr);
+      sb.append(s);
       sb.append("\n");
     }
     return sb.toString();
