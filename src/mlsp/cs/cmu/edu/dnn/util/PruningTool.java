@@ -65,59 +65,108 @@ public class PruningTool {
     System.out.println("Sorting by ground truth, gain, and second gain...");
     int[] groundTruthRankings = sortByGroundTruthError(neuronsToSort);
     double[] groundTruthErrorRank = getGTErrorRank(neuronsToSort);
+    double[] dropOffForGT = bigFuckingAlgorithm(1.0, neuronsToSort, net, testing);
+    
     int[] gainSumRankings = sortByGain(neuronsToSort);
     double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
+    double[] dropOffFor1stGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, testing);
+    
     int[] secondGainSumRankings = sortBySecondGain(neuronsToSort);
     double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
+    double[] dropOffFor2ndGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, testing);
+    
 
     int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
     double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
+    double[][] combinedDropoff = getErrorRankingsMatrix(dropOffForGT, dropOffFor1stGain, dropOffFor2ndGain);
     String result = printMatrix(combined);
     String errResult = printErrorMatrix(combinedError);
+    String dropOffResult = printErrorMatrix(combinedDropoff);
     System.out.println(result);
+    System.out.println(errResult);
+    System.out.println(dropOffResult);
 
-    FileWriter writer = new FileWriter(new File("result.csv"));
+    FileWriter writer = new FileWriter(new File("ranking-result.csv"));
     writer.write(result);
     writer.close();
-    writer = new FileWriter(new File("error-result.csv"));
+    writer = new FileWriter(new File("e0-e1-e2-change-result.csv"));
     writer.write(errResult);
     writer.close();
-
-    /* If reducing by percentage, get the number of neurons to remove */
-    System.out.println("Removing neurons...");
-    int neuronsToRemove = (int) Math.floor(neuronsToSort.size() * percentReduce);
+    writer = new FileWriter(new File("accuracy_dropoff_comparison.csv"));
+    writer.close();
     return net;
   }
+  
+  private static double[] bigFuckingAlgorithm(double percentReduce, List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet) {
+    /* If reducing by percentage, get the number of neurons to remove */
+    System.out.println("Removing neurons...");
+    DNNTrainingModule trainingModule = new DNNTrainingModule(net, testingSet);
+    double initialError = trainingModule.doTestTrainedNetwork();
+    int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
+    double[] result = new double[neuronsToRemove];
+    for(int i = 0; i < neuronsToRemove; i++) {
+      GainSwitchNeuron neuron = sortedNeurons.get(i);
+      System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
+      neuron.setSwitchOff(true);
+      double newError = trainingModule.doTestTrainedNetwork();
+      double diff = newError - initialError;
+      System.out.println("E(o1): " + initialError + " E(0): " + newError + "\nE(0) - E(o1): " + diff);
+      result[i] = newError;
+    }
+    // switch back on 
+    for(GainSwitchNeuron neuron : sortedNeurons) {
+      neuron.setSwitchOff(false);
+    }
+    return result;
+  }
+  
+  private static double[] getAccuracyRank(List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet) {
+    DNNTrainingModule trainingModule = new DNNTrainingModule(net, testingSet);
+    double initialError = trainingModule.doTestTrainedNetwork();
+    double[] accuracyRanks = new double[sortedNeurons.size()];
+    System.out.println("Unmodified network error: " + initialError);
+    for (GainSwitchNeuron neuron : sortedNeurons) {
+      System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
+      neuron.setSwitchOff(true);
+      double newError = trainingModule.doTestTrainedNetwork();
+      System.out.println("Switching neuron " + neuron.getIdNum() + " back ON...");
+      neuron.setSwitchOff(false);
+      double diff = newError - initialError;
+      System.out.println("E(o1): " + initialError + " E(0): " + newError + "\nE(0) - E(o1): " + diff);
+      neuron.setGroundTruthError(diff);
+    }
+    return accuracyRanks;
+  }
 
-  private static double[] get2GErrorRank(List<GainSwitchNeuron> neuronsToSort) {
-    double[] ranks = new double[neuronsToSort.size()];
+  private static double[] get2GErrorRank(List<GainSwitchNeuron> sortedNeurons) {
+    double[] ranks = new double[sortedNeurons.size()];
     for(int i = 0; i < ranks.length; i++) {
-      ranks[i] = neuronsToSort.get(i).getTotalSecondGain();
+      ranks[i] = sortedNeurons.get(i).getTotalSecondGain();
     }
     return ranks;
   }
 
-  private static double[] get1GErrorRank(List<GainSwitchNeuron> neuronsToSort) {
-    double[] ranks = new double[neuronsToSort.size()];
+  private static double[] get1GErrorRank(List<GainSwitchNeuron> sortedNeurons) {
+    double[] ranks = new double[sortedNeurons.size()];
     for(int i = 0; i < ranks.length; i++) {
-      ranks[i] = neuronsToSort.get(i).getTotalGain();
+      ranks[i] = sortedNeurons.get(i).getTotalGain();
     }
     return ranks;
   }
 
-  private static double[] getGTErrorRank(List<GainSwitchNeuron> neuronsToSort) {
-    double[] ranks = new double[neuronsToSort.size()];
+  private static double[] getGTErrorRank(List<GainSwitchNeuron> sortedNeurons) {
+    double[] ranks = new double[sortedNeurons.size()];
     for(int i = 0; i < ranks.length; i++) {
-      ranks[i] = neuronsToSort.get(i).getGroundTruthError();
+      ranks[i] = sortedNeurons.get(i).getGroundTruthError();
     }
     return ranks;
   }
 
-  private static void getGroundTruthError(List<GainSwitchNeuron> neuronsToSort, NeuralNetwork net, List<DataInstance> testingSet) {
+  private static void getGroundTruthError(List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet) {
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, testingSet);
     double initialError = trainingModule.doTestTrainedNetwork();
     System.out.println("Unmodified network error: " + initialError);
-    for (GainSwitchNeuron neuron : neuronsToSort) {
+    for (GainSwitchNeuron neuron : sortedNeurons) {
       System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
       neuron.setSwitchOff(true);
       double newError = trainingModule.doTestTrainedNetwork();
@@ -203,9 +252,9 @@ public class PruningTool {
       @Override
       public int compare(GainSwitchNeuron o1, GainSwitchNeuron o2) {
         if (o1.getTotalGain() > o2.getTotalGain()) {
-          return 1;
-        } else if (o1.getTotalGain() < o2.getTotalGain()) {
           return -1;
+        } else if (o1.getTotalGain() < o2.getTotalGain()) {
+          return 1;
         } else {
           return 0;
         }
@@ -220,9 +269,9 @@ public class PruningTool {
       @Override
       public int compare(GainSwitchNeuron o1, GainSwitchNeuron o2) {
         if (o1.getTotalSecondGain() > o2.getTotalSecondGain()) {
-          return 1;
-        } else if (o1.getTotalSecondGain() < o2.getTotalSecondGain()) {
           return -1;
+        } else if (o1.getTotalSecondGain() < o2.getTotalSecondGain()) {
+          return 1;
         } else {
           return 0;
         }
@@ -231,10 +280,10 @@ public class PruningTool {
     return getRankedIds(neuronsToSort);
   }
 
-  private static int[] getRankedIds(List<GainSwitchNeuron> neuronsToSort) {
-    int[] rankings = new int[neuronsToSort.size()];
+  private static int[] getRankedIds(List<GainSwitchNeuron> sortedNeurons) {
+    int[] rankings = new int[sortedNeurons.size()];
     for (int i = 0; i < rankings.length; i++)
-      rankings[i] = neuronsToSort.get(i).getIdNum();
+      rankings[i] = sortedNeurons.get(i).getIdNum();
     return rankings;
   }
 

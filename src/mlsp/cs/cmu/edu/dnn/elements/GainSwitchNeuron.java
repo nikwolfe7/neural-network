@@ -61,7 +61,7 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 	}
 
 	public double getTotalGain() {
-		return gainSum;
+		return -1.0 * gainSum;
 	}
 	
 	public double getTotalSecondGain() {
