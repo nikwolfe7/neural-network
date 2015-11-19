@@ -86,13 +86,16 @@ public class PruningTool {
     System.out.println(errResult);
     System.out.println(dropOffResult);
 
-    FileWriter writer = new FileWriter(new File("acc-ranking-result.csv"));
+//    FileWriter writer = new FileWriter(new File("acc-ranking-result.csv"));
+    FileWriter writer = new FileWriter(new File("ranking-result.csv"));
     writer.write(result);
     writer.close();
-    writer = new FileWriter(new File("acc-e0-e1-e2-change-result.csv"));
+//    writer = new FileWriter(new File("acc-e0-e1-e2-change-result.csv"));
+    writer = new FileWriter(new File("e0-e1-e2-change-result.csv"));
     writer.write(errResult);
     writer.close();
-    writer = new FileWriter(new File("acc-accuracy_dropoff_comparison.csv"));
+//    writer = new FileWriter(new File("acc-accuracy_dropoff_comparison.csv"));
+    writer = new FileWriter(new File("accuracy_dropoff_comparison.csv"));
     writer.write(dropOffResult);
     writer.close();
     return net;
