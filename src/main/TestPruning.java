@@ -16,13 +16,6 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class TestPruning {
 
-	static OutputAdapter adapter = new BinaryThresholdOutput();
-	static boolean printOut = true;
-	static boolean batchUpdate = false;
-	static boolean removeElements = false;
-	static String sep = System.getProperty("file.separator");
-	static String data = "." + sep + "data" + sep;
-
 	public static void main(String[] args) throws IOException {
 		RShapeDriver(0);
 	}
@@ -32,21 +25,20 @@ public class TestPruning {
 		System.out.println("                    RShape                         ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
-		List<DataInstance> training = reader.getDataFromFile(data + "RShape-train.csv", 2, 1);
-		List<DataInstance> testing = reader.getDataFromFile(data + "RShape-test.csv", 2, 1);
-		String dnnFile = data + "rshape.network.dnn";
+		List<DataInstance> training = reader.getDataFromFile(PruningTool.data + "RShape-train.csv", 2, 1);
+		List<DataInstance> testing = reader.getDataFromFile(PruningTool.data + "RShape-test.csv", 2, 1);
 		
 		double remove = 0.0;
 		while (remove <= 1) {
 			System.out.println("\n\nWith remove: " + remove);
-			System.out.println("Deserializing stored network " + dnnFile);
-			DNNFactory factory = new ReadSerializedFileDNNFactory(dnnFile);
+			System.out.println("Deserializing stored network " + PruningTool.dnnFile);
+			DNNFactory factory = new ReadSerializedFileDNNFactory(PruningTool.dnnFile);
 			NeuralNetwork net = factory.getInitializedNeuralNetwork();
 			DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 			trainingModule.setOutputOn(false);
-			trainingModule.setOutputAdapter(adapter);
+			trainingModule.setOutputAdapter(PruningTool.adapter);
 			trainingModule.doTestTrainedNetwork();
-			net = PruningTool.doPruning(net, training, remove, removeElements);
+			net = PruningTool.doPruning(net, training, testing, remove);
 			remove += 2;
 		}
 	}
