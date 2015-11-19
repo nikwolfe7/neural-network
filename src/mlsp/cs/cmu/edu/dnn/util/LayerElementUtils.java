@@ -86,18 +86,21 @@ public class LayerElementUtils {
 	 * Converts an edge from one type to another given two instantiated
 	 * Edges of potentially different subclasses
 	 * 
-	 * @param convertFrom
-	 * @param convertTo
+	 * @param from
+	 * @param to
 	 * @return
 	 */
-	public static Edge convertEdge(Edge convertFrom, Edge convertTo) {
-	  convertTo.setBatchUpdate(convertFrom.isBatchUpdate());
-	  convertTo.setGradient(convertFrom.getGradient());
-	  convertTo.setIncomingElement(convertFrom.getIncomingElement());
-	  convertTo.setOutgoingElement(convertFrom.getOutgoingElement());
-	  convertTo.setLearningRate(convertFrom.getLearningRate());
-	  convertTo.setWeight(convertFrom.getWeight());
-	  return convertTo;
+	public static void convertEdge(Edge from, Edge to) {
+	  to.setBatchUpdate(from.isBatchUpdate());
+	  to.setGradient(from.getGradient());
+	  to.setLearningRate(from.getLearningRate());
+	  to.setWeight(from.getWeight());
+	  Neuron fN, tN;
+	  fN = (Neuron) from.getIncomingElement();
+	  tN = (Neuron) from.getOutgoingElement();
+	  fN.removeElement(from);
+	  tN.removeElement(from);
+	  attachElements(fN, to, tN);
 	}
 	
 	public static void convertNeuron(Neuron from, Neuron to) {

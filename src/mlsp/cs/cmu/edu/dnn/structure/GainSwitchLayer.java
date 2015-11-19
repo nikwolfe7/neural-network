@@ -1,5 +1,6 @@
 package mlsp.cs.cmu.edu.dnn.structure;
 
+import mlsp.cs.cmu.edu.dnn.elements.Bias;
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.GainSwitchNeuron;
 import mlsp.cs.cmu.edu.dnn.elements.Input;
@@ -22,12 +23,14 @@ public class GainSwitchLayer implements Layer {
     for(int i = 0; i < elements.length; ++i) {
       NetworkElement e = elements[i];
       if(e instanceof Neuron) {
-        if(!(e instanceof Output) && !(e instanceof Input)) {
+        if(!(e instanceof Output) && !(e instanceof Input) && !(e instanceof Bias)) {
           GainSwitchNeuron neuron = new GainSwitchNeuron((Neuron) e);
           newElements[i] = neuron;
         } else if(e instanceof Output) {
           SecondDerivativeOutput output = new SecondDerivativeOutput((Output) e);
           newElements[i] = output;
+        } else {
+          newElements[i] = e;
         }
       } else if(e instanceof Edge) {
         SwitchEdge edge  = new SwitchEdge((Edge) e);

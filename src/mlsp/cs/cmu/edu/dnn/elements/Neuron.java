@@ -77,4 +77,9 @@ public class Neuron implements NetworkElement {
     this.output = output;
   }
 
+  public void removeElement(NetworkElement elem) {
+    incoming.remove(elem);
+    outgoing.remove(elem);
+  }
+
 }

@@ -108,6 +108,7 @@ public class PruningTool {
     DNNTrainingModule trainingModule = new DNNTrainingModule(modifyLayers(net), validationSet, validationSet);
     trainingModule.setOutputAdapter(new BinaryThresholdOutput());
     trainingModule.setConvergenceCriteria(-1, -1, true, 0, 1);
+    trainingModule.doTestTrainedNetwork();
     return trainingModule;
   }
   
@@ -159,6 +160,12 @@ public class PruningTool {
   private static NeuralNetwork modifyLayers(NeuralNetwork net) {
     int[] hiddenLayerIndices = net.getHiddenLayerIndices();
     int[] edgeLayerIndices = net.getWeightMatrixIndices();
+    for (int i : edgeLayerIndices) {
+      Layer oldLayer = net.getLayer(i);
+      GainSwitchLayer newLayer = new GainSwitchLayer(oldLayer);
+      newLayer.switchOff(true);
+      net.modifyExistingLayer(oldLayer, newLayer);
+    }
     Layer outputLayer = net.getLastLayer();
     GainSwitchLayer newOutputLayer = new GainSwitchLayer(outputLayer);
     net.modifyExistingLayer(outputLayer, newOutputLayer);
@@ -166,12 +173,6 @@ public class PruningTool {
       Layer oldLayer = net.getLayer(i);
       GainSwitchLayer newLayer = new GainSwitchLayer(oldLayer);
       newLayer.resetLayer();
-      net.modifyExistingLayer(oldLayer, newLayer);
-    }
-    for (int i : edgeLayerIndices) {
-      Layer oldLayer = net.getLayer(i);
-      GainSwitchLayer newLayer = new GainSwitchLayer(oldLayer);
-      newLayer.switchOff(true);
       net.modifyExistingLayer(oldLayer, newLayer);
     }
     return net;

@@ -135,7 +135,8 @@ public abstract class Edge implements NetworkElement, Cloneable {
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
-		return LayerElementUtils.convertEdge(this, o);
+		LayerElementUtils.convertEdge(this, o);
+		return o;
 	}
 
 }
