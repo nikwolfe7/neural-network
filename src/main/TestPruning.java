@@ -31,8 +31,8 @@ public class TestPruning {
 		double remove = 0.0;
 		while (remove <= 1) {
 			System.out.println("\n\nWith remove: " + remove);
-			System.out.println("Deserializing stored network " + PruningTool.dnnFile);
-			DNNFactory factory = new ReadSerializedFileDNNFactory(PruningTool.dnnFile);
+			System.out.println("Deserializing stored network " + PruningTool.modDnnFile);
+			DNNFactory factory = new ReadSerializedFileDNNFactory(PruningTool.modDnnFile);
 			NeuralNetwork net = factory.getInitializedNeuralNetwork();
 			DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 			trainingModule.setOutputOn(false);

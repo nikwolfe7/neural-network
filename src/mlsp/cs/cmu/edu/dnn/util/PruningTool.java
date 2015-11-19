@@ -25,7 +25,7 @@ public class PruningTool {
   public static OutputAdapter adapter = new BinaryThresholdOutput();
   public static boolean printOut = true;
   public static boolean batchUpdate = false;
-  public static boolean newFile = true;
+  public static boolean newFile = false;
   public static String sep = System.getProperty("file.separator");
   public static String data = "." + sep + "data" + sep;
   public static String dnnFile = PruningTool.data + "rshape.network.dnn";
