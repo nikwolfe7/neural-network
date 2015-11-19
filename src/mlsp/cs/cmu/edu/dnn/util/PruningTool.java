@@ -98,6 +98,38 @@ public class PruningTool {
     return net;
   }
   
+  private static double[] superFuckingAlgorithm(double percentReduce, List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet, String reSort) {
+    /* If reducing by percentage, get the number of neurons to remove */
+    System.out.println("Removing neurons...");
+    DNNTrainingModule trainingModule = new DNNTrainingModule(net, testingSet);
+    double initialError = trainingModule.doTestTrainedNetwork();
+    int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
+    double[] result = new double[neuronsToRemove];
+    for(int i = 0; i < neuronsToRemove; i++) {
+      GainSwitchNeuron neuron = sortedNeurons.get(i);
+      System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
+      neuron.setSwitchOff(true);
+      double newError = trainingModule.doTestTrainedNetwork();
+      double diff = newError - initialError;
+      System.out.println("E(o1): " + initialError + " E(0): " + newError + "\nE(0) - E(o1): " + diff);
+      result[i] = newError;
+    }
+    // switch back on 
+    for(GainSwitchNeuron neuron : sortedNeurons) {
+      neuron.setSwitchOff(false);
+    }
+    return result;
+  }
+  
+  private void reset(NeuralNetwork net) {
+    for(int i : net.getHiddenLayerIndices()) {
+      
+    }
+    for(int i : net.getWeightMatrixIndices()) {
+      
+    }
+  }
+  
   private static double[] bigFuckingAlgorithm(double percentReduce, List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet) {
     /* If reducing by percentage, get the number of neurons to remove */
     System.out.println("Removing neurons...");

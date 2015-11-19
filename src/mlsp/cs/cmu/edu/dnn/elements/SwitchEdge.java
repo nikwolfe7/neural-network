@@ -14,6 +14,11 @@ public class SwitchEdge extends SimpleEdge implements Switchable, SecondDerivati
 		this.switchOff = false;
 		this.secondGradient = 0;
 	}
+	
+	public void reset() {
+	  switchOff = false;
+	  setSecondGradient(0);
+	}
 
 	@Override
 	public void setSwitchOff(boolean b) {
