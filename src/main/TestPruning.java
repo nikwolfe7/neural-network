@@ -34,11 +34,13 @@ public class TestPruning {
 		DataReader reader = new ReadCSVTrainingData();
 		List<DataInstance> training = reader.getDataFromFile(data + "RShape-train.csv", 2, 1);
 		List<DataInstance> testing = reader.getDataFromFile(data + "RShape-test.csv", 2, 1);
-
+		String dnnFile = data + "rshape.network.dnn";
+		
 		double remove = 0.0;
 		while (remove <= 1) {
 			System.out.println("\n\nWith remove: " + remove);
-			DNNFactory factory = new ReadSerializedFileDNNFactory(data + "rshape.network.dnn");
+			System.out.println("Deserializing stored network " + dnnFile);
+			DNNFactory factory = new ReadSerializedFileDNNFactory(dnnFile);
 			NeuralNetwork net = factory.getInitializedNeuralNetwork();
 			DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 			trainingModule.setOutputOn(false);
