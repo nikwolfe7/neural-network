@@ -64,22 +64,53 @@ public class PruningTool {
     /* Sort the list by the different metrics */
     System.out.println("Sorting by ground truth, gain, and second gain...");
     int[] groundTruthRankings = sortByGroundTruthError(neuronsToSort);
+    double[] groundTruthErrorRank = getGTErrorRank(neuronsToSort);
     int[] gainSumRankings = sortByGain(neuronsToSort);
+    double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
     int[] secondGainSumRankings = sortBySecondGain(neuronsToSort);
+    double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
 
     int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
+    double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
     String result = printMatrix(combined);
+    String errResult = printErrorMatrix(combinedError);
     System.out.println(result);
 
     FileWriter writer = new FileWriter(new File("result.csv"));
     writer.write(result);
     writer.close();
+    writer = new FileWriter(new File("error-result.csv"));
+    writer.write(errResult);
+    writer.close();
 
     /* If reducing by percentage, get the number of neurons to remove */
     System.out.println("Removing neurons...");
     int neuronsToRemove = (int) Math.floor(neuronsToSort.size() * percentReduce);
-
     return net;
+  }
+
+  private static double[] get2GErrorRank(List<GainSwitchNeuron> neuronsToSort) {
+    double[] ranks = new double[neuronsToSort.size()];
+    for(int i = 0; i < ranks.length; i++) {
+      ranks[i] = neuronsToSort.get(i).getTotalSecondGain();
+    }
+    return ranks;
+  }
+
+  private static double[] get1GErrorRank(List<GainSwitchNeuron> neuronsToSort) {
+    double[] ranks = new double[neuronsToSort.size()];
+    for(int i = 0; i < ranks.length; i++) {
+      ranks[i] = neuronsToSort.get(i).getTotalGain();
+    }
+    return ranks;
+  }
+
+  private static double[] getGTErrorRank(List<GainSwitchNeuron> neuronsToSort) {
+    double[] ranks = new double[neuronsToSort.size()];
+    for(int i = 0; i < ranks.length; i++) {
+      ranks[i] = neuronsToSort.get(i).getGroundTruthError();
+    }
+    return ranks;
   }
 
   private static void getGroundTruthError(List<GainSwitchNeuron> neuronsToSort, NeuralNetwork net, List<DataInstance> testingSet) {
@@ -172,9 +203,9 @@ public class PruningTool {
       @Override
       public int compare(GainSwitchNeuron o1, GainSwitchNeuron o2) {
         if (o1.getTotalGain() > o2.getTotalGain()) {
-          return -1;
-        } else if (o1.getTotalGain() < o2.getTotalGain()) {
           return 1;
+        } else if (o1.getTotalGain() < o2.getTotalGain()) {
+          return -1;
         } else {
           return 0;
         }
@@ -189,9 +220,9 @@ public class PruningTool {
       @Override
       public int compare(GainSwitchNeuron o1, GainSwitchNeuron o2) {
         if (o1.getTotalSecondGain() > o2.getTotalSecondGain()) {
-          return -1;
-        } else if (o1.getTotalSecondGain() < o2.getTotalSecondGain()) {
           return 1;
+        } else if (o1.getTotalSecondGain() < o2.getTotalSecondGain()) {
+          return -1;
         } else {
           return 0;
         }
@@ -210,8 +241,27 @@ public class PruningTool {
   private static int[][] getRankingsMatrix(int[]... rankings) {
     return rankings;
   }
+  
+  private static double[][] getErrorRankingsMatrix(double[]... rankings) {
+    return rankings;
+  }
 
+  
   private static String printMatrix(int[][] matrix) {
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < matrix[0].length; i++) {
+      String[] arr = new String[matrix.length];
+      for (int j = 0; j < matrix.length; j++) {
+        arr[j] = "" + matrix[j][i];
+      }
+      String s = String.join(",", arr);
+      sb.append(s);
+      sb.append("\n");
+    }
+    return sb.toString();
+  }
+  
+  private static String printErrorMatrix(double[][] matrix) {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < matrix[0].length; i++) {
       String[] arr = new String[matrix.length];
