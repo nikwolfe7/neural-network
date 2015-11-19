@@ -15,7 +15,7 @@ public class BinaryThresholdOutput implements OutputAdapter {
 
   @Override
   public boolean isCorrect(Object output, Object truth) {
-    double[] out = (double[]) output;
+    double[] out = (double[]) getSmoothedPrediction((double[]) output);
     double[] t = (double[]) truth;
     for(int i = 0; i < out.length; i++) {
       if(out[i] != t[i]) {

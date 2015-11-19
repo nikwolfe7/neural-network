@@ -9,6 +9,7 @@ import javax.swing.text.SimpleAttributeSet;
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
+import mlsp.cs.cmu.edu.dnn.elements.Output;
 import mlsp.cs.cmu.edu.dnn.elements.SimpleEdge;
 import mlsp.cs.cmu.edu.dnn.factory.NetworkElementAbstractFactory;
 import mlsp.cs.cmu.edu.dnn.structure.Layer;
@@ -98,6 +99,31 @@ public class LayerElementUtils {
 	  convertTo.setWeight(convertFrom.getWeight());
 	  return convertTo;
 	}
+	
+	public static void convertNeuron(Neuron from, Neuron to) {
+    for(NetworkElement e : from.getIncomingElements()) {
+      Edge edge = (Edge) e;
+      edge.setOutgoingElement(to);
+      to.addIncomingElement(edge);
+    }
+    for(NetworkElement e : from.getOutgoingElements()) {
+      Edge edge = (Edge) e;
+      edge.setIncomingElement(to);
+      to.addOutgoingElement(edge);
+    }
+    to.setOutput(from.getOutput());
+    to.setGradient(from.getGradient());
+	}
+	
+	/**
+	 * 
+	 * @param o1
+	 * @param o2
+	 */
+	public static void convertOutput(Output from, Output to) {
+	  convertNeuron(from, to);
+	  to.setTruthValue(from.getTruthValue());
+  }
 
 	/**
 	 * Attach two individual neurons together with an Edge
@@ -154,5 +180,4 @@ public class LayerElementUtils {
 			return newElements;
 		}
 	}
-
 }

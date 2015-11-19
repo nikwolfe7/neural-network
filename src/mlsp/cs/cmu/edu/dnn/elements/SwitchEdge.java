@@ -1,15 +1,16 @@
 package mlsp.cs.cmu.edu.dnn.elements;
 
-public class SwitchEdge extends Edge implements Switchable, SecondDerivativeNetworkElement {
+import mlsp.cs.cmu.edu.dnn.util.LayerElementUtils;
+
+public class SwitchEdge extends SimpleEdge implements Switchable, SecondDerivativeNetworkElement {
 
 	private static final long serialVersionUID = 1338100192118401076L;
 
-	private Edge edge;
 	private boolean switchOff;
 	private double secondGradient;
 
 	public SwitchEdge(Edge e) {
-		this.edge = e;
+		LayerElementUtils.convertEdge(e, this);
 		this.switchOff = false;
 		this.secondGradient = 0;
 	}
@@ -34,103 +35,13 @@ public class SwitchEdge extends Edge implements Switchable, SecondDerivativeNetw
   @Override
 	public void updateWeight() {
 		if (!switchOff)
-			edge.updateWeight();
+			super.updateWeight();
 	}
 
 	@Override
 	public void batchUpdate() {
 		if (!switchOff)
-			edge.batchUpdate();
-	}
-
-	@Override
-	public void setBatchUpdate(boolean b) {
-		edge.setBatchUpdate(b);
-	}
-
-	@Override
-	public boolean isBatchUpdate() {
-		return edge.isBatchUpdate();
-	}
-
-	@Override
-	public void resetBatchGradient() {
-		edge.resetBatchGradient();
-	}
-
-	@Override
-	public void reinitializeWeight(double low, double high) {
-		edge.reinitializeWeight(low, high);
-	}
-
-	@Override
-	public void setLearningRate(double rate) {
-		edge.setLearningRate(rate);
-	}
-
-	@Override
-	public double getLearningRate() {
-		return edge.getLearningRate();
-	}
-
-	@Override
-	public void setIncomingElement(NetworkElement element) {
-		edge.setIncomingElement(element);
-	}
-
-	@Override
-	public NetworkElement getIncomingElement() {
-		return edge.getIncomingElement();
-	}
-
-	@Override
-	public void setOutgoingElement(NetworkElement element) {
-		edge.setOutgoingElement(element);
-	}
-
-	@Override
-	public NetworkElement getOutgoingElement() {
-		return edge.getOutgoingElement();
-	}
-
-	@Override
-	public double getWeight() {
-		return edge.getWeight();
-	}
-
-	@Override
-	public void setWeight(double w) {
-		edge.setWeight(w);
-	}
-
-	@Override
-	public void forward() {
-		edge.forward();
-	}
-
-	@Override
-	public double derivative() {
-		return edge.derivative();
-	}
-
-	@Override
-	public double getOutput() {
-		return edge.getOutput();
-	}
-
-	@Override
-	public double getGradient() {
-		return edge.getGradient();
-	}
-
-	@Override
-	public double getBatchGradient() {
-		return edge.getBatchGradient();
-	}
-
-	@Override
-	public void setGradient(double g) {
-		edge.setGradient(g);
+		  super.batchUpdate();
 	}
 
   @Override

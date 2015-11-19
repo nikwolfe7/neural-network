@@ -1,16 +1,13 @@
 package mlsp.cs.cmu.edu.dnn.elements;
 
-import java.util.List;
-
 import mlsp.cs.cmu.edu.dnn.util.ActivationFunction;
+import mlsp.cs.cmu.edu.dnn.util.LayerElementUtils;
 
 public class GainSwitchNeuron extends Neuron implements Switchable, SecondDerivativeNetworkElement {
 
 	private static final long serialVersionUID = 6087613637614963686L;
 	
 	private static int IDNumber = 0;
-
-	private Neuron neuron;
 
 	private boolean switchOff;
 
@@ -27,9 +24,9 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 	private int idNum;
 
 	public GainSwitchNeuron(Neuron n) {
+	  LayerElementUtils.convertNeuron(n, this);
 	  GainSwitchNeuron.IDNumber++;
 	  this.idNum = IDNumber; 
-		this.neuron = n;
 		this.switchOff = false;
 		this.gainSum = 0;
 		this.secondGainSum = 0;
@@ -80,26 +77,16 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 	}
 	
 	@Override
-	public void addIncomingElement(NetworkElement element) {
-		neuron.addIncomingElement(element);
-	}
-
-	@Override
-	public void addOutgoingElement(NetworkElement element) {
-		neuron.addOutgoingElement(element);
-	}
-
-	@Override
 	public void forward() {
 		if (!switchOff) {
-			neuron.forward();
+			super.forward();
 		}
 	}
 
 	@Override
 	public void backward() {
 		if (!switchOff) {
-			neuron.backward();
+			super.backward();
 			double secondGradSum = 0;
 			for(NetworkElement e : getOutgoingElements()) {
 			  SecondDerivativeNetworkElement elem = (SecondDerivativeNetworkElement) e;
@@ -120,13 +107,13 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
   @Override
 	public void setGradient(double e) {
 		if (!switchOff)
-			neuron.setGradient(e);
+			super.setGradient(e);
 	}
 
 	@Override
 	public double derivative() {
 		if (!switchOff)
-			return neuron.derivative();
+			return super.derivative();
 		else
 			return 0;
 	}
@@ -134,7 +121,7 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 	@Override
 	public double getOutput() {
 		if (!switchOff)
-			return neuron.getOutput();
+			return super.getOutput();
 		else
 			return 0;
 	}
@@ -142,26 +129,11 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 	@Override
 	public double getGradient() {
 		if (!switchOff)
-			return neuron.getGradient();
+			return super.getGradient();
 		else
 			return 0;
 	}
 
-	@Override
-	public List<NetworkElement> getIncomingElements() {
-		return neuron.getIncomingElements();
-	}
-
-	@Override
-	public List<NetworkElement> getOutgoingElements() {
-		return neuron.getOutgoingElements();
-	}
-	
-	@Override
-	public void setOutput(double output) {
-		neuron.setOutput(output);
-	}
-	
   @Override
   public double secondDerivative() {
     return ActivationFunction.sigmoidSecondDerivative(getOutput());
