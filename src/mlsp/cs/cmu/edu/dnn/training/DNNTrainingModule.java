@@ -217,8 +217,8 @@ public class DNNTrainingModule {
 		System.out.println("Total Error:  " + f.format(sumOfSquaredErrors));
 		System.out.println(" Mean Error:  " + f.format(sumOfSquaredErrors/testing.size()));
 		System.out.println("   Accuracy:  " + f.format(numCorrect/testing.size()));
-		return sumOfSquaredErrors;
-//		return numCorrect/testing.size();
+//		return sumOfSquaredErrors;
+		return numCorrect/testing.size();
 	}
 	
 	public void saveNetworkToFile(String fileName) {
