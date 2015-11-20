@@ -13,6 +13,7 @@ import java.util.Random;
 
 import mlsp.cs.cmu.edu.dnn.elements.GainSwitchNeuron;
 import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
+import mlsp.cs.cmu.edu.dnn.elements.SwitchEdge;
 import mlsp.cs.cmu.edu.dnn.elements.Switchable;
 import mlsp.cs.cmu.edu.dnn.structure.GainSwitchLayer;
 import mlsp.cs.cmu.edu.dnn.structure.Layer;
@@ -104,9 +105,11 @@ public class PruningTool {
   private static double[] superFuckingAlgorithm(double percentReduce, List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet, String reSort) {
     /* If reducing by percentage, get the number of neurons to remove */
     System.out.println("Removing neurons...");
+    int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
+    
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, testingSet);
     double initialError = trainingModule.doTestTrainedNetwork();
-    int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
+    
     double[] result = new double[neuronsToRemove];
     for(int i = 0; i < neuronsToRemove; i++) {
       GainSwitchNeuron neuron = sortedNeurons.get(i);
@@ -126,10 +129,18 @@ public class PruningTool {
   
   private void reset(NeuralNetwork net) {
     for(int i : net.getHiddenLayerIndices()) {
-      
+      for(NetworkElement e : net.getLayer(i).getElements()) {
+        if(e instanceof GainSwitchNeuron) {
+          ((GainSwitchNeuron) e).reset();
+        }
+      }
     }
     for(int i : net.getWeightMatrixIndices()) {
-      
+      for(NetworkElement e : net.getLayer(i).getElements()) {
+        if(e instanceof SwitchEdge) {
+          ((SwitchEdge) e).reset();
+        }
+      }
     }
   }
   

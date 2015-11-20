@@ -46,6 +46,7 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 		secondGainSum = 0;
 		setGradient(0);
     setSecondGradient(0);
+    setSwitchOff(false);
 	}
 	
 	public int getIdNum() {
