@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -32,12 +33,12 @@ public class PruningTool {
 	public static String dnnFile = PruningTool.data + "rshape.network.dnn";
 	public static String modDnnFile = PruningTool.data + "mod.rshape.network.dnn";
 
-	public static NeuralNetwork doPruning(NeuralNetwork net, List<DataInstance> training, List<DataInstance> testing,
-			double percentReduce) throws IOException {
-
+	public static NeuralNetwork doPruning(NeuralNetwork net, List<DataInstance> training, List<DataInstance> testing, double percentReduce) throws IOException {
 		DNNTrainingModule trainingModule = null;
 		if (newFile) {
 			/* Get training module and run through the validation set once */
+			System.out.println("Modifying network for 2nd derivative backprop...");
+			modifyLayers(net);
 			System.out.println("Initializing training module...");
 			trainingModule = initTrainingModule(net, training, testing);
 			System.out.println("Running through validation set to compute first and second gradients...");
@@ -50,22 +51,22 @@ public class PruningTool {
 		 */
 		if (newFile) {
 			System.out.println("Computing ground truth error...");
-			getGroundTruthError(neuronsToSort, net, training, false);
+			getGroundTruthError(neuronsToSort, net, training);
 			trainingModule.saveNetworkToFile(modDnnFile);
 		}
 		/* Sort the list by the different metrics */
 		System.out.println("Sorting by ground truth, gain, and second gain...");
-//		int[] groundTruthRankings = sortByGroundTruthError(neuronsToSort);
+//		int[] groundTruthRankings = sortNeurons("gt",neuronsToSort);
 //		double[] groundTruthErrorRank = getGTErrorRank(neuronsToSort);
 //		double[] dropOffForGT = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
 		double[] algoForGT = bruteFuckingForce(1.0, net, training, "gt");
 
-//		int[] gainSumRankings = sortByGain(neuronsToSort);
+//		int[] gainSumRankings = sortNeurons("1g",neuronsToSort);
 //		double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
 //		double[] dropOffFor1stGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
 		double[] algoFor1G = superFuckingAlgorithm(1.0, net, training, "1g");
 
-//		int[] secondGainSumRankings = sortBySecondGain(neuronsToSort);
+//		int[] secondGainSumRankings = sortNeurons("2g", neuronsToSort);
 //		double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
 //		double[] dropOffFor2ndGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
 		double[] algoFor2G = superFuckingAlgorithm(1.0, net, training, "2g");
@@ -104,54 +105,43 @@ public class PruningTool {
 		return net;
 	}
 	
-	private static double[] bruteFuckingForce(double percentReduce, NeuralNetwork net, List<DataInstance> trainingSet, String reSort) {
-    System.out.println("Removing neurons...");
-    List<GainSwitchNeuron> sortedNeurons = getGainSwitchNeurons(net);
-    int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
-    DNNTrainingModule trainingModule = new DNNTrainingModule(net, trainingSet, trainingSet);
-    trainingModule.setOutputAdapter(new BinaryThresholdOutput());
-    trainingModule.setConvergenceCriteria(-1, -1, true, 0, 1);
-    double initialError = trainingModule.doTestTrainedNetwork();
-    double[] result = new double[neuronsToRemove];
-    // turn everything on
-    switchOffElements(sortedNeurons, false); 
-    for (int i = 0; i < neuronsToRemove; i++) {
-      // Reset sums and stuff
-      print("Resetting sums...");
-      reset(net);
-      // Run through training set O(n * k)
-      print("Running through training data 2nd derivative backprop...");
-      getGroundTruthError(sortedNeurons, net, trainingSet, true);
-      // Get the item at the top O(n)
-      print("Picking the winner...");
-      GainSwitchNeuron neuron = getBest(reSort, sortedNeurons);
-      // Switch it off
-      System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
-      neuron.setSwitchOff(true);
-      // test network and get error
-      double newError = trainingModule.doTestTrainedNetwork();
-      double diff = newError - initialError;
-      System.out.println("E(o1): " + initialError + " E(0): " + newError + "\nE(0) - E(o1): " + diff);
-      result[i] = newError;
-    }
-    // switch back on
-    for (GainSwitchNeuron neuron : sortedNeurons) {
-      neuron.setSwitchOff(false);
-    }
-    return result;
-  }
+	private static double[] bruteFuckingForce(double percentReduce, NeuralNetwork net, List<DataInstance> trainingSet, String sortBy) {
+		List<GainSwitchNeuron> neurons = getGainSwitchNeurons(net);
+		int neuronsToRemove = (int) Math.floor(neurons.size() * percentReduce);
+		DNNTrainingModule trainingModule = initTrainingModule(net, trainingSet, trainingSet);
+		double[] result = new double[neuronsToRemove];
+		// turn everything on
+		switchOffNeurons(neurons, false);
+		for (int i = 0; i < neuronsToRemove; i++) {
+			// Run through training set O(n * k)
+			print("Running through training data 2nd derivative backprop...");
+			getGroundTruthError(neurons, net, trainingSet);
+			// Get the item at the top O(n)
+			print("Picking the winner...");
+			GainSwitchNeuron neuron = getBest(sortBy, neurons);
+			// Switch it off
+			System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
+			neuron.setSwitchOff(true);
+			neurons.remove(neuron);
+			// test network and get error
+			double newError = trainingModule.doTestTrainedNetwork();
+			result[i] = newError;
+		}
+		// switch back on
+		for (GainSwitchNeuron neuron : neurons) {
+			neuron.setSwitchOff(false);
+		}
+		return result;
+	}
 
-	private static double[] superFuckingAlgorithm(double percentReduce, NeuralNetwork net, List<DataInstance> trainingSet, String reSort) {
-		System.out.println("Removing neurons...");
+	private static double[] superFuckingAlgorithm(double percentReduce, NeuralNetwork net, List<DataInstance> trainingSet, String sortBy) {
 		List<GainSwitchNeuron> sortedNeurons = getGainSwitchNeurons(net);
 		int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
-		DNNTrainingModule trainingModule = new DNNTrainingModule(net, trainingSet, trainingSet);
-		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
-		trainingModule.setConvergenceCriteria(-1, -1, true, 0, 1);
+		DNNTrainingModule trainingModule = initTrainingModule(net, trainingSet, trainingSet);
 		double initialError = trainingModule.doTestTrainedNetwork();
 		double[] result = new double[neuronsToRemove];
 		// turn everything on
-		switchOffElements(sortedNeurons, false); 
+		switchOffNeurons(sortedNeurons, false); 
 		for (int i = 0; i < neuronsToRemove; i++) {
 			// Reset sums and stuff
 			print("Resetting sums...");
@@ -161,7 +151,7 @@ public class PruningTool {
 			trainingModule.doTrainNetworkUntilConvergence();
 			// Get the item at the top O(n)
 			print("Picking the winner...");
-			GainSwitchNeuron neuron = getBest(reSort, sortedNeurons);
+			GainSwitchNeuron neuron = getBest(sortBy, sortedNeurons);
 			// Switch it off
 			System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
 			neuron.setSwitchOff(true);
@@ -178,9 +168,9 @@ public class PruningTool {
 		return result;
 	}
 	
-	private static GainSwitchNeuron getBest(String reSort, List<GainSwitchNeuron> sortedNeurons) {
+	private static GainSwitchNeuron getBest(String sortBy, List<GainSwitchNeuron> sortedNeurons) {
 		GainSwitchNeuron neuron = null;
-		if (reSort.equals("gt")) {
+		if (sortBy.equals("gt")) {
 			double val = Double.POSITIVE_INFINITY;
 			for(GainSwitchNeuron n : sortedNeurons) {
 				if(n.getGroundTruthError() < val) {
@@ -189,7 +179,7 @@ public class PruningTool {
 				}
 			}
 		}
-		else if (reSort.equals("g1")) {
+		else if (sortBy.equals("g1")) {
 			double val = Double.NEGATIVE_INFINITY;
 			for(GainSwitchNeuron n : sortedNeurons) {
 				if(n.getTotalGain() > val) {
@@ -198,7 +188,7 @@ public class PruningTool {
 				}
 			}
 		}
-		else if (reSort.equals("g2")) {
+		else if (sortBy.equals("g2")) {
 			double val = Double.NEGATIVE_INFINITY;
 			for(GainSwitchNeuron n : sortedNeurons) {
 				if(n.getTotalSecondGain() > val) {
@@ -210,13 +200,13 @@ public class PruningTool {
 		return neuron;
 	}
 
-	private static int[] sortNeurons(String reSort, List<GainSwitchNeuron> neurons) {
+	private static int[] sortNeurons(String sortBy, List<GainSwitchNeuron> neurons) {
 		int[] result = new int[neurons.size()];
-		if (reSort.equals("gt"))
+		if (sortBy.equals("gt"))
 			result = sortByGroundTruthError(neurons);
-		else if (reSort.equals("g1"))
+		else if (sortBy.equals("g1"))
 			result = sortByGain(neurons);
-		else if (reSort.equals("g2"))
+		else if (sortBy.equals("g2"))
 			result = sortBySecondGain(neurons);
 		return result;
 	}
@@ -224,15 +214,15 @@ public class PruningTool {
 	private static List<GainSwitchNeuron> getGainSwitchNeurons(NeuralNetwork net) {
 		/* Get the GainSwitch neurons out */
 		System.out.println("Getting array of GainSwitch neurons...");
-		List<GainSwitchNeuron> neuronsToSort = new ArrayList<GainSwitchNeuron>();
+		List<GainSwitchNeuron> neurons = new LinkedList<GainSwitchNeuron>();
 		for (int i : net.getHiddenLayerIndices()) {
 			Layer l = net.getLayer(i);
 			for (NetworkElement e : l.getElements()) {
 				if (e instanceof GainSwitchNeuron)
-					neuronsToSort.add((GainSwitchNeuron) e);
+					neurons.add((GainSwitchNeuron) e);
 			}
 		}
-		return neuronsToSort;
+		return neurons;
 	}
 
 	private static void reset(NeuralNetwork net) {
@@ -252,11 +242,9 @@ public class PruningTool {
 		}
 	}
 
-	private static double[] bigFuckingAlgorithm(double percentReduce, List<GainSwitchNeuron> sortedNeurons,
-			NeuralNetwork net, List<DataInstance> testingSet) {
+	private static double[] bigFuckingAlgorithm(double percentReduce, List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet) {
 		/* If reducing by percentage, get the number of neurons to remove */
-		System.out.println("Removing neurons...");
-		DNNTrainingModule trainingModule = new DNNTrainingModule(net, testingSet);
+		DNNTrainingModule trainingModule = initTrainingModule(net, testingSet, testingSet);
 		double initialError = trainingModule.doTestTrainedNetwork();
 		int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
 		double[] result = new double[neuronsToRemove];
@@ -300,9 +288,8 @@ public class PruningTool {
 		return ranks;
 	}
 
-	private static void getGroundTruthError(List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net,
-			List<DataInstance> testingSet, boolean leaveOff) {
-		DNNTrainingModule trainingModule = new DNNTrainingModule(net, testingSet);
+	private static void getGroundTruthError(List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet) {
+		DNNTrainingModule trainingModule = initTrainingModule(net, testingSet, testingSet);
 		double initialError = trainingModule.doTestTrainedNetwork();
 		System.out.println("Unmodified network error: " + initialError);
 		for (GainSwitchNeuron neuron : sortedNeurons) {
@@ -310,8 +297,7 @@ public class PruningTool {
 			neuron.setSwitchOff(true);
 			double newError = trainingModule.doTestTrainedNetwork();
 			System.out.println("Switching neuron " + neuron.getIdNum() + " back ON...");
-			if(!leaveOff)
-			  neuron.setSwitchOff(false);
+			neuron.setSwitchOff(false);
 			double diff = newError - initialError;
 			System.out.println("E(o1): " + initialError + " E(0): " + newError + "\nE(0) - E(o1): " + diff);
 			neuron.setGroundTruthError(diff);
@@ -330,40 +316,19 @@ public class PruningTool {
 		return switchOffs;
 	}
 
-	private static List<NetworkElement> doRankedPruning(List<GainSwitchNeuron> sortedNeurons, int neuronsToRemove) {
-		sortByGain(sortedNeurons);
-		List<NetworkElement> switchOffs = new ArrayList<NetworkElement>();
-		List<GainSwitchNeuron> subList = sortedNeurons.subList(sortedNeurons.size() - neuronsToRemove,
-				sortedNeurons.size());
-		for (GainSwitchNeuron n : subList) {
-			switchOffs.add(n);
-		}
-		return switchOffs;
-	}
-
 	/* ====================== HELPER METHODS ====================== */
 	/* ====================== HELPER METHODS ====================== */
 	/* ====================== HELPER METHODS ====================== */
 
-	public static void switchOffElements(List<GainSwitchNeuron> sortedNeurons, boolean b) {
+	public static void switchOffNeurons(List<GainSwitchNeuron> sortedNeurons, boolean b) {
 		for (GainSwitchNeuron s : sortedNeurons)
 			s.setSwitchOff(b);
 	}
 
-	private static DNNTrainingModule initTrainingModule(NeuralNetwork net, List<DataInstance> training,
-			List<DataInstance> testing) {
-		/* Before */
-		System.out.println("Error before altering the network:");
+	private static DNNTrainingModule initTrainingModule(NeuralNetwork net, List<DataInstance> training, List<DataInstance> testing) {
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
 		trainingModule.setConvergenceCriteria(-1, -1, true, 0, 1);
-		trainingModule.doTestTrainedNetwork();
-		/* After */
-		System.out.println("Error after altering the network:");
-		trainingModule = new DNNTrainingModule(modifyLayers(net), training, testing);
-		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
-		trainingModule.setConvergenceCriteria(-1, -1, true, 0, 1);
-		trainingModule.doTestTrainedNetwork();
 		return trainingModule;
 	}
 
@@ -462,7 +427,6 @@ public class PruningTool {
 	}
 
 	private static NeuralNetwork modifyLayers(NeuralNetwork net) {
-		System.out.println("Modifying network for 2nd derivative backprop...");
 		int[] hiddenLayerIndices = net.getHiddenLayerIndices();
 		int[] edgeLayerIndices = net.getWeightMatrixIndices();
 		for (int i : edgeLayerIndices) {
