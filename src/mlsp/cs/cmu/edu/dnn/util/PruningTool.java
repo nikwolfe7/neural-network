@@ -56,55 +56,62 @@ public class PruningTool {
 		}
 		/* Sort the list by the different metrics */
 		System.out.println("Sorting by ground truth, gain, and second gain...");
-//		int[] groundTruthRankings = sortNeurons("gt",neuronsToSort);
-//		double[] groundTruthErrorRank = getGTErrorRank(neuronsToSort);
-//		double[] dropOffForGT = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-//		double[] algoForGT = bruteFuckingForce(1.0, net, training, "gt");
+		// int[] groundTruthRankings = sortNeurons("gt",neuronsToSort);
+		// double[] groundTruthErrorRank = getGTErrorRank(neuronsToSort);
+		// double[] dropOffForGT = bigFuckingAlgorithm(1.0, neuronsToSort, net,
+		// training);
+		// double[] algoForGT = bruteFuckingForce(1.0, net, training, "gt");
 
-//		int[] gainSumRankings = sortNeurons("g1",neuronsToSort);
-//		double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
-//		double[] dropOffFor1stGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-		double[] algoFor1G = superFuckingAlgorithm(1.0, net, training, "g1");
+		// int[] gainSumRankings = sortNeurons("g1",neuronsToSort);
+		// double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
+		// double[] dropOffFor1stGain = bigFuckingAlgorithm(1.0, neuronsToSort,
+		// net, training);
+		 double[] algoFor1G = superFuckingAlgorithm(1.0, net, training, "g1");
 
-//		int[] secondGainSumRankings = sortNeurons("g2", neuronsToSort);
-//		double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
-//		double[] dropOffFor2ndGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
+		// int[] secondGainSumRankings = sortNeurons("g2", neuronsToSort);
+		// double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
+		// double[] dropOffFor2ndGain = bigFuckingAlgorithm(1.0, neuronsToSort,
+		// net, training);
 		double[] algoFor2G = superFuckingAlgorithm(1.0, net, training, "g2");
 
-//		int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
-//		double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
-//		double[][] combinedDropoff = getErrorRankingsMatrix(dropOffForGT, dropOffFor1stGain, dropOffFor2ndGain);
-		double[][] algoCombined = getErrorRankingsMatrix(/*algoForGT,*/algoFor1G, algoFor2G);
-		
-//		String result = printMatrix(combined);
-//		String errResult = printErrorMatrix(combinedError);
-//		String dropOffResult = printErrorMatrix(combinedDropoff);
+		// int[][] combined = getRankingsMatrix(groundTruthRankings,
+		// gainSumRankings, secondGainSumRankings);
+		// double[][] combinedError =
+		// getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank,
+		// secondGainSumErrorRank);
+		// double[][] combinedDropoff = getErrorRankingsMatrix(dropOffForGT,
+		// dropOffFor1stGain, dropOffFor2ndGain);
+		double[][] algoCombined = getErrorRankingsMatrix(/* algoForGT,*/ algoFor1G,algoFor2G);
+
+		// String result = printMatrix(combined);
+		// String errResult = printErrorMatrix(combinedError);
+		// String dropOffResult = printErrorMatrix(combinedDropoff);
 		String algoResult = printErrorMatrix(algoCombined);
-		
-//		System.out.println(result);
-//		System.out.println(errResult);
-//		System.out.println(dropOffResult);
+
+		// System.out.println(result);
+		// System.out.println(errResult);
+		// System.out.println(dropOffResult);
 		System.out.println(algoResult);
 
 		FileWriter writer;
-//		writer = new FileWriter(new File("ranking-result.csv"));
-//		writer.write(result);
-//		writer.close();
-//		
-//		writer = new FileWriter(new File("e0-e1-e2-change-result.csv"));
-//		writer.write(errResult);
-//		writer.close();
-//		
-//		writer = new FileWriter(new File("accuracy_dropoff_comparison.csv"));
-//		writer.write(dropOffResult);
-//		writer.close();
-		
-		writer = new FileWriter(new File("greedy_algo_comparison.csv"));
+		// writer = new FileWriter(new File(dnnFile + "ranking-result.csv"));
+		// writer.write(result);
+		// writer.close();
+		//
+		// writer = new FileWriter(new File(dnnFile + "e0-e1-e2-change-result.csv"));
+		// writer.write(errResult);
+		// writer.close();
+		//
+		// writer = new FileWriter(new File(dnnFile + "accuracy_dropoff_comparison.csv"));
+		// writer.write(dropOffResult);
+		// writer.close();
+
+		writer = new FileWriter(new File(dnnFile + "greedy_algo_comparison.csv"));
 		writer.write(algoResult);
 		writer.close();
 		return net;
 	}
-	
+
 	private static double[] bruteFuckingForce(double percentReduce, NeuralNetwork net, List<DataInstance> trainingSet, String sortBy) {
 		List<GainSwitchNeuron> neurons = getGainSwitchNeurons(net);
 		int neuronsToRemove = (int) Math.floor(neurons.size() * percentReduce);
@@ -141,7 +148,7 @@ public class PruningTool {
 		double initialError = trainingModule.doTestTrainedNetwork();
 		double[] result = new double[neuronsToRemove];
 		// turn everything on
-		switchOffNeurons(sortedNeurons, false); 
+		switchOffNeurons(sortedNeurons, false);
 		for (int i = 0; i < neuronsToRemove; i++) {
 			// Reset sums and stuff
 			print("Resetting sums...");
@@ -162,38 +169,49 @@ public class PruningTool {
 			result[i] = newError;
 		}
 		// switch back on
-		switchOffNeurons(sortedNeurons, false); 
+		switchOffNeurons(sortedNeurons, false);
 		return result;
 	}
-	
+
 	private static GainSwitchNeuron getBest(String sortBy, List<GainSwitchNeuron> sortedNeurons) {
 		GainSwitchNeuron neuron = null;
 		if (sortBy.equals("gt")) {
 			double val = Double.POSITIVE_INFINITY;
-			for(GainSwitchNeuron n : sortedNeurons) {
-				if(n.getGroundTruthError() < val) {
-					val = n.getGroundTruthError();
-					neuron = n;
+			for (GainSwitchNeuron n : sortedNeurons) {
+				if (!n.isSwitchedOff()) {
+					if (n.getGroundTruthError() < val) {
+						val = n.getGroundTruthError();
+						neuron = n;
+					}
+				} else {
+					System.out.println("Neuron: " + n.getIdNum() + " is switched off!");
 				}
 			}
-		}
-		else if (sortBy.equals("g1")) {
+		} else if (sortBy.equals("g1")) {
 			double val = Double.NEGATIVE_INFINITY;
-			for(GainSwitchNeuron n : sortedNeurons) {
-				if(n.getTotalGain() > val) {
-					val = n.getTotalGain();
-					neuron = n;
+			for (GainSwitchNeuron n : sortedNeurons) {
+				if (!n.isSwitchedOff()) {
+					if (n.getTotalGain() > val) {
+						val = n.getTotalGain();
+						neuron = n;
+					}
+				} else {
+					System.out.println("Neuron: " + n.getIdNum() + " is switched off!");
 				}
 			}
-		}
-		else if (sortBy.equals("g2")) {
+		} else if (sortBy.equals("g2")) {
 			double val = Double.NEGATIVE_INFINITY;
-			for(GainSwitchNeuron n : sortedNeurons) {
-				if(n.getTotalSecondGain() > val) {
-					val = n.getTotalSecondGain();
-					neuron = n;
+			for (GainSwitchNeuron n : sortedNeurons) {
+				if (!n.isSwitchedOff()) {
+					if (n.getTotalSecondGain() > val) {
+						val = n.getTotalSecondGain();
+						neuron = n;
+					}
+				} else {
+					System.out.println("Neuron: " + n.getIdNum() + " is switched off!");
 				}
 			}
+
 		}
 		return neuron;
 	}
@@ -444,7 +462,7 @@ public class PruningTool {
 		}
 		return net;
 	}
-	
+
 	private static void print(String s) {
 		System.out.println(s);
 	}
