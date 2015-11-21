@@ -9,7 +9,7 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 
 	private static int IDNumber = 0;
 
-	private boolean switchOff;
+	private boolean switchedOff;
 
 	private double gainSum;
 
@@ -27,7 +27,7 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 		LayerElementUtils.convertNeuron(n, this);
 		GainSwitchNeuron.IDNumber++;
 		this.idNum = IDNumber;
-		this.switchOff = false;
+		this.switchedOff = false;
 		this.gainSum = 0;
 		this.secondGainSum = 0;
 		this.count = 0;
@@ -36,8 +36,13 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 
 	@Override
 	public void setSwitchOff(boolean b) {
-		switchOff = b;
+		switchedOff = b;
 		setOutput(0);
+	}
+	
+	@Override
+	public boolean isSwitchedOff() {
+		return switchedOff;
 	}
 
 	public void reset() {
@@ -78,14 +83,14 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 
 	@Override
 	public void forward() {
-		if (!switchOff) {
+		if (!switchedOff) {
 			super.forward();
 		}
 	}
 
 	@Override
 	public void backward() {
-		if (!switchOff) {
+		if (!switchedOff) {
 			super.backward();
 			double secondGradSum = 0;
 			for (NetworkElement e : getOutgoingElements()) {
@@ -106,13 +111,13 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 
 	@Override
 	public void setGradient(double e) {
-		if (!switchOff)
+		if (!switchedOff)
 			super.setGradient(e);
 	}
 
 	@Override
 	public double derivative() {
-		if (!switchOff)
+		if (!switchedOff)
 			return super.derivative();
 		else
 			return 0;
@@ -120,7 +125,7 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 
 	@Override
 	public double getOutput() {
-		if (!switchOff)
+		if (!switchedOff)
 			return super.getOutput();
 		else
 			return 0;
@@ -128,7 +133,7 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 
 	@Override
 	public double getGradient() {
-		if (!switchOff)
+		if (!switchedOff)
 			return super.getGradient();
 		else
 			return 0;

@@ -4,4 +4,6 @@ public interface Switchable {
   
   public void setSwitchOff(boolean b);
   
+  public boolean isSwitchedOff();
+  
 }

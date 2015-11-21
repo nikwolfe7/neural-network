@@ -14,9 +14,9 @@ public class SwitchEdge extends SimpleEdge implements Switchable, SecondDerivati
 		this.switchOff = false;
 		this.secondGradient = 0;
 	}
-	
+
 	public void reset() {
-	  setSecondGradient(0);
+		setSecondGradient(0);
 	}
 
 	@Override
@@ -25,18 +25,23 @@ public class SwitchEdge extends SimpleEdge implements Switchable, SecondDerivati
 	}
 
 	@Override
+	public boolean isSwitchedOff() {
+		return switchOff;
+	}
+
+	@Override
 	public void backward() {
 		setGradient(getOutgoingElement().getGradient() * derivative());
 		SecondDerivativeNetworkElement elem = (SecondDerivativeNetworkElement) getOutgoingElement();
-		setSecondGradient(elem.getSecondGradient() * Math.pow(getWeight(),2));
+		setSecondGradient(elem.getSecondGradient() * Math.pow(getWeight(), 2));
 		updateWeight();
 	}
 
 	private void setSecondGradient(double d) {
-	  secondGradient = d;
-  }
+		secondGradient = d;
+	}
 
-  @Override
+	@Override
 	public void updateWeight() {
 		if (!switchOff)
 			super.updateWeight();
@@ -45,17 +50,17 @@ public class SwitchEdge extends SimpleEdge implements Switchable, SecondDerivati
 	@Override
 	public void batchUpdate() {
 		if (!switchOff)
-		  super.batchUpdate();
+			super.batchUpdate();
 	}
 
-  @Override
-  public double secondDerivative() {
-    return 1.0;
-  }
+	@Override
+	public double secondDerivative() {
+		return 1.0;
+	}
 
-  @Override
-  public double getSecondGradient() {
-     return secondGradient;
-  }
+	@Override
+	public double getSecondGradient() {
+		return secondGradient;
+	}
 
 }

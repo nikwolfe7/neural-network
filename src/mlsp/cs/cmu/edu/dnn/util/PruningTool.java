@@ -59,7 +59,7 @@ public class PruningTool {
 //		int[] groundTruthRankings = sortNeurons("gt",neuronsToSort);
 //		double[] groundTruthErrorRank = getGTErrorRank(neuronsToSort);
 //		double[] dropOffForGT = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-		double[] algoForGT = bruteFuckingForce(1.0, net, training, "gt");
+//		double[] algoForGT = bruteFuckingForce(1.0, net, training, "gt");
 
 //		int[] gainSumRankings = sortNeurons("g1",neuronsToSort);
 //		double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
@@ -74,7 +74,7 @@ public class PruningTool {
 //		int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
 //		double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
 //		double[][] combinedDropoff = getErrorRankingsMatrix(dropOffForGT, dropOffFor1stGain, dropOffFor2ndGain);
-		double[][] algoCombined = getErrorRankingsMatrix(algoForGT, algoFor1G, algoFor2G);
+		double[][] algoCombined = getErrorRankingsMatrix(/*algoForGT,*/algoFor1G, algoFor2G);
 		
 //		String result = printMatrix(combined);
 //		String errResult = printErrorMatrix(combinedError);
@@ -162,9 +162,7 @@ public class PruningTool {
 			result[i] = newError;
 		}
 		// switch back on
-		for (GainSwitchNeuron neuron : sortedNeurons) {
-			neuron.setSwitchOff(false);
-		}
+		switchOffNeurons(sortedNeurons, false); 
 		return result;
 	}
 	
