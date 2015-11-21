@@ -144,8 +144,4 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 		return secondGradient;
 	}
 
-	private void setSecondGradient(int g) {
-		this.secondGradient = g;
-	}
-
 }

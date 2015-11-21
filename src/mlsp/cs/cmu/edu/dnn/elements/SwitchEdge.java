@@ -50,7 +50,7 @@ public class SwitchEdge extends SimpleEdge implements Switchable, SecondDerivati
 
   @Override
   public double secondDerivative() {
-    return 1;
+    return 1.0;
   }
 
   @Override

@@ -61,15 +61,15 @@ public class PruningTool {
 //		double[] dropOffForGT = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
 		double[] algoForGT = bruteFuckingForce(1.0, net, training, "gt");
 
-//		int[] gainSumRankings = sortNeurons("1g",neuronsToSort);
+//		int[] gainSumRankings = sortNeurons("g1",neuronsToSort);
 //		double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
 //		double[] dropOffFor1stGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-		double[] algoFor1G = superFuckingAlgorithm(1.0, net, training, "1g");
+		double[] algoFor1G = superFuckingAlgorithm(1.0, net, training, "g1");
 
-//		int[] secondGainSumRankings = sortNeurons("2g", neuronsToSort);
+//		int[] secondGainSumRankings = sortNeurons("g2", neuronsToSort);
 //		double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
 //		double[] dropOffFor2ndGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-		double[] algoFor2G = superFuckingAlgorithm(1.0, net, training, "2g");
+		double[] algoFor2G = superFuckingAlgorithm(1.0, net, training, "g2");
 
 //		int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
 //		double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
