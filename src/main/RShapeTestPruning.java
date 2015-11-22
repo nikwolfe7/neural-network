@@ -14,33 +14,31 @@ import mlsp.cs.cmu.edu.dnn.util.BinaryThresholdOutput;
 import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
-public class TestPruning {
+public class RShapeTestPruning {
+
+	public static String dnnFile = "rshape.network.dnn";
+	public static String modDnnFile = "mod.rshape.network.dnn";
 
 	public static void main(String[] args) throws IOException {
-		RShapeDriver(0);
+		TestPruning(0);
 	}
 
-	public static void RShapeDriver(int... structure) throws IOException {
+	public static void TestPruning(int... structure) throws IOException {
 		System.out.println("---------------------------------------------------");
 		System.out.println("                    RShape                         ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
 		List<DataInstance> training = reader.getDataFromFile(PruningTool.data + "RShape-train.csv", 2, 1);
 		List<DataInstance> testing = reader.getDataFromFile(PruningTool.data + "RShape-test.csv", 2, 1);
-		
-		double remove = 0.0;
-		while (remove <= 1) {
-			System.out.println("\n\nWith remove: " + remove);
-			System.out.println("Deserializing stored network " + PruningTool.modDnnFile);
-			DNNFactory factory = new ReadSerializedFileDNNFactory(PruningTool.modDnnFile);
-			NeuralNetwork net = factory.getInitializedNeuralNetwork();
-			DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
-			trainingModule.setOutputOn(false);
-			trainingModule.setOutputAdapter(PruningTool.adapter);
-			trainingModule.doTestTrainedNetwork();
-			net = PruningTool.doPruning(net, training, testing, remove);
-			remove += 2;
-		}
+
+		System.out.println("Deserializing stored network " + PruningTool.data + modDnnFile);
+		DNNFactory factory = new ReadSerializedFileDNNFactory(PruningTool.data + modDnnFile);
+		NeuralNetwork net = factory.getInitializedNeuralNetwork();
+		DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
+		trainingModule.setOutputOn(false);
+		trainingModule.setOutputAdapter(PruningTool.adapter);
+		trainingModule.doTestTrainedNetwork();
+		net = PruningTool.doPruning(modDnnFile, false, net, training, testing, 1.0);
 	}
 
 }

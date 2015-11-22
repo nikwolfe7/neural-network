@@ -133,7 +133,7 @@ public class ShapesDriver {
 			trainingModule = new DNNTrainingModule(net, testing);
 			trainingModule.setOutputOn(false);
 			trainingModule.setOutputAdapter(adapter);
-			net = PruningTool.doPruning(net, training, testing, remove);
+//			net = PruningTool.doPruning(net, training, testing, remove);
 			trainingModule.doTestTrainedNetwork();
 			remove += 2;
 		}

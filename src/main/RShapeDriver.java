@@ -65,7 +65,7 @@ public class RShapeDriver {
 			trainingModule = new DNNTrainingModule(net, testing);
 			trainingModule.setOutputOn(false);
 			trainingModule.setOutputAdapter(adapter);
-			net = PruningTool.doPruning(net, training, testing, remove);
+//			net = PruningTool.doPruning(data, batchUpdate, net, training, testing, remove);
 			trainingModule.doTestTrainedNetwork();
 			remove += 2;
 		}

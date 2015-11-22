@@ -9,6 +9,7 @@ import mlsp.cs.cmu.edu.dnn.factory.CrossEntropyFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.DNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.ReadSerializedFileDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFFDNNFactory;
+import mlsp.cs.cmu.edu.dnn.factory.TanhOutputFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
@@ -40,7 +41,7 @@ public class DRShapeDriver {
     DataReader reader = new ReadCSVTrainingData();
     List<DataInstance> training = reader.getDataFromFile(data + "DRShape-train.csv", 2, 1);
     List<DataInstance> testing = reader.getDataFromFile(data + "DRShape-test.csv", 2, 1);
-    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+    DNNFactory factory = new TanhOutputFFDNNFactory(training.get(0), structure);
 
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);

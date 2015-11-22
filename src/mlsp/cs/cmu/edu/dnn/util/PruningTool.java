@@ -27,13 +27,10 @@ public class PruningTool {
 	public static OutputAdapter adapter = new BinaryThresholdOutput();
 	public static boolean printOut = true;
 	public static boolean batchUpdate = false;
-	public static boolean newFile = false;
 	public static String sep = System.getProperty("file.separator");
 	public static String data = "." + sep + "data" + sep;
-	public static String dnnFile = PruningTool.data + "rshape.network.dnn";
-	public static String modDnnFile = PruningTool.data + "mod.rshape.network.dnn";
 
-	public static NeuralNetwork doPruning(NeuralNetwork net, List<DataInstance> training, List<DataInstance> testing, double percentReduce) throws IOException {
+	public static NeuralNetwork doPruning(String dnnFile, boolean newFile, NeuralNetwork net, List<DataInstance> training, List<DataInstance> testing, double percentReduce) throws IOException {
 		DNNTrainingModule trainingModule = null;
 		if (newFile) {
 			/* Get training module and run through the validation set once */
@@ -52,24 +49,24 @@ public class PruningTool {
 		if (newFile) {
 			System.out.println("Computing ground truth error...");
 			getGroundTruthError(neuronsToSort, net, training);
-			trainingModule.saveNetworkToFile(modDnnFile);
+			trainingModule.saveNetworkToFile("mod." + dnnFile);
 		}
 		/* Sort the list by the different metrics */
 		System.out.println("Sorting by ground truth, gain, and second gain...");
 		int[] groundTruthRankings = sortNeurons("gt",neuronsToSort);
 		double[] groundTruthErrorRank = getGTErrorRank(neuronsToSort);
-		double[] dropOffForGT = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-		double[] algoForGT = bruteFuckingForce(1.0, net, training, "gt");
+		double[] dropOffForGT = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
+		double[] algoForGT = bruteFuckingForce(percentReduce, net, training, "gt");
 
 		int[] gainSumRankings = sortNeurons("g1",neuronsToSort);
 		double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
-		double[] dropOffFor1stGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-		double[] algoFor1G = superFuckingAlgorithm(1.0, net, training, "g1");
+		double[] dropOffFor1stGain = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
+		double[] algoFor1G = superFuckingAlgorithm(percentReduce, net, training, "g1");
 
 		int[] secondGainSumRankings = sortNeurons("g2", neuronsToSort);
 		double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
-		double[] dropOffFor2ndGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-		double[] algoFor2G = superFuckingAlgorithm(1.0, net, training, "g2");
+		double[] dropOffFor2ndGain = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
+		double[] algoFor2G = superFuckingAlgorithm(percentReduce, net, training, "g2");
 
 		int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
 		double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
