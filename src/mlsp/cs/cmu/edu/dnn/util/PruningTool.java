@@ -55,17 +55,19 @@ public class PruningTool {
 		System.out.println("Sorting by ground truth, gain, and second gain...");
 		int[] groundTruthRankings = sortNeurons("gt",neuronsToSort);
 		double[] groundTruthErrorRank = getGTErrorRank(neuronsToSort);
-		double[] dropOffForGT = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
-		double[] algoForGT = bruteFuckingForce(percentReduce, net, training, "gt");
-
+		
 		int[] gainSumRankings = sortNeurons("g1",neuronsToSort);
 		double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
-		double[] dropOffFor1stGain = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
-		double[] algoFor1G = superFuckingAlgorithm(percentReduce, net, training, "g1");
-
+		
 		int[] secondGainSumRankings = sortNeurons("g2", neuronsToSort);
 		double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
+		
+		double[] dropOffForGT = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
+		double[] dropOffFor1stGain = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
 		double[] dropOffFor2ndGain = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
+		
+		double[] algoForGT = bruteFuckingForce(percentReduce, net, training, "gt");
+		double[] algoFor1G = superFuckingAlgorithm(percentReduce, net, training, "g1");
 		double[] algoFor2G = superFuckingAlgorithm(percentReduce, net, training, "g2");
 
 		int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);

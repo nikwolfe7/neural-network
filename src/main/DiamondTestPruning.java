@@ -16,8 +16,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class DiamondTestPruning {
 	
-	public static String dnnFile = "diamond.network.dnn";
-	public static String modDnnFile = "mod.diamond.network.dnn";
+	public static String dnnFile = "mod.diamond.network.dnn";
 
 	public static void main(String[] args) throws IOException {
 		TestPruning(0);
@@ -38,7 +37,7 @@ public class DiamondTestPruning {
 		trainingModule.setOutputOn(false);
 		trainingModule.setOutputAdapter(PruningTool.adapter);
 		trainingModule.doTestTrainedNetwork();
-		net = PruningTool.doPruning(dnnFile, true, net, training, testing, 1.0);
+		net = PruningTool.doPruning(dnnFile, false, net, training, testing, 1.0);
 	}
 
 }
