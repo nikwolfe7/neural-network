@@ -32,8 +32,7 @@ public class SigmoidNetworkElementFactory implements NetworkElementAbstractFacto
 
 	@Override
 	public Edge getNewEdge() {
-	  Edge edge = new SimpleEdge(-10, 10, 0.1);
-	  return edge;
+	  return new MomentumEdge(-10, 10, 0.01, 0.9);
 	}
 
 	@Override

@@ -48,7 +48,7 @@ public class ShapesDriver {
 	};
 
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
-		  RShapeDriver(50,50);
+		  CircleDriver(50,50);
 		  
 //		  DiamondDriver(8);
 //		for(int[] config : configs) {
@@ -70,29 +70,29 @@ public class ShapesDriver {
 		System.out.println("                    Circle                         ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
-//	    List<DataInstance> training = reader.getDataFromFile("circle-train.csv", 2, 1);
+	    List<DataInstance> training = reader.getDataFromFile(data + "circle-train.csv", 2, 1);
 	    List<DataInstance> testing = reader.getDataFromFile(data + "circle-test.csv", 2, 1);
-//	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
-//	    
-//	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
-//	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-//	    trainingModule.setOutputOn(printOut);
-//	    trainingModule.setOutputAdapter(adapter);
-//	    trainingModule.setBatchUpdate(batchUpdate);
-//	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
-//	    trainingModule.doTrainNetworkUntilConvergence();
-//	    trainingModule.doTestTrainedNetwork(); 
-//	    trainingModule.saveNetworkToFile("network.dnn");
+	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+	    
+	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
+	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
+	    trainingModule.setOutputOn(printOut);
+	    trainingModule.setOutputAdapter(adapter);
+	    trainingModule.setBatchUpdate(batchUpdate);
+	    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 500);
+	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
+	    trainingModule.doTrainNetworkUntilConvergence();
+	    trainingModule.doTestTrainedNetwork(); 
+	    trainingModule.saveNetworkToFile(data + "circle.network.dnn");
 	    
 	    /* Test */
 	    System.out.println("De-serializing the network..");
-	    ReadSerializedFileDNNFactory factory = new ReadSerializedFileDNNFactory(data + "circle-network.dnn");
-	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
-	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
+	    factory = new ReadSerializedFileDNNFactory(data + "circle.network.dnn");
+	    net = factory.getInitializedNeuralNetwork();
+	    trainingModule = new DNNTrainingModule(net, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.doTestTrainedNetwork();
-	    
 	}
 	
 	public static void DiamondDriver(int... structure) {
