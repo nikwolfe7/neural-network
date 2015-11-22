@@ -23,7 +23,7 @@ public class TanhOutputElementFactory implements NetworkElementAbstractFactory {
 
 	@Override
 	public Edge getNewEdge() {
-		return new MomentumEdge(-1,1,0.000001,0.5);
+		return new MomentumEdge(-10,10,0.000001,0.25);
 	}
 
 	@Override

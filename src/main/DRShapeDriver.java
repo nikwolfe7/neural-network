@@ -41,14 +41,14 @@ public class DRShapeDriver {
     DataReader reader = new ReadCSVTrainingData();
     List<DataInstance> training = reader.getDataFromFile(data + "DRShape-train.csv", 2, 1);
     List<DataInstance> testing = reader.getDataFromFile(data + "DRShape-test.csv", 2, 1);
-    DNNFactory factory = new TanhOutputFFDNNFactory(training.get(0), structure);
+    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
 
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
     trainingModule.setOutputOn(printOut);
     trainingModule.setOutputAdapter(adapter);
-    trainingModule.setBatchUpdate(batchUpdate,15);
-    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 500);
+    trainingModule.setBatchUpdate(batchUpdate, 5);
+    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0);
     trainingModule.setPrintResults(true, data + "DRShape-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
     trainingModule.doTrainNetworkUntilConvergence();
 
