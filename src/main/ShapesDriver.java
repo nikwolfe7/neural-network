@@ -29,40 +29,8 @@ public class ShapesDriver {
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
   
-  static int[][] configs = new int[][] {
-		{2,2},
-		{4,4},
-		{8,8},
-		{16,16},
-		{32,32},
-		{64,64},
-	};
-	static int[][] configs2 = new int[][] {
-		{1},
-		{2},
-		{3},
-		{4},
-		{5},
-		{6},
-		{7},
-	};
-
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
 		  CircleDriver(50,50);
-		  
-//		  DiamondDriver(8);
-//		for(int[] config : configs) {
-//			CircleDriver(config);
-//			DiamondDriver(config);
-//			RShapeDriver(config);
-//			DRShapeDriver(config);
-//		}
-//		for(int[] config : configs2) {
-//			CircleDriver(config);
-//			DiamondDriver(config);
-//			RShapeDriver(config);
-//			DRShapeDriver(config);
-//		}
 	}
 	
 	public static void CircleDriver(int... structure) {
@@ -79,7 +47,7 @@ public class ShapesDriver {
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.setBatchUpdate(batchUpdate);
-	    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 500);
+	    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 200);
 	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork(); 

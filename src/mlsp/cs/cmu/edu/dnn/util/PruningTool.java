@@ -59,32 +59,32 @@ public class PruningTool {
 		int[] groundTruthRankings = sortNeurons("gt",neuronsToSort);
 		double[] groundTruthErrorRank = getGTErrorRank(neuronsToSort);
 		double[] dropOffForGT = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-		// double[] algoForGT = bruteFuckingForce(1.0, net, training, "gt");
+		double[] algoForGT = bruteFuckingForce(1.0, net, training, "gt");
 
 		int[] gainSumRankings = sortNeurons("g1",neuronsToSort);
 		double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
 		double[] dropOffFor1stGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-//		 double[] algoFor1G = superFuckingAlgorithm(1.0, net, training, "g1");
+		double[] algoFor1G = superFuckingAlgorithm(1.0, net, training, "g1");
 
 		int[] secondGainSumRankings = sortNeurons("g2", neuronsToSort);
 		double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
 		double[] dropOffFor2ndGain = bigFuckingAlgorithm(1.0, neuronsToSort, net, training);
-//		double[] algoFor2G = superFuckingAlgorithm(1.0, net, training, "g2");
+		double[] algoFor2G = superFuckingAlgorithm(1.0, net, training, "g2");
 
 		int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
 		double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
 		double[][] combinedDropoff = getErrorRankingsMatrix(dropOffForGT, dropOffFor1stGain, dropOffFor2ndGain);
-//		double[][] algoCombined = getErrorRankingsMatrix(/* algoForGT,*/ algoFor1G,algoFor2G);
+		double[][] algoCombined = getErrorRankingsMatrix(algoForGT,algoFor1G,algoFor2G);
 
-		 String result = printMatrix(combined);
-		 String errResult = printErrorMatrix(combinedError);
-		 String dropOffResult = printErrorMatrix(combinedDropoff);
-//		String algoResult = printErrorMatrix(algoCombined);
+		String result = printMatrix(combined);
+		String errResult = printErrorMatrix(combinedError);
+		String dropOffResult = printErrorMatrix(combinedDropoff);
+		String algoResult = printErrorMatrix(algoCombined);
 
 		System.out.println(result);
 		System.out.println(errResult);
 		System.out.println(dropOffResult);
-//		System.out.println(algoResult);
+		System.out.println(algoResult);
 
 		FileWriter writer;
 		writer = new FileWriter(new File(dnnFile + ".ranking-result.csv"));
@@ -95,13 +95,13 @@ public class PruningTool {
 		writer.write(errResult);
 		writer.close();
 		
-		writer = new FileWriter(new File(dnnFile + ".accuracy_dropoff_comparison.csv"));
+		writer = new FileWriter(new File(dnnFile + ".accuracy-dropoff-comparison.csv"));
 		writer.write(dropOffResult);
 		writer.close();
 
-//		writer = new FileWriter(new File(dnnFile + ".greedy_algo_comparison.csv"));
-//		writer.write(algoResult);
-//		writer.close();
+		writer = new FileWriter(new File(dnnFile + ".greedy-algo-comparison.csv"));
+		writer.write(algoResult);
+		writer.close();
 		return net;
 	}
 
