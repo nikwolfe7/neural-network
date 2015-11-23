@@ -31,7 +31,7 @@ public class DRShapeDriver {
   static String data = "." + sep + "data" + sep;
   
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
-		DRShape(50,50);
+		DRShape(50,25,25);
 	}
 	
   public static void DRShape(int... structure) {

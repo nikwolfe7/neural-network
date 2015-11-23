@@ -62,9 +62,9 @@ public class PruningTool {
 		int[] secondGainSumRankings = sortNeurons("g2", neuronsToSort);
 		double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
 		
-		double[] dropOffForGT = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
-		double[] dropOffFor1stGain = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
-		double[] dropOffFor2ndGain = bigFuckingAlgorithm(percentReduce, neuronsToSort, net, training);
+		double[] dropOffForGT = bigFuckingAlgorithm(percentReduce, net, training, "gt");
+		double[] dropOffFor1stGain = bigFuckingAlgorithm(percentReduce, net, training, "g1");
+		double[] dropOffFor2ndGain = bigFuckingAlgorithm(percentReduce, net, training, "g2");
 		
 		double[] algoForGT = bruteFuckingForce(percentReduce, net, training, "gt");
 		double[] algoFor1G = superFuckingAlgorithm(percentReduce, net, training, "g1");
@@ -250,14 +250,17 @@ public class PruningTool {
 		}
 	}
 
-	private static double[] bigFuckingAlgorithm(double percentReduce, List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet) {
+	private static double[] bigFuckingAlgorithm(double percentReduce, NeuralNetwork net, List<DataInstance> testingSet, String sortBy) {
 		/* If reducing by percentage, get the number of neurons to remove */
+		List<GainSwitchNeuron> neurons = getGainSwitchNeurons(net);
+		sortNeurons(sortBy, neurons);
+		switchOffNeurons(neurons, false);
 		DNNTrainingModule trainingModule = initTrainingModule(net, testingSet, testingSet);
 		double initialError = trainingModule.doTestTrainedNetwork();
-		int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
+		int neuronsToRemove = (int) Math.floor(neurons.size() * percentReduce);
 		double[] result = new double[neuronsToRemove];
 		for (int i = 0; i < neuronsToRemove; i++) {
-			GainSwitchNeuron neuron = sortedNeurons.get(i);
+			GainSwitchNeuron neuron = neurons.get(i);
 			System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
 			neuron.setSwitchOff(true);
 			double newError = trainingModule.doTestTrainedNetwork();
@@ -266,9 +269,7 @@ public class PruningTool {
 			result[i] = newError;
 		}
 		// switch back on
-		for (GainSwitchNeuron neuron : sortedNeurons) {
-			neuron.setSwitchOff(false);
-		}
+		switchOffNeurons(neurons, false);
 		return result;
 	}
 
