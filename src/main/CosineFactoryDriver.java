@@ -46,7 +46,7 @@ public class CosineFactoryDriver {
 
     /* Test the network */
     trainingModule.doTestTrainedNetwork();
-    trainingModule.saveNetworkToFile("cos.network.dnn");
+    trainingModule.saveNetworkToFile("cos.big.network.dnn");
   }
 
   private static List<DataInstance> getData(int numInstances) {

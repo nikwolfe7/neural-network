@@ -25,8 +25,8 @@ import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
 public class FactoryDriver {
 
   static DataInstanceGenerator dataGen = new XORGenerator();
-//  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(),10,10);
-  static DNNFactory factory = new ReadSerializedFileDNNFactory("xor.network.dnn");
+  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(),50,50);
+//  static DNNFactory factory = new ReadSerializedFileDNNFactory("xor.big.network.dnn");
   
   public static void main(String[] args) {
     
@@ -41,12 +41,12 @@ public class FactoryDriver {
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
     trainingModule.setOutputOn(true);
     trainingModule.setOutputAdapter(new BinaryThresholdOutput());
-//    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 1, 1000);
-//    trainingModule.doTrainNetworkUntilConvergence();
+    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 1, 1000);
+    trainingModule.doTrainNetworkUntilConvergence();
 
     /* Test the network */
     trainingModule.doTestTrainedNetwork();
-    trainingModule.saveNetworkToFile("xor.network.dnn");
+    trainingModule.saveNetworkToFile("xor.big.network.dnn");
   }
 
   private static List<DataInstance> getData(int numInstances) {
