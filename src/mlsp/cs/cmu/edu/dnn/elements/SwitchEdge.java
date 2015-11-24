@@ -17,6 +17,8 @@ public class SwitchEdge extends SimpleEdge implements Switchable, SecondDerivati
 
 	public void reset() {
 		setSecondGradient(0);
+		setGradient(0);
+		resetBatchGradient();
 	}
 
 	@Override

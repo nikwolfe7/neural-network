@@ -62,13 +62,13 @@ public class PruningTool {
 		int[] secondGainSumRankings = sortNeurons("g2", neuronsToSort);
 		double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
 		
-		double[] dropOffForGT = bigFuckingAlgorithm(percentReduce, net, training, "gt");
-		double[] dropOffFor1stGain = bigFuckingAlgorithm(percentReduce, net, training, "g1");
-		double[] dropOffFor2ndGain = bigFuckingAlgorithm(percentReduce, net, training, "g2");
+		double[] dropOffForGT = singlePassAlgorithm(percentReduce, net, training, "gt");
+		double[] dropOffFor1stGain = singlePassAlgorithm(percentReduce, net, training, "g1");
+		double[] dropOffFor2ndGain = singlePassAlgorithm(percentReduce, net, training, "g2");
 		
 		double[] algoForGT = bruteFuckingForce(percentReduce, net, training, "gt");
-		double[] algoFor1G = superFuckingAlgorithm(percentReduce, net, training, "g1");
-		double[] algoFor2G = superFuckingAlgorithm(percentReduce, net, training, "g2");
+		double[] algoFor1G = continuousReestimationAlgorithm(percentReduce, net, training, "g1");
+		double[] algoFor2G = continuousReestimationAlgorithm(percentReduce, net, training, "g2");
 
 		int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
 		double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
@@ -80,8 +80,8 @@ public class PruningTool {
 		String dropOffResult = printErrorMatrix(combinedDropoff);
 		String algoResult = printErrorMatrix(algoCombined);
 
-		System.out.println(result);
-		System.out.println(errResult);
+//		System.out.println(result);
+//		System.out.println(errResult);
 		System.out.println(dropOffResult);
 		System.out.println(algoResult);
 
@@ -133,7 +133,7 @@ public class PruningTool {
 		return result;
 	}
 
-	private static double[] superFuckingAlgorithm(double percentReduce, NeuralNetwork net, List<DataInstance> trainingSet, String sortBy) {
+	private static double[] continuousReestimationAlgorithm(double percentReduce, NeuralNetwork net, List<DataInstance> trainingSet, String sortBy) {
 		List<GainSwitchNeuron> sortedNeurons = getGainSwitchNeurons(net);
 		int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
 		DNNTrainingModule trainingModule = initTrainingModule(net, trainingSet, trainingSet);
@@ -250,12 +250,12 @@ public class PruningTool {
 		}
 	}
 
-	private static double[] bigFuckingAlgorithm(double percentReduce, NeuralNetwork net, List<DataInstance> testingSet, String sortBy) {
+	private static double[] singlePassAlgorithm(double percentReduce, NeuralNetwork net, List<DataInstance> testingSet, String sortBy) {
 		/* If reducing by percentage, get the number of neurons to remove */
+		DNNTrainingModule trainingModule = initTrainingModule(net, testingSet, testingSet);
 		List<GainSwitchNeuron> neurons = getGainSwitchNeurons(net);
 		sortNeurons(sortBy, neurons);
-		switchOffNeurons(neurons, false);
-		DNNTrainingModule trainingModule = initTrainingModule(net, testingSet, testingSet);
+    switchOffNeurons(neurons, false);
 		double initialError = trainingModule.doTestTrainedNetwork();
 		int neuronsToRemove = (int) Math.floor(neurons.size() * percentReduce);
 		double[] result = new double[neuronsToRemove];
@@ -309,7 +309,7 @@ public class PruningTool {
 			neuron.setSwitchOff(false);
 			double diff = newError - initialError;
 			System.out.println("E(o1): " + initialError + " E(0): " + newError + "\nE(0) - E(o1): " + diff);
-			neuron.setGroundTruthError(diff);
+			neuron.setGroundTruthError(newError);
 		}
 	}
 

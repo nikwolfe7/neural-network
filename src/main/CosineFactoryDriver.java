@@ -22,11 +22,11 @@ import mlsp.cs.cmu.edu.dnn.training.XORGenerator;
 import mlsp.cs.cmu.edu.dnn.util.BinaryThresholdOutput;
 import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
 
-public class FactoryDriver {
+public class CosineFactoryDriver {
 
-  static DataInstanceGenerator dataGen = new XORGenerator();
-//  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(),10,10);
-  static DNNFactory factory = new ReadSerializedFileDNNFactory("xor.network.dnn");
+  static DataInstanceGenerator dataGen = new CosineGenerator();
+  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(),10,10);
+//  static DNNFactory factory = new ReadSerializedFileDNNFactory("cos.network.dnn");
   
   public static void main(String[] args) {
     
@@ -34,19 +34,19 @@ public class FactoryDriver {
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
 
     /* Generate training and test data */
-    List<DataInstance> training = getData(100000);
-    List<DataInstance> testing = getData(10000);
+    List<DataInstance> training = getData(1000000);
+    List<DataInstance> testing = getData(1000);
 
     /* Train the network */
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
     trainingModule.setOutputOn(true);
-    trainingModule.setOutputAdapter(new BinaryThresholdOutput());
-//    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 1, 1000);
-//    trainingModule.doTrainNetworkUntilConvergence();
+//    trainingModule.setOutputAdapter(new BinaryThresholdOutput());
+    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 1, 1000);
+    trainingModule.doTrainNetworkUntilConvergence();
 
     /* Test the network */
     trainingModule.doTestTrainedNetwork();
-    trainingModule.saveNetworkToFile("xor.network.dnn");
+    trainingModule.saveNetworkToFile("cos.network.dnn");
   }
 
   private static List<DataInstance> getData(int numInstances) {
