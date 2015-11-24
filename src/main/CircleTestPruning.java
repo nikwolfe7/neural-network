@@ -16,7 +16,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class CircleTestPruning {
 
-	public static String dnnFile = "mod.circle.network.dnn";
+	public static String dnnFile = "circle.network.dnn";
 
 	public static void main(String[] args) throws IOException {
 		TestPruning(0);
@@ -37,7 +37,7 @@ public class CircleTestPruning {
 		trainingModule.setOutputOn(false);
 		trainingModule.setOutputAdapter(PruningTool.adapter);
 		trainingModule.doTestTrainedNetwork();
-		net = PruningTool.doPruning(dnnFile, false, net, training, testing, 1.0);
+		net = PruningTool.doPruning(dnnFile, true, net, training, testing, 1.0);
 	}
 
 }

@@ -19,7 +19,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class XORTestPruning {
 
-	public static String dnnFile = "mod.xor.network.dnn";
+	public static String dnnFile = "xor.big.network.dnn";
 	static DataInstanceGenerator dataGen = new XORGenerator();
 
 	public static void main(String[] args) throws IOException {
