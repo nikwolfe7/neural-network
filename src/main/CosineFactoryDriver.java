@@ -25,7 +25,7 @@ import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
 public class CosineFactoryDriver {
 
   static DataInstanceGenerator dataGen = new CosineGenerator();
-  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(),10,10);
+  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(),50,50);
 //  static DNNFactory factory = new ReadSerializedFileDNNFactory("cos.network.dnn");
   
   public static void main(String[] args) {
