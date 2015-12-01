@@ -20,7 +20,6 @@ import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 
 public class PruningTool {
 
-	public static OutputAdapter adapter = new BinaryThresholdOutput();
 	public static boolean printOut = true;
 	public static boolean batchUpdate = false;
 	public static String sep = System.getProperty("file.separator");
@@ -67,8 +66,7 @@ public class PruningTool {
 		double[] algoFor2G = continuousReestimationAlgorithm(percentReduce, net, training, "g2");
 
 		int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
-		double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank,
-				secondGainSumErrorRank);
+		double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
 		double[][] combinedDropoff = getErrorRankingsMatrix(dropOffForGT, dropOffFor1stGain, dropOffFor2ndGain);
 		double[][] algoCombined = getErrorRankingsMatrix(algoForGT, algoFor1G, algoFor2G);
 
@@ -124,9 +122,7 @@ public class PruningTool {
 			result[i] = newError;
 		}
 		// switch back on
-		for (GainSwitchNeuron neuron : neurons) {
-			neuron.setSwitchOff(false);
-		}
+		switchOffNeurons(getGainSwitchNeurons(net), false);
 		return result;
 	}
 
@@ -184,6 +180,7 @@ public class PruningTool {
 		 * USING THRESHOLDING on the MAGNITUDE
 		 */
 		double threshold = avg(getSortByMagnitudes(sortBy, sortedNeurons));
+		//double threshold = Double.MAX_VALUE;
 		/**/
 		if (sortBy.equals("g1")) {
 			double val = Double.NEGATIVE_INFINITY;

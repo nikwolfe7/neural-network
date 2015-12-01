@@ -5,161 +5,178 @@ import mlsp.cs.cmu.edu.dnn.util.LayerElementUtils;
 
 public class GainSwitchNeuron extends Neuron implements Switchable, SecondDerivativeNetworkElement {
 
-	private static final long serialVersionUID = 6087613637614963686L;
+  private static final long serialVersionUID = 6087613637614963686L;
 
-	private static int IDNumber = 0;
+  private static int IDNumber = 0;
 
-	private boolean switchedOff;
-	
-	private double gain;
+  private boolean switchedOff;
 
-	private double gradientSum;
+  private double gain;
 
-	private double secondGainSum;
+  private double gradientSum;
 
-	private double groundTruthError;
+  private double secondGradientSum;
 
-	private double secondGradient;
+  private double groundTruthError;
 
-	private int count;
+  private double secondGradient;
 
-	private int idNum;
+  private double threshold = Double.MAX_VALUE;
 
-	public GainSwitchNeuron(Neuron n) {
-		LayerElementUtils.convertNeuron(n, this);
-		GainSwitchNeuron.IDNumber++;
-		this.idNum = IDNumber;
-		this.switchedOff = false;
-		this.gain = 1.0;
-		this.gradientSum = 0;
-		this.secondGainSum = 0;
-		this.count = 0;
-		this.secondGradient = 0;
-	}
+  private int count;
 
-	@Override
-	public void setSwitchOff(boolean b) {
-		switchedOff = b;
-		setOutput(0);
-	}
-	
-	@Override
-	public boolean isSwitchedOff() {
-		return switchedOff;
-	}
-	
-	public double getGain() {
-	  return gain;
-	}
-	
-	public void setGain(double d) {
-	  gain = d;
-	}
+  private int idNum;
 
-	public void reset() {
-		count = 0;
-		gain = 1.0;
-		gradientSum = 0;
-		secondGainSum = 0;
-		setGradient(0);
-		setSecondGradient(0);
-	}
+  public GainSwitchNeuron(Neuron n) {
+    LayerElementUtils.convertNeuron(n, this);
+    GainSwitchNeuron.IDNumber++;
+    this.idNum = IDNumber;
+    this.switchedOff = false;
+    this.gain = 1.0;
+    this.gradientSum = 0;
+    this.secondGradientSum = 0;
+    this.count = 0;
+    this.secondGradient = 0;
+  }
 
-	public int getIdNum() {
-		return idNum;
-	}
+  @Override
+  public void setSwitchOff(boolean b) {
+    switchedOff = b;
+    setOutput(0);
+  }
 
-	public void setGroundTruthError(double val) {
-		groundTruthError = val;
-	}
+  @Override
+  public boolean isSwitchedOff() {
+    return switchedOff;
+  }
 
-	public double getGroundTruthError() {
-		return groundTruthError;
-	}
+  public double getGain() {
+    return gain;
+  }
 
-	public double getTotalGain() {
-		return -1.0 * gradientSum;
-	}
+  public void setGain(double d) {
+    gain = d;
+  }
 
-	public double getTotalSecondGain() {
-		return secondGainSum * 0.5 - gradientSum;
-	}
+  public void reset() {
+    count = 0;
+    gain = 1.0;
+    gradientSum = 0;
+    secondGradientSum = 0;
+    setGradient(0);
+    setSecondGradient(0);
+  }
 
-	public double getAverageGain() {
-		return getTotalGain() / count;
-	}
+  public int getIdNum() {
+    return idNum;
+  }
 
-	public double getAverageSecondGain() {
-		return getTotalSecondGain() / count;
-	}
+  public void setGroundTruthError(double val) {
+    groundTruthError = val;
+  }
 
-	@Override
-	public void forward() {
-		if (!switchedOff) {
-			super.forward();
-		}
-	}
+  public double getGroundTruthError() {
+    return groundTruthError;
+  }
 
-	@Override
-	public void backward() {
-		if (!switchedOff) {
-			super.backward();
-			double secondGradSum = 0;
-			for (NetworkElement e : getOutgoingElements()) {
-				SecondDerivativeNetworkElement elem = (SecondDerivativeNetworkElement) e;
-				secondGradSum += elem.getSecondGradient();
-			}
-			double secondGrad = secondGradSum * Math.pow(derivative(), 2) + getGradient() * secondDerivative();
-			setSecondGradient(secondGrad);
-			count++;
-			gradientSum += (getGradient() * getOutput());
-			secondGainSum += (secondGradSum * Math.pow(getOutput(), 2));
-		}
-	}
+  public double getTotalGain() {
+    return -1.0 * gradientSum;
+  }
 
-	private void setSecondGradient(double val) {
-		secondGradient = val;
-	}
+  public double getTotalSecondGain() {
+    return secondGradientSum * 0.5 - gradientSum;
+  }
 
-	@Override
-	public void setGradient(double e) {
-		if (!switchedOff)
-			super.setGradient(e);
-	}
+  private double thresh(double d) {
+    return (Math.abs(d) <= threshold) ? d : threshold * sign(d);
+  }
 
-	@Override
-	public double derivative() {
-		if (!switchedOff)
-			return super.derivative();
-		else
-			return 0;
-	}
+  private int sign(double d) {
+    return (d >= 0) ? 1 : -1;
+  }
 
-	@Override
-	public double getOutput() {
-		if (!switchedOff)
-		   // this is where the gain gets used...
-			return super.getOutput() * gain;
-		else
-			return 0;
-	}
+  public double getAverageGain() {
+    return getTotalGain() / count;
+  }
 
-	@Override
-	public double getGradient() {
-		if (!switchedOff)
-			return super.getGradient();
-		else
-			return 0;
-	}
+  public double getAverageSecondGain() {
+    return getTotalSecondGain() / count;
+  }
 
-	@Override
-	public double secondDerivative() {
-		return ActivationFunction.sigmoidSecondDerivative(getOutput());
-	}
+  @Override
+  public void forward() {
+    if (!switchedOff) {
+      super.forward();
+    }
+  }
 
-	@Override
-	public double getSecondGradient() {
-		return secondGradient;
-	}
+  @Override
+  public void backward() {
+    if (!switchedOff) {
+      super.backward();
+      double secondGradSum = 0;
+      for (NetworkElement e : getOutgoingElements()) {
+        SecondDerivativeNetworkElement elem = (SecondDerivativeNetworkElement) e;
+        secondGradSum += elem.getSecondGradient();
+      }
+      double secondGrad = secondGradSum * Math.pow(derivative(), 2) + getGradient() * secondDerivative();
+      setSecondGradient(secondGrad);
+      count++;
+      gradientSum += (getGradient() * getOutput());
+      secondGradientSum += (secondGradSum * Math.pow(getOutput(), 2));
+    }
+  }
+
+  private void setSecondGradient(double val) {
+    if (!switchedOff)
+      secondGradient = thresh(val);
+  }
+
+  @Override
+  public void setGradient(double val) {
+    if (!switchedOff)
+      super.setGradient(thresh(val));
+  }
+
+  @Override
+  public double derivative() {
+    if (!switchedOff)
+      return super.derivative();
+    else
+      return 0;
+  }
+
+  @Override
+  public double getOutput() {
+    if (!switchedOff)
+      // this is where the gain gets used...
+      return super.getOutput() * gain;
+    else
+      return 0;
+  }
+
+  @Override
+  public double getGradient() {
+    if (!switchedOff)
+      return super.getGradient();
+    else
+      return 0;
+  }
+
+  @Override
+  public double secondDerivative() {
+    if (!switchedOff)
+      return ActivationFunction.sigmoidSecondDerivative(getOutput());
+    else
+      return 0;
+  }
+
+  @Override
+  public double getSecondGradient() {
+    if (!switchedOff)
+      return secondGradient;
+    else
+      return 0;
+  }
 
 }

@@ -35,7 +35,7 @@ public class DiamondTestPruning {
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 		trainingModule.setOutputOn(false);
-		trainingModule.setOutputAdapter(PruningTool.adapter);
+		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
 		trainingModule.doTestTrainedNetwork();
 		net = PruningTool.doPruning(dnnFile, true, net, training, testing, 1.0);
 	}

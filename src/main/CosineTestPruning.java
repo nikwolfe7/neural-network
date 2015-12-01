@@ -20,7 +20,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class CosineTestPruning {
 
-	public static String dnnFile = "mod.cos.big.network.dnn";
+	public static String dnnFile = "cos.big.network.dnn";
 	static DataInstanceGenerator dataGen = new CosineGenerator();
 
 	public static void main(String[] args) throws IOException {
@@ -29,7 +29,7 @@ public class CosineTestPruning {
 
 	public static void TestPruning(int... structure) throws IOException {
 		System.out.println("---------------------------------------------------");
-		System.out.println("                    XOR                            ");
+		System.out.println("                    COS                            ");
 		System.out.println("---------------------------------------------------");
 		DataReader reader = new ReadCSVTrainingData();
 		List<DataInstance> training = getData(10000);
@@ -40,6 +40,7 @@ public class CosineTestPruning {
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 		trainingModule.setOutputOn(false);
+		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
 		trainingModule.doTestTrainedNetwork();
 		net = PruningTool.doPruning(dnnFile, true, net, training, testing, 1.0);
 	}

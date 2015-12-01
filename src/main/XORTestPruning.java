@@ -19,7 +19,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class XORTestPruning {
 
-	public static String dnnFile = "mod.xor.network.dnn";
+	public static String dnnFile = "xor.network.dnn";
 	static DataInstanceGenerator dataGen = new XORGenerator();
 
 	public static void main(String[] args) throws IOException {
@@ -39,7 +39,7 @@ public class XORTestPruning {
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 		trainingModule.setOutputOn(false);
-		trainingModule.setOutputAdapter(PruningTool.adapter);
+		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
 		trainingModule.doTestTrainedNetwork();
 		net = PruningTool.doPruning(dnnFile, true, net, training, testing, 1.0);
 	}
