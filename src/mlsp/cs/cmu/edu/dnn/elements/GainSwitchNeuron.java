@@ -10,8 +10,10 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 	private static int IDNumber = 0;
 
 	private boolean switchedOff;
+	
+	private double gain;
 
-	private double gainSum;
+	private double gradientSum;
 
 	private double secondGainSum;
 
@@ -28,7 +30,8 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 		GainSwitchNeuron.IDNumber++;
 		this.idNum = IDNumber;
 		this.switchedOff = false;
-		this.gainSum = 0;
+		this.gain = 1.0;
+		this.gradientSum = 0;
 		this.secondGainSum = 0;
 		this.count = 0;
 		this.secondGradient = 0;
@@ -44,10 +47,19 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 	public boolean isSwitchedOff() {
 		return switchedOff;
 	}
+	
+	public double getGain() {
+	  return gain;
+	}
+	
+	public void setGain(double d) {
+	  gain = d;
+	}
 
 	public void reset() {
 		count = 0;
-		gainSum = 0;
+		gain = 1.0;
+		gradientSum = 0;
 		secondGainSum = 0;
 		setGradient(0);
 		setSecondGradient(0);
@@ -66,11 +78,11 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 	}
 
 	public double getTotalGain() {
-		return -1.0 * gainSum;
+		return -1.0 * gradientSum;
 	}
 
 	public double getTotalSecondGain() {
-		return secondGainSum * 0.5 - gainSum;
+		return secondGainSum * 0.5 - gradientSum;
 	}
 
 	public double getAverageGain() {
@@ -100,7 +112,7 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 			double secondGrad = secondGradSum * Math.pow(derivative(), 2) + getGradient() * secondDerivative();
 			setSecondGradient(secondGrad);
 			count++;
-			gainSum += (getGradient() * getOutput());
+			gradientSum += (getGradient() * getOutput());
 			secondGainSum += (secondGradSum * Math.pow(getOutput(), 2));
 		}
 	}
@@ -126,7 +138,8 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 	@Override
 	public double getOutput() {
 		if (!switchedOff)
-			return super.getOutput();
+		   // this is where the gain gets used...
+			return super.getOutput() * gain;
 		else
 			return 0;
 	}

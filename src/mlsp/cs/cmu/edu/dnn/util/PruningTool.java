@@ -54,13 +54,13 @@ public class PruningTool {
 		/* Sort the list by the different metrics */
 		System.out.println("Sorting by ground truth, gain, and second gain...");
 		int[] groundTruthRankings = sortNeurons("gt",neuronsToSort);
-		double[] groundTruthErrorRank = getGTErrorRank(neuronsToSort);
+		double[] groundTruthErrorRank = getSortByValues("gt",neuronsToSort);
 		
 		int[] gainSumRankings = sortNeurons("g1",neuronsToSort);
-		double[] gainSumErrorRank = get1GErrorRank(neuronsToSort);
+		double[] gainSumErrorRank = getSortByValues("g1",neuronsToSort);
 		
 		int[] secondGainSumRankings = sortNeurons("g2", neuronsToSort);
-		double[] secondGainSumErrorRank = get2GErrorRank(neuronsToSort);
+		double[] secondGainSumErrorRank = getSortByValues("g2",neuronsToSort);
 		
 		double[] dropOffForGT = singlePassAlgorithm(percentReduce, net, training, "gt");
 		double[] dropOffFor1stGain = singlePassAlgorithm(percentReduce, net, training, "g1");
@@ -154,6 +154,7 @@ public class PruningTool {
 			// Switch it off
 			System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
 			neuron.setSwitchOff(true);
+			sortedNeurons.remove(neuron);
 			// test network and get error
 			double newError = trainingModule.doTestTrainedNetwork();
 			double diff = newError - initialError;
@@ -161,7 +162,7 @@ public class PruningTool {
 			result[i] = newError;
 		}
 		// switch back on
-		switchOffNeurons(sortedNeurons, false);
+		switchOffNeurons(getGainSwitchNeurons(net), false);
 		return result;
 	}
 
@@ -179,12 +180,25 @@ public class PruningTool {
 					System.out.println("Neuron: " + n.getIdNum() + " is switched off!");
 				}
 			}
-		} else if (sortBy.equals("g1")) {
+			return neuron;
+		}
+		/* 
+		 * 
+		 * 
+		 * USING THRESHOLDING on the MAGNITUDE
+		 * */
+	 double[] vals = getSortByValues(sortBy, sortedNeurons);
+	 for(int i = 0; i < vals.length; i++)
+	   vals[i] = Math.abs(vals[i]);
+   double threshold = Math.abs(mean());
+   /**/
+		if (sortBy.equals("g1")) {
 			double val = Double.NEGATIVE_INFINITY;
 			for (GainSwitchNeuron n : sortedNeurons) {
 				if (!n.isSwitchedOff()) {
-					if (n.getTotalGain() > val) {
-						val = n.getTotalGain();
+				  double gain = n.getTotalGain();
+					if (gain > val && Math.abs(gain) <= threshold) {
+						val = gain;
 						neuron = n;
 					}
 				} else {
@@ -195,8 +209,9 @@ public class PruningTool {
 			double val = Double.NEGATIVE_INFINITY;
 			for (GainSwitchNeuron n : sortedNeurons) {
 				if (!n.isSwitchedOff()) {
-					if (n.getTotalSecondGain() > val) {
-						val = n.getTotalSecondGain();
+				  double gain = n.getTotalSecondGain();
+					if (gain > val && Math.abs(gain) <= threshold) {
+						val = gain;
 						neuron = n;
 					}
 				} else {
@@ -206,6 +221,20 @@ public class PruningTool {
 
 		}
 		return neuron;
+	}
+	
+	private static double mean(double... vals) {
+	  double mean = 0;
+	  for(double d : vals)
+	    mean += d;
+	  return mean / vals.length;
+	}
+	
+	private static double var(double mean, double... vals) {
+	  double var = 0;
+	  for(double d : vals)
+	    var += Math.pow((d - mean), 2);
+	  return var / vals.length;
 	}
 
 	private static int[] sortNeurons(String sortBy, List<GainSwitchNeuron> neurons) {
@@ -273,7 +302,17 @@ public class PruningTool {
 		return result;
 	}
 
-	private static double[] get2GErrorRank(List<GainSwitchNeuron> sortedNeurons) {
+	private static double[] getSortByValues(String sortBy, List<GainSwitchNeuron> sortedNeurons) {
+	  if(sortBy.equals("gt"))
+	    return getGTSortByValues(sortedNeurons);
+	  else if (sortBy.equals("g1"))
+	    return get1GSortByValues(sortedNeurons);
+	  else if (sortBy.equals("g2"))
+	    return get2GSortByValues(sortedNeurons);
+	  else return new double[sortedNeurons.size()];
+	}
+	
+	private static double[] get2GSortByValues(List<GainSwitchNeuron> sortedNeurons) {
 		double[] ranks = new double[sortedNeurons.size()];
 		for (int i = 0; i < ranks.length; i++) {
 			ranks[i] = sortedNeurons.get(i).getTotalSecondGain();
@@ -281,7 +320,7 @@ public class PruningTool {
 		return ranks;
 	}
 
-	private static double[] get1GErrorRank(List<GainSwitchNeuron> sortedNeurons) {
+	private static double[] get1GSortByValues(List<GainSwitchNeuron> sortedNeurons) {
 		double[] ranks = new double[sortedNeurons.size()];
 		for (int i = 0; i < ranks.length; i++) {
 			ranks[i] = sortedNeurons.get(i).getTotalGain();
@@ -289,7 +328,7 @@ public class PruningTool {
 		return ranks;
 	}
 
-	private static double[] getGTErrorRank(List<GainSwitchNeuron> sortedNeurons) {
+	private static double[] getGTSortByValues(List<GainSwitchNeuron> sortedNeurons) {
 		double[] ranks = new double[sortedNeurons.size()];
 		for (int i = 0; i < ranks.length; i++) {
 			ranks[i] = sortedNeurons.get(i).getGroundTruthError();
