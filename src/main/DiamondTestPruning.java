@@ -16,7 +16,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class DiamondTestPruning {
 	
-	public static String dnnFile = "diamond.network.dnn";
+	public static String dnnFile = "mod.diamond.network.dnn";
 
 	public static void main(String[] args) throws IOException {
 		TestPruning(0);
@@ -30,8 +30,8 @@ public class DiamondTestPruning {
 		List<DataInstance> training = reader.getDataFromFile(PruningTool.data + "diamond-train.csv", 2, 1);
 		List<DataInstance> testing = reader.getDataFromFile(PruningTool.data + "diamond-test.csv", 2, 1);
 		
-		System.out.println("Deserializing stored network " + PruningTool.data + dnnFile);
-		DNNFactory factory = new ReadSerializedFileDNNFactory(PruningTool.data + dnnFile);
+		System.out.println("Deserializing stored network " + dnnFile);
+		DNNFactory factory = new ReadSerializedFileDNNFactory(dnnFile);
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 		trainingModule.setOutputOn(false);
