@@ -184,13 +184,9 @@ public class PruningTool {
 		}
 		/* 
 		 * 
-		 * 
 		 * USING THRESHOLDING on the MAGNITUDE
 		 * */
-	 double[] vals = getSortByValues(sortBy, sortedNeurons);
-	 for(int i = 0; i < vals.length; i++)
-	   vals[i] = Math.abs(vals[i]);
-   double threshold = Math.abs(mean());
+	double threshold = avg(getSortByMagnitudes(sortBy, sortedNeurons));
    /**/
 		if (sortBy.equals("g1")) {
 			double val = Double.NEGATIVE_INFINITY;
@@ -223,62 +219,6 @@ public class PruningTool {
 		return neuron;
 	}
 	
-	private static double mean(double... vals) {
-	  double mean = 0;
-	  for(double d : vals)
-	    mean += d;
-	  return mean / vals.length;
-	}
-	
-	private static double var(double mean, double... vals) {
-	  double var = 0;
-	  for(double d : vals)
-	    var += Math.pow((d - mean), 2);
-	  return var / vals.length;
-	}
-
-	private static int[] sortNeurons(String sortBy, List<GainSwitchNeuron> neurons) {
-		int[] result = new int[neurons.size()];
-		if (sortBy.equals("gt"))
-			result = sortByGroundTruthError(neurons);
-		else if (sortBy.equals("g1"))
-			result = sortByGain(neurons);
-		else if (sortBy.equals("g2"))
-			result = sortBySecondGain(neurons);
-		return result;
-	}
-
-	private static List<GainSwitchNeuron> getGainSwitchNeurons(NeuralNetwork net) {
-		/* Get the GainSwitch neurons out */
-		System.out.println("Getting array of GainSwitch neurons...");
-		List<GainSwitchNeuron> neurons = new LinkedList<GainSwitchNeuron>();
-		for (int i : net.getHiddenLayerIndices()) {
-			Layer l = net.getLayer(i);
-			for (NetworkElement e : l.getElements()) {
-				if (e instanceof GainSwitchNeuron)
-					neurons.add((GainSwitchNeuron) e);
-			}
-		}
-		return neurons;
-	}
-
-	private static void reset(NeuralNetwork net) {
-		for (int i : net.getHiddenLayerIndices()) {
-			for (NetworkElement e : net.getLayer(i).getElements()) {
-				if (e instanceof GainSwitchNeuron) {
-					((GainSwitchNeuron) e).reset();
-				}
-			}
-		}
-		for (int i : net.getWeightMatrixIndices()) {
-			for (NetworkElement e : net.getLayer(i).getElements()) {
-				if (e instanceof SwitchEdge) {
-					((SwitchEdge) e).reset();
-				}
-			}
-		}
-	}
-
 	private static double[] singlePassAlgorithm(double percentReduce, NeuralNetwork net, List<DataInstance> testingSet, String sortBy) {
 		/* If reducing by percentage, get the number of neurons to remove */
 		DNNTrainingModule trainingModule = initTrainingModule(net, testingSet, testingSet);
@@ -300,40 +240,6 @@ public class PruningTool {
 		// switch back on
 		switchOffNeurons(neurons, false);
 		return result;
-	}
-
-	private static double[] getSortByValues(String sortBy, List<GainSwitchNeuron> sortedNeurons) {
-	  if(sortBy.equals("gt"))
-	    return getGTSortByValues(sortedNeurons);
-	  else if (sortBy.equals("g1"))
-	    return get1GSortByValues(sortedNeurons);
-	  else if (sortBy.equals("g2"))
-	    return get2GSortByValues(sortedNeurons);
-	  else return new double[sortedNeurons.size()];
-	}
-	
-	private static double[] get2GSortByValues(List<GainSwitchNeuron> sortedNeurons) {
-		double[] ranks = new double[sortedNeurons.size()];
-		for (int i = 0; i < ranks.length; i++) {
-			ranks[i] = sortedNeurons.get(i).getTotalSecondGain();
-		}
-		return ranks;
-	}
-
-	private static double[] get1GSortByValues(List<GainSwitchNeuron> sortedNeurons) {
-		double[] ranks = new double[sortedNeurons.size()];
-		for (int i = 0; i < ranks.length; i++) {
-			ranks[i] = sortedNeurons.get(i).getTotalGain();
-		}
-		return ranks;
-	}
-
-	private static double[] getGTSortByValues(List<GainSwitchNeuron> sortedNeurons) {
-		double[] ranks = new double[sortedNeurons.size()];
-		for (int i = 0; i < ranks.length; i++) {
-			ranks[i] = sortedNeurons.get(i).getGroundTruthError();
-		}
-		return ranks;
 	}
 
 	private static void getGroundTruthError(List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet) {
@@ -364,9 +270,132 @@ public class PruningTool {
 		return switchOffs;
 	}
 
+	
+	
+	
+	
 	/* ====================== HELPER METHODS ====================== */
 	/* ====================== HELPER METHODS ====================== */
 	/* ====================== HELPER METHODS ====================== */
+	/* ====================== HELPER METHODS ====================== */
+	/* ====================== HELPER METHODS ====================== */
+	
+	private static double avg(double... vals) {
+    double mean = 0;
+    for(double d : vals)
+      mean += d;
+    return mean / vals.length;
+  }
+  
+  private static int[] sortNeurons(String sortBy, List<GainSwitchNeuron> neurons) {
+    int[] result = new int[neurons.size()];
+    if (sortBy.equals("gt"))
+      result = sortByGroundTruthError(neurons);
+    else if (sortBy.equals("g1"))
+      result = sortByGain(neurons);
+    else if (sortBy.equals("g2"))
+      result = sortBySecondGain(neurons);
+    return result;
+  }
+
+  private static List<GainSwitchNeuron> getGainSwitchNeurons(NeuralNetwork net) {
+    /* Get the GainSwitch neurons out */
+    System.out.println("Getting array of GainSwitch neurons...");
+    List<GainSwitchNeuron> neurons = new LinkedList<GainSwitchNeuron>();
+    for (int i : net.getHiddenLayerIndices()) {
+      Layer l = net.getLayer(i);
+      for (NetworkElement e : l.getElements()) {
+        if (e instanceof GainSwitchNeuron)
+          neurons.add((GainSwitchNeuron) e);
+      }
+    }
+    return neurons;
+  }
+
+  private static void reset(NeuralNetwork net) {
+    for (int i : net.getHiddenLayerIndices()) {
+      for (NetworkElement e : net.getLayer(i).getElements()) {
+        if (e instanceof GainSwitchNeuron) {
+          ((GainSwitchNeuron) e).reset();
+        }
+      }
+    }
+    for (int i : net.getWeightMatrixIndices()) {
+      for (NetworkElement e : net.getLayer(i).getElements()) {
+        if (e instanceof SwitchEdge) {
+          ((SwitchEdge) e).reset();
+        }
+      }
+    }
+  }
+	
+	private static double[] getSortByValues(String sortBy, List<GainSwitchNeuron> sortedNeurons) {
+    if(sortBy.equals("gt"))
+      return getGTSortByValues(sortedNeurons);
+    else if (sortBy.equals("g1"))
+      return get1GSortByValues(sortedNeurons);
+    else if (sortBy.equals("g2"))
+      return get2GSortByValues(sortedNeurons);
+    else return new double[sortedNeurons.size()];
+  }
+  
+  private static double[] getSortByMagnitudes(String sortBy, List<GainSwitchNeuron> sortedNeurons) {
+    if(sortBy.equals("gt"))
+      return getGTSortByMagnitudes(sortedNeurons);
+    else if (sortBy.equals("g1"))
+      return get1GSortByMagnitudes(sortedNeurons);
+    else if (sortBy.equals("g2"))
+      return get2GSortByMagnitudes(sortedNeurons);
+    else return new double[sortedNeurons.size()];
+  }
+  
+  private static double[] get2GSortByValues(List<GainSwitchNeuron> sortedNeurons) {
+    double[] ranks = new double[sortedNeurons.size()];
+    for (int i = 0; i < ranks.length; i++) {
+      ranks[i] = sortedNeurons.get(i).getTotalSecondGain();
+    }
+    return ranks;
+  }
+
+  private static double[] get1GSortByValues(List<GainSwitchNeuron> sortedNeurons) {
+    double[] ranks = new double[sortedNeurons.size()];
+    for (int i = 0; i < ranks.length; i++) {
+      ranks[i] = sortedNeurons.get(i).getTotalGain();
+    }
+    return ranks;
+  }
+
+  private static double[] getGTSortByValues(List<GainSwitchNeuron> sortedNeurons) {
+    double[] ranks = new double[sortedNeurons.size()];
+    for (int i = 0; i < ranks.length; i++) {
+      ranks[i] = sortedNeurons.get(i).getGroundTruthError();
+    }
+    return ranks;
+  }
+  
+  private static double[] get2GSortByMagnitudes(List<GainSwitchNeuron> sortedNeurons) {
+    double[] ranks = new double[sortedNeurons.size()];
+    for (int i = 0; i < ranks.length; i++) {
+      ranks[i] = Math.abs(sortedNeurons.get(i).getTotalSecondGain());
+    }
+    return ranks;
+  }
+
+  private static double[] get1GSortByMagnitudes(List<GainSwitchNeuron> sortedNeurons) {
+    double[] ranks = new double[sortedNeurons.size()];
+    for (int i = 0; i < ranks.length; i++) {
+      ranks[i] = Math.abs(sortedNeurons.get(i).getTotalGain());
+    }
+    return ranks;
+  }
+
+  private static double[] getGTSortByMagnitudes(List<GainSwitchNeuron> sortedNeurons) {
+    double[] ranks = new double[sortedNeurons.size()];
+    for (int i = 0; i < ranks.length; i++) {
+      ranks[i] = Math.abs(sortedNeurons.get(i).getGroundTruthError());
+    }
+    return ranks;
+  }
 
 	public static void switchOffNeurons(List<GainSwitchNeuron> sortedNeurons, boolean b) {
 		for (GainSwitchNeuron s : sortedNeurons)
