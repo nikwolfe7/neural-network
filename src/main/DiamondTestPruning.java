@@ -16,7 +16,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class DiamondTestPruning {
 	
-	public static String dnnFile = "mod.diamond.network.dnn";
+	public static String dnnFile = "diamond.network.dnn";
 
 	public static void main(String[] args) throws IOException {
 		TestPruning(0);

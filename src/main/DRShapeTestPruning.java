@@ -16,7 +16,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class DRShapeTestPruning {
 
-	public static String dnnFile = "mod.drshape.network.dnn";
+	public static String dnnFile = "drshape.network.dnn";
 
 	public static void main(String[] args) throws IOException {
 		TestPruning(0);

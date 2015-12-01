@@ -16,7 +16,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class RShapeTestPruning {
 
-	public static String dnnFile = "mod.rshape.network.dnn";
+	public static String dnnFile = "rshape.network.dnn";
 
 	public static void main(String[] args) throws IOException {
 		TestPruning(0);
