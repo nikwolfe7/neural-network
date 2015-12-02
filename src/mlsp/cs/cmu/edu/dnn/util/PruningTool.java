@@ -188,8 +188,8 @@ public class PruningTool {
           arrays.add(scn.nextLine());
         scn.close();
       }
-      double maxGain = 5;
-      double step = 0.05;
+      double maxGain = 10;
+      double step = 0.1;
       int i = 0;
       for (double gain = 0; gain < maxGain; gain += step) {
         neuron.setGain(gain);
