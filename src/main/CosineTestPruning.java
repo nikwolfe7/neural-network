@@ -20,7 +20,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class CosineTestPruning {
 
-	public static String dnnFile = "cos.network.dnn";
+	public static String dnnFile = "cos.big.network.dnn";
 	static DataInstanceGenerator dataGen = new CosineGenerator();
 
 	public static void main(String[] args) throws IOException {
