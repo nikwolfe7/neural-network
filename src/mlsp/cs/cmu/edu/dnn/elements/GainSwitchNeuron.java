@@ -21,9 +21,9 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 
   private double secondGradient;
 
-  private double g2threshold = 1.0e-3;
+  private double g2threshold = Double.MAX_VALUE;
   
-  private double g1threshold = 1.0;
+  private double g1threshold = Double.MAX_VALUE;
 
   private int count;
 

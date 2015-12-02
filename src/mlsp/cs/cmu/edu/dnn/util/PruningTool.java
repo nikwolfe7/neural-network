@@ -231,9 +231,9 @@ public class PruningTool {
 		/*
 		 * USING THRESHOLDING on the MAGNITUDE
 		 */
-//		double threshold = median(getSortByMagnitudes(sortBy, sortedNeurons));
+		double threshold = median(getSortByMagnitudes(sortBy, sortedNeurons));
 //		double threshold = avg(getSortByMagnitudes(sortBy, sortedNeurons));
-		double threshold = Double.MAX_VALUE;
+//		double threshold = Double.MAX_VALUE;
 		/**/
 		if (sortBy.equals("g1")) {
 			double val = Double.NEGATIVE_INFINITY;
