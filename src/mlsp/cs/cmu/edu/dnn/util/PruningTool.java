@@ -1,13 +1,17 @@
 package mlsp.cs.cmu.edu.dnn.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import mlsp.cs.cmu.edu.dnn.elements.GainSwitchNeuron;
 import mlsp.cs.cmu.edu.dnn.elements.NetworkElement;
@@ -24,9 +28,16 @@ public class PruningTool {
 	public static boolean batchUpdate = false;
 	public static String sep = System.getProperty("file.separator");
 	public static String data = "." + sep + "data" + sep;
+	public static String DNNFileName = "?";
 
 	public static NeuralNetwork doPruning(String dnnFile, boolean newFile, NeuralNetwork net, List<DataInstance> training, List<DataInstance> testing, double percentReduce) throws IOException {
 		DNNTrainingModule trainingModule = null;
+		DNNFileName = dnnFile;
+		if(newFile) {
+		  new File(DNNFileName.replace("dnn", "") + "gt" + ".gain.vals.csv").delete();
+		  new File(DNNFileName.replace("dnn", "") + "g1" + ".gain.vals.csv").delete();
+		  new File(DNNFileName.replace("dnn", "") + "g2" + ".gain.vals.csv").delete();
+		}
 		if (newFile) {
 			/* Get training module and run through the validation set once */
 			System.out.println("Modifying network for 2nd derivative backprop...");
@@ -65,10 +76,10 @@ public class PruningTool {
 		double[] algoFor1G = continuousReestimationAlgorithm(percentReduce, net, training, "g1");
 		double[] algoFor2G = continuousReestimationAlgorithm(percentReduce, net, training, "g2");
 
-		int[][] combined = getRankingsMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
-		double[][] combinedError = getErrorRankingsMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
-		double[][] combinedDropoff = getErrorRankingsMatrix(dropOffForGT, dropOffFor1stGain, dropOffFor2ndGain);
-		double[][] algoCombined = getErrorRankingsMatrix(algoForGT, algoFor1G, algoFor2G);
+		int[][] combined = getIntMatrix(groundTruthRankings, gainSumRankings, secondGainSumRankings);
+		double[][] combinedError = getDoubleMatrix(groundTruthErrorRank, gainSumErrorRank, secondGainSumErrorRank);
+		double[][] combinedDropoff = getDoubleMatrix(dropOffForGT, dropOffFor1stGain, dropOffFor2ndGain);
+		double[][] algoCombined = getDoubleMatrix(algoForGT, algoFor1G, algoFor2G);
 
 		String result = printMatrix(combined);
 		String errResult = printErrorMatrix(combinedError);
@@ -115,6 +126,9 @@ public class PruningTool {
 			GainSwitchNeuron neuron = getBest(sortBy, neurons);
 			// Switch it off
 			System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
+			if(i % 10 == 0) {
+			  gradualChangeGainTest(sortBy, neuron, trainingModule);
+			}
 			neuron.setSwitchOff(true);
 			neurons.remove(neuron);
 			// test network and get error
@@ -126,7 +140,8 @@ public class PruningTool {
 		return result;
 	}
 
-	private static double[] continuousReestimationAlgorithm(double percentReduce, NeuralNetwork net, List<DataInstance> trainingSet, String sortBy) {
+	
+  private static double[] continuousReestimationAlgorithm(double percentReduce, NeuralNetwork net, List<DataInstance> trainingSet, String sortBy) {
 		List<GainSwitchNeuron> sortedNeurons = getGainSwitchNeurons(net);
 		int neuronsToRemove = (int) Math.floor(sortedNeurons.size() * percentReduce);
 		DNNTrainingModule trainingModule = initTrainingModule(net, trainingSet, trainingSet);
@@ -146,6 +161,9 @@ public class PruningTool {
 			GainSwitchNeuron neuron = getBest(sortBy, sortedNeurons);
 			// Switch it off
 			System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
+			if(i % 10 == 0) {
+			  gradualChangeGainTest(sortBy, neuron, trainingModule);
+			}
 			neuron.setSwitchOff(true);
 			sortedNeurons.remove(neuron);
 			// test network and get error
@@ -158,8 +176,43 @@ public class PruningTool {
 		switchOffNeurons(getGainSwitchNeurons(net), false);
 		return result;
 	}
+  
+  private static void gradualChangeGainTest(String sortBy, GainSwitchNeuron neuron, DNNTrainingModule trainingModule) {
+    String fileName = DNNFileName.replace("dnn", "") + sortBy + ".gain.vals.csv";
+    print("Writing error/gain values for one neuron to file: " + fileName + "...");
+    List<String> arrays = new ArrayList<>();
+    try {
+      if (new File(fileName).exists()) {
+        Scanner scn = new Scanner(new File(fileName));
+        while (scn.hasNextLine())
+          arrays.add(scn.nextLine());
+        scn.close();
+      }
+      double maxGain = 10;
+      double step = 0.1;
+      int i = 0;
+      for (double gain = 0; gain < maxGain; gain += step) {
+        neuron.setGain(gain);
+        // test network and get error
+        double newError = trainingModule.doTestTrainedNetwork();
+        if(arrays.size() > i)
+          arrays.set(i, arrays.get(i) + "," + newError);
+        else
+          arrays.add(gain + "," + newError);
+        i++;
+      }
+      // reset the gain
+      neuron.setGain(1);
+      FileWriter writer = new FileWriter(new File(fileName));
+      for (String s : arrays)
+        writer.write(s + "\n");
+      writer.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
-	private static GainSwitchNeuron getBest(String sortBy, List<GainSwitchNeuron> sortedNeurons) {
+  private static GainSwitchNeuron getBest(String sortBy, List<GainSwitchNeuron> sortedNeurons) {
 		GainSwitchNeuron neuron = null;
 		if (sortBy.equals("gt")) {
 			double val = Double.POSITIVE_INFINITY;
@@ -176,11 +229,11 @@ public class PruningTool {
 			return neuron;
 		}
 		/*
-		 * 
 		 * USING THRESHOLDING on the MAGNITUDE
 		 */
-		double threshold = avg(getSortByMagnitudes(sortBy, sortedNeurons));
-		//double threshold = Double.MAX_VALUE;
+		double threshold = median(getSortByMagnitudes(sortBy, sortedNeurons));
+//		double threshold = avg(getSortByMagnitudes(sortBy, sortedNeurons));
+//		double threshold = Double.MAX_VALUE;
 		/**/
 		if (sortBy.equals("g1")) {
 			double val = Double.NEGATIVE_INFINITY;
@@ -275,6 +328,12 @@ public class PruningTool {
 		for (double d : vals)
 			mean += d;
 		return mean / vals.length;
+	}
+	
+	private static double median(double... vals) {
+	  Arrays.sort(vals);
+	  int index = Math.floorDiv(vals.length, 2);
+	  return vals[index];
 	}
 
 	private static int[] sortNeurons(String sortBy, List<GainSwitchNeuron> neurons) {
@@ -460,11 +519,11 @@ public class PruningTool {
 		return rankings;
 	}
 
-	private static int[][] getRankingsMatrix(int[]... rankings) {
+	private static int[][] getIntMatrix(int[]... rankings) {
 		return rankings;
 	}
 
-	private static double[][] getErrorRankingsMatrix(double[]... rankings) {
+	private static double[][] getDoubleMatrix(double[]... rankings) {
 		return rankings;
 	}
 

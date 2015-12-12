@@ -21,7 +21,9 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 
   private double secondGradient;
 
-  private double threshold = Double.MAX_VALUE;
+  private double g2threshold = Double.MAX_VALUE;
+  
+  private double g1threshold = Double.MAX_VALUE;
 
   private int count;
 
@@ -87,8 +89,8 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
     return secondGradientSum * 0.5 - gradientSum;
   }
 
-  private double thresh(double d) {
-    return (Math.abs(d) <= threshold) ? d : threshold * sign(d);
+  private double thresh(double d, double th) {
+    return (Math.abs(d) <= th) ? d : th * sign(d);
   }
 
   private int sign(double d) {
@@ -129,13 +131,13 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
 
   private void setSecondGradient(double val) {
     if (!switchedOff)
-      secondGradient = thresh(val);
+      secondGradient = thresh(val, g2threshold);
   }
 
   @Override
   public void setGradient(double val) {
     if (!switchedOff)
-      super.setGradient(thresh(val));
+      super.setGradient(thresh(val, g1threshold));
   }
 
   @Override

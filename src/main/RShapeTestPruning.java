@@ -37,7 +37,7 @@ public class RShapeTestPruning {
 		trainingModule.setOutputOn(false);
 		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
 		trainingModule.doTestTrainedNetwork();
-		net = PruningTool.doPruning(dnnFile, true, net, training, testing, 1.0);
+//		net = PruningTool.doPruning(dnnFile, true, net, training, testing, 1.0);
 	}
 
 }
