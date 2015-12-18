@@ -42,7 +42,7 @@ public class CosineTestPruning {
 		trainingModule.setOutputOn(false);
 		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
 		trainingModule.doTestTrainedNetwork();
-		net = PruningTool.doPruning(dnnFile, true, net, training, testing, 1.0);
+		net = PruningTool.runPruningExperiment(dnnFile, true, net, training, testing, 1.0);
 	}
 	
 	private static List<DataInstance> getData(int numInstances) {

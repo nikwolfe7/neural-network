@@ -54,11 +54,11 @@ public class DiamondDriver {
 		
 		System.out.println("Test:\n");
 		trainingModule.doTestTrainedNetwork();
-		trainingModule.saveNetworkToFile(data + "diamond.network.dnn");
+		trainingModule.saveNetworkToFile("models" + sep + "diamond.network.dnn");
 		
 		 /* Test */
 	    System.out.println("De-serializing the network..");
-	    factory = new ReadSerializedFileDNNFactory(data + "diamond.network.dnn");
+	    factory = new ReadSerializedFileDNNFactory("models" + sep + "diamond.network.dnn");
 	    net = factory.getInitializedNeuralNetwork();
 	    trainingModule = new DNNTrainingModule(net, testing);
 	    trainingModule.setOutputOn(printOut);

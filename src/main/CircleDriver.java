@@ -53,11 +53,11 @@ public class CircleDriver {
 	    
 	    System.out.println("Test:\n");
 	    trainingModule.doTestTrainedNetwork(); 
-	    trainingModule.saveNetworkToFile(data + "circle.network.dnn");
+	    trainingModule.saveNetworkToFile("models" + sep + "circle.network.dnn");
 	    
 	    /* Test */
 	    System.out.println("De-serializing the network..");
-	    factory = new ReadSerializedFileDNNFactory(data + "circle.network.dnn");
+	    factory = new ReadSerializedFileDNNFactory("models" + sep + "circle.network.dnn");
 	    net = factory.getInitializedNeuralNetwork();
 	    trainingModule = new DNNTrainingModule(net, testing);
 	    trainingModule.setOutputOn(printOut);

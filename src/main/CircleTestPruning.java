@@ -16,6 +16,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class CircleTestPruning {
 
+  static String sep = System.getProperty("file.separator");
 	public static String dnnFile = "circle.network.dnn";
 
 	public static void main(String[] args) throws IOException {
@@ -31,13 +32,13 @@ public class CircleTestPruning {
 		List<DataInstance> testing = reader.getDataFromFile(PruningTool.data + "circle-test.csv", 2, 1);
 
 		System.out.println("Deserializing stored network " + dnnFile);
-		DNNFactory factory = new ReadSerializedFileDNNFactory(dnnFile);
+		DNNFactory factory = new ReadSerializedFileDNNFactory("models" + sep + dnnFile);
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 		trainingModule.setOutputOn(false);
 		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
 		trainingModule.doTestTrainedNetwork();
-		net = PruningTool.doPruning(dnnFile, true, net, training, testing, 1.0);
+		net = PruningTool.runPruningExperiment(dnnFile, true, net, training, testing, 1.0);
 	}
 
 }

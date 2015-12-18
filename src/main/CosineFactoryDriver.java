@@ -24,6 +24,7 @@ import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
 
 public class CosineFactoryDriver {
 
+  static String sep = System.getProperty("file.separator");
   static DataInstanceGenerator dataGen = new CosineGenerator();
   static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(),50,50);
 //  static DNNFactory factory = new ReadSerializedFileDNNFactory("cos.network.dnn");
@@ -46,7 +47,7 @@ public class CosineFactoryDriver {
 
     /* Test the network */
     trainingModule.doTestTrainedNetwork();
-    trainingModule.saveNetworkToFile("cos.big.network.dnn");
+    trainingModule.saveNetworkToFile("models" + sep +"cos.big.network.dnn");
   }
 
   private static List<DataInstance> getData(int numInstances) {

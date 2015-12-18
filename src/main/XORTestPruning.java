@@ -19,6 +19,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class XORTestPruning {
 
+  public static String sep = System.getProperty("file.separator");
 	public static String dnnFile = "xor.big.network.dnn";
 	static DataInstanceGenerator dataGen = new XORGenerator();
 
@@ -35,13 +36,13 @@ public class XORTestPruning {
 		List<DataInstance> testing = getData(10000);
 
 		System.out.println("Deserializing stored network " + dnnFile);
-		DNNFactory factory = new ReadSerializedFileDNNFactory(dnnFile);
+		DNNFactory factory = new ReadSerializedFileDNNFactory("models" + sep + dnnFile);
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, testing);
 		trainingModule.setOutputOn(false);
 		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
 		trainingModule.doTestTrainedNetwork();
-		net = PruningTool.doPruning(dnnFile, true, net, training, testing, 1.0);
+		net = PruningTool.runPruningExperiment(dnnFile, true, net, training, testing, 1.0);
 	}
 	
 	private static List<DataInstance> getData(int numInstances) {

@@ -55,12 +55,12 @@ public class RShapeDriver {
 		
 //		trainingModule.setOutputOn(false);
 //		trainingModule.doTestTrainedNetwork();
-//		trainingModule.saveNetworkToFile(data + "network.dnn");
+//		trainingModule.saveNetworkToFile("models" + sep + "network.dnn");
 
 		double remove = 0.0;
 		while (remove <= 1) {
 			System.out.println("\n\nWith remove: " + remove);
-			factory = new ReadSerializedFileDNNFactory(data + "rshape.network.dnn");
+			factory = new ReadSerializedFileDNNFactory("models" + sep + "rshape.network.dnn");
 			net = factory.getInitializedNeuralNetwork();
 			trainingModule = new DNNTrainingModule(net, testing);
 			trainingModule.setOutputOn(false);

@@ -30,7 +30,7 @@ public class PruningTool {
 	public static String data = "." + sep + "data" + sep;
 	public static String DNNFileName = "?";
 
-	public static NeuralNetwork doPruning(String dnnFile, boolean newFile, NeuralNetwork net, List<DataInstance> training, List<DataInstance> testing, double percentReduce) throws IOException {
+	public static NeuralNetwork runPruningExperiment(String dnnFile, boolean newFile, NeuralNetwork net, List<DataInstance> training, List<DataInstance> testing, double percentReduce) throws IOException {
 		DNNTrainingModule trainingModule = null;
 		DNNFileName = dnnFile;
 		if(newFile) {
@@ -100,11 +100,11 @@ public class PruningTool {
 		writer.write(errResult);
 		writer.close();
 
-		writer = new FileWriter(new File(dnnFile + ".accuracy-dropoff-comparison.csv"));
+		writer = new FileWriter(new File(dnnFile + ".first-order-comparison.csv"));
 		writer.write(dropOffResult);
 		writer.close();
 
-		writer = new FileWriter(new File(dnnFile + ".greedy-algo-comparison.csv"));
+		writer = new FileWriter(new File(dnnFile + ".second-order-comparison.csv"));
 		writer.write(algoResult);
 		writer.close();
 		return net;
