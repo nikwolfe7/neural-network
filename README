@@ -1,0 +1,30 @@
+# To run:
+
+# Keep directory structure as is. To run our experiments on each toy dataset, simply run the associated JAR file:
+
+java -jar xor.jar
+java -jar cosine.jar
+java -jar circle.jar
+java -jar diamond.jar
+java -jar rshape.jar
+java -jar drshape.jar
+
+# Or, just make this file executable and run this. 
+# It will take a long time to finish, but the output 
+# goes through the examples we discuss in the slides 
+# in our presentation and in the report.
+#
+# For each trained network, it will first print the ground
+# truth for the network in terms of the optimial ordering for each
+# neuron to be turned off. Then it will go through the first order
+# approximation, and then the second order approximation. 
+#
+# The files generated are the comparison of the rankings assigned to the 
+# individual neurons, then the ground truth ordering, the output values for 
+# every 10th neuron after adjusting the gain through a range of values, and
+# then the first and second order approximations. The file names are
+# descriptive. 
+#
+# Enjoy!
+#
+# P.S. The dnn-0.9.9.jar file is an archive of the code. If you want to use it! :-) 
