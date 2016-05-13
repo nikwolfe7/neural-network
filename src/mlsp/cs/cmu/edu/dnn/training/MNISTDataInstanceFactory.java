@@ -11,12 +11,10 @@ public class MNISTDataInstanceFactory implements DataInstanceFactory {
 	List<DataInstance> testing;
 	
 	public MNISTDataInstanceFactory() {
-		
-		System.out.print("Reading MNIST data... ");
+		System.out.println("Reading MNIST data... ");
 		DataReader reader = new ReadCSVDataOneHotVectors();
 		this.training = reader.getDataFromFile(data + "mnist-train.csv", 784, 10);
 		this.testing = reader.getDataFromFile(data + "mnist-test.csv", 784, 10);
-		System.out.println("Done!");
 	}
 
 	@Override

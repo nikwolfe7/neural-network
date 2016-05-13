@@ -16,13 +16,13 @@ public class TrainNeuralNetworkDriver {
 	
 	static int numCores = Runtime.getRuntime().availableProcessors();
 	static ExecutorService pool = Executors.newFixedThreadPool(numCores);
-	static String o = "mnist-test-output";
+	static String o = "mnist-test";
 	static boolean batch = false;
 	static boolean allow = true;
 	static int iterations = 1000;
 	static double minDiff = 1.0e-8;
 	
-	private static void runDNN(String o, int numFrames, int maxIter, boolean batch, int... structure) throws IOException {
+	private static void runDNN(String o, int maxIter, boolean batch, int... structure) throws IOException {
 		OutputAdapter adapter = new MaxBinaryThresholdOutput();
 		DataInstanceFactory dataInstanceFactory = new MNISTDataInstanceFactory();
 		List<DataInstance> training = dataInstanceFactory.getTrainingInstances();
@@ -33,9 +33,14 @@ public class TrainNeuralNetworkDriver {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		runDNN(o, 1, iterations, batch, new int[] {5});
-		runDNN(o, 2, iterations, batch, new int[] {5,5});
-		runDNN(o, 3, iterations, batch, new int[] {5,5,5});
+		runDNN(o, iterations, batch, new int[] {16});
+		runDNN(o, iterations, batch, new int[] {100});
+		runDNN(o, iterations, batch, new int[] {28,72});
+		runDNN(o, iterations, batch, new int[] {72,28});
+		runDNN(o, iterations, batch, new int[] {50,50});
+		runDNN(o, iterations, batch, new int[] {56,28,16});
+		runDNN(o, iterations, batch, new int[] {16,56,28});
+		runDNN(o, iterations, batch, new int[] {28,56,16});
 		pool.shutdown();
 	}
 	
