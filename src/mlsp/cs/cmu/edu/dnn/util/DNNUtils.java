@@ -16,6 +16,8 @@ import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 
 public class DNNUtils {
 
+	public static String sep = System.getProperty("file.separator");
+	
 	public static String printVector(double[] vec) {
 		DecimalFormat f = new DecimalFormat("###.###");
 		StringBuilder sb = new StringBuilder("[  ");

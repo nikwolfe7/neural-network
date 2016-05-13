@@ -140,7 +140,7 @@ public class DNNTrainingModule {
 			double diff = prevSumError - sumError;
 
 			if (outputOn)
-				System.out.println("Epoch " + (epoch++) + " | Avg Error: " + f.format(sumError) + "\tDiff: " + diff + "\ttime: " + f.format(duration) + "s");
+				System.out.println("Epoch " + (epoch++) + " | Avg Error: " + f.format(sumError) + "\t\t| Diff: " + diff + "\t\t| Time: " + f.format(duration) + "s");
 
 			prevSumError = sumError;
 

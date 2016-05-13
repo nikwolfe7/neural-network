@@ -17,7 +17,7 @@ public class CrossEntropyNetworkElementFactory extends SigmoidNetworkElementFact
 
 	@Override
 	public Edge getNewEdge() {
-		return new MomentumEdge(-10, 10, 0.00001, 0.25);
+		return new MomentumEdge(-10, 10, 0.0001, 0.25);
 	}
 
 }
