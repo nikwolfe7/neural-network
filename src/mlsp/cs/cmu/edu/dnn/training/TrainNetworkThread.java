@@ -1,4 +1,4 @@
-package test;
+package mlsp.cs.cmu.edu.dnn.training;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,9 +9,6 @@ import mlsp.cs.cmu.edu.dnn.factory.ReadSerializedFileDNNFactory;
 import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkElementFactory;
 import mlsp.cs.cmu.edu.dnn.factory.SigmoidNetworkFFDNNFactory;
 import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
-import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
-import mlsp.cs.cmu.edu.dnn.training.DataInstance;
-import mlsp.cs.cmu.edu.dnn.training.DataInstanceFactory;
 import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public class TrainNetworkThread extends Thread {
@@ -24,7 +21,7 @@ public class TrainNetworkThread extends Thread {
 	private List<DataInstance> testingSet;
 	private List<DataInstance> trainingSet;
 	private OutputAdapter adapter;
-	private String netFile;
+	private String networkFile;
 
 	public TrainNetworkThread
 			(/* output */
@@ -41,8 +38,11 @@ public class TrainNetworkThread extends Thread {
 			int numMinChangeIterations,
 			int maxIterations,
 			boolean batchUpdate,
+			boolean snapshot,
+			int snapshotInterval,
 			int... structure) throws IOException {
 
+		/* Training setup... */
 		this.adapter = adapter;
 		this.trainingSet = training;
 		this.testingSet = testing;
@@ -55,10 +55,13 @@ public class TrainNetworkThread extends Thread {
 		trainingModule.setConvergenceCriteria(minDiff, minSquaredError, allowNegativeIterations,
 				numMinChangeIterations, maxIterations);
 
+		/* Create file name */
 		String[] arr = new String[] { netFile, "in-" + ex.getInputDimension(), "out-" + ex.getOutputDimension(),
-				"struct-" + str(structure) + "-id-" + (++idNum)};
-		this.netFile = String.join("-", arr) + ".dnn";
-		System.out.println("Training network for file: " + this.netFile);
+				"struct-" + str(structure) + "-id-" + (++idNum) };
+		this.networkFile = String.join("-", arr) + ".dnn";
+
+		/* Set snapshot criteria... */
+		trainingModule.setSnapshotInterval(snapshot, snapshotInterval, networkFile);
 	}
 
 	private String str(int... vals) {
@@ -70,17 +73,19 @@ public class TrainNetworkThread extends Thread {
 	}
 
 	private void trainNetwork() {
+		System.out.println("Training network for file: " + networkFile);
 		trainingModule.doTrainNetworkUntilConvergence();
 	}
 
 	private void testAndSaveNetwork() {
+		System.out.println("Testing network for file: " + networkFile);
 		trainingModule.doTestTrainedNetwork();
-		trainingModule.saveNetworkToFile(netFile);
+		trainingModule.saveNetworkToFile(networkFile);
 	}
 
 	private void verifySavedNetwork() {
-		System.out.println("De-serializing network...");
-		dnnFactory = new ReadSerializedFileDNNFactory(netFile);
+		System.out.println("De-serializing network file: " + networkFile);
+		dnnFactory = new ReadSerializedFileDNNFactory(networkFile);
 		net = dnnFactory.getInitializedNeuralNetwork();
 		trainingModule = new DNNTrainingModule(net, testingSet);
 		trainingModule.setOutputAdapter(adapter);

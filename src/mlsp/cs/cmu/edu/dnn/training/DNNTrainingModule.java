@@ -33,6 +33,11 @@ public class DNNTrainingModule {
 	private int batchDivisions = 1;
 	private File outputFile; 
 	private OutputAdapter adapter = new DefaultOutput();
+	
+	/* snapshots */
+	private boolean snapshot = false;
+	private int snapshotInterval = 1; 
+	private String snapshotFile = "snapshot.dnn";
 
 	public DNNTrainingModule(NeuralNetwork network, List<DataInstance> trainingSet, List<DataInstance> testingSet) {
 		this.net = network;
@@ -77,6 +82,12 @@ public class DNNTrainingModule {
 	
 	public void setOutputAdapter(OutputAdapter adapter) {
 		this.adapter = adapter;
+	}
+	
+	public void setSnapshotInterval(boolean b, int interval, String fileName) {
+		this.snapshot = b;
+		this.snapshotInterval = (snapshot) ? interval : 1;
+		this.snapshotFile = (snapshot) ? fileName : "snapshot.dnn";
 	}
 	
 	public NeuralNetwork getNetwork() {
@@ -142,6 +153,12 @@ public class DNNTrainingModule {
 			if (outputOn)
 				System.out.println("Epoch " + (epoch++) + " | Avg Error: " + f.format(sumError) + "\t\t| Diff: " + diff + "\t\t| Time: " + f.format(duration) + "s");
 
+			/* Output current network to file */
+			if (snapshot && epoch % snapshotInterval == 1) {
+				saveNetworkToFile(snapshotFile);
+			}
+				
+			/* Tests for convergence... */
 			prevSumError = sumError;
 
 			/* Evaluate stopping criteria */

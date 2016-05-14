@@ -1,4 +1,4 @@
-package main;
+package example;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,11 +21,14 @@ public class TestDriver {
 	  static boolean printOut = true;
 	  static boolean batchUpdate = false;
 	  static boolean removeElements = false;
+	  static boolean snapshot = true;
+	  static int snapshotInterval = 10;
 	  static String sep = System.getProperty("file.separator");
 	  static String data = "." + sep + "data" + sep;
+	  static String outFile = "models" + sep + "circle.network.dnn";
 	  
 		public static void main(String[] args) throws IOException, CloneNotSupportedException {
-			TestDriver(8,8);
+			TestDriver(4);
 		}
 		
 		public static void TestDriver(int... structure) {
@@ -42,17 +45,20 @@ public class TestDriver {
 		    trainingModule.setOutputOn(printOut);
 		    trainingModule.setOutputAdapter(adapter);
 		    trainingModule.setBatchUpdate(batchUpdate);
-		    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 300);
+		    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 100);
 		    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
+		    trainingModule.setSnapshotInterval(snapshot, snapshotInterval, outFile);
+		    
+		    /* Do training */
 		    trainingModule.doTrainNetworkUntilConvergence();
 		    
 		    System.out.println("Test:\n");
 		    trainingModule.doTestTrainedNetwork(); 
-		    trainingModule.saveNetworkToFile("models" + sep + "circle.network.dnn");
+		    trainingModule.saveNetworkToFile(outFile);
 		    
 		    /* Test */
 		    System.out.println("De-serializing the network..");
-		    factory = new ReadSerializedFileDNNFactory("models" + sep + "circle.network.dnn");
+		    factory = new ReadSerializedFileDNNFactory(outFile);
 		    net = factory.getInitializedNeuralNetwork();
 		    trainingModule = new DNNTrainingModule(net, testing);
 		    trainingModule.setOutputOn(printOut);
