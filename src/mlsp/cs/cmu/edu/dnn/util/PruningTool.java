@@ -457,7 +457,7 @@ public class PruningTool {
 			List<DataInstance> testing) {
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
-		trainingModule.setConvergenceCriteria(-1, -1, true, 0, 1);
+		trainingModule.setConvergenceCriteria(-1, -1, 0, 1);
 		return trainingModule;
 	}
 

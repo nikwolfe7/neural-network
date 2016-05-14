@@ -48,7 +48,7 @@ public class DiamondDriver {
 		trainingModule.setOutputOn(true);
 		trainingModule.setOutputAdapter(adapter);
 		trainingModule.setBatchUpdate(batchUpdate);
-		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 300);
+		trainingModule.setConvergenceCriteria(1.0e-8, -1, 0, 300);
 		trainingModule.doTrainNetworkUntilConvergence();
 		trainingModule.setOutputOn(false);
 		

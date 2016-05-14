@@ -45,7 +45,7 @@ public class TestDriver {
 		    trainingModule.setOutputOn(printOut);
 		    trainingModule.setOutputAdapter(adapter);
 		    trainingModule.setBatchUpdate(batchUpdate);
-		    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 100);
+		    trainingModule.setConvergenceCriteria(1.0e-8, -1, 0, 100);
 		    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 		    trainingModule.setSnapshotInterval(snapshot, snapshotInterval, outFile);
 		    

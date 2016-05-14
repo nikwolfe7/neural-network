@@ -20,7 +20,6 @@ public class TrainNeuralNetworkDriver {
 	static String o = "mnist-test";
 	static boolean batch = false;
 	static int batchDivisions = 100;
-	static boolean allow = true;
 	static boolean saveSnapshots = true;
 	static int snapshotInterval = 5;
 	static int iterations = 1000;
@@ -34,7 +33,7 @@ public class TrainNeuralNetworkDriver {
 		List<DataInstance> testing = dataInstanceFactory.getTestingInstances();
 		DNNFactory dnnFactory = new CustomDNNFactory(testing.get(0), structure);
 		Thread dnnThread = new TrainNetworkThread(o, adapter, dataInstanceFactory, training, testing, dnnFactory,
-				minDiff, -1, allow, 1, maxIter, batch, batchDiv, ss, si, structure);
+				minDiff, -1, 1, maxIter, batch, batchDiv, ss, si, structure);
 		pool.execute(dnnThread);
 	}
 

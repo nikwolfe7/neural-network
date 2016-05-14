@@ -34,7 +34,6 @@ public class TrainNetworkThread extends Thread {
 			/* convergence criteria */
 			double minDiff, 
 			double minSquaredError, 
-			boolean allowNegativeIterations, 
 			int numMinChangeIterations,
 			int maxIterations,
 			boolean batchUpdate,
@@ -56,7 +55,7 @@ public class TrainNetworkThread extends Thread {
 		trainingModule.setOutputAdapter(outputAdapter);
 		trainingModule.setOutputOn(printOut);
 		trainingModule.setBatchUpdate(batchUpdate, batchDivisions);
-		trainingModule.setConvergenceCriteria(minDiff, minSquaredError, allowNegativeIterations,
+		trainingModule.setConvergenceCriteria(minDiff, minSquaredError,
 				numMinChangeIterations, maxIterations);
 
 		/* Create file name */

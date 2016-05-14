@@ -42,7 +42,7 @@ public class CosineFactoryDriver {
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
     trainingModule.setOutputOn(true);
 //    trainingModule.setOutputAdapter(new BinaryThresholdOutput());
-    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 1, 1000);
+    trainingModule.setConvergenceCriteria(1.0e-8, -1, 1, 1000);
     trainingModule.doTrainNetworkUntilConvergence();
 
     /* Test the network */

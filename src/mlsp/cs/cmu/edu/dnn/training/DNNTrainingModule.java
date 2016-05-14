@@ -25,7 +25,6 @@ public class DNNTrainingModule {
 	private double minDifference = 0.001;
 	private int numMinChangeIterations = 1;
 	private double minError = Double.NEGATIVE_INFINITY;
-	private boolean allowNegativeChangeIterations = true;
 	private DecimalFormat f = new DecimalFormat("##.#######");
 	private boolean outputOn = false;
 	private boolean printResults = false;
@@ -54,18 +53,16 @@ public class DNNTrainingModule {
 		this.outputFile = new File("testing-output.csv");
 	}
 	
-	public void setConvergenceCriteria(double minDiff, double minError, boolean allowNegativeIterations, int numMinChangeIterations, int maxEpochs) {
+	public void setConvergenceCriteria(double minDiff, double minError, int numMinChangeIterations, int maxEpochs) {
 		this.minDifference = minDiff;
 		this.minError = minError;
-		this.allowNegativeChangeIterations = allowNegativeIterations;
 		this.numMinChangeIterations = numMinChangeIterations;
 		this.maxEpochs = maxEpochs;
 	}
 	
-	public void setConvergenceCriteria(double minDiff, double minError, boolean allowNegativeIterations, int numMinChangeIterations) {
+	public void setConvergenceCriteria(double minDiff, double minError, int numMinChangeIterations) {
 		this.minDifference = minDiff;
 		this.minError = minError;
-		this.allowNegativeChangeIterations = allowNegativeIterations;
 		this.numMinChangeIterations = numMinChangeIterations;
 	}
 	
@@ -163,11 +160,9 @@ public class DNNTrainingModule {
 
 			/* Evaluate stopping criteria */
 			boolean converged = false;
-			if (allowNegativeChangeIterations) {
-				diff = Math.abs(diff);
-			}
+
 			/* min difference reached */
-			if (diff <= minDifference) {
+			if (Math.abs(diff) <= minDifference) {
 				if (countDown-- <= 0)
 					converged = true;
 			}

@@ -47,7 +47,7 @@ public class MNISTDriver {
 		trainingModule.setOutputOn(printout);
 		trainingModule.setOutputAdapter(adapter);
 		trainingModule.setBatchUpdate(batchUpdate, 600);
-		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 10);
+		trainingModule.setConvergenceCriteria(1.0e-8, -1, 0, 10);
 		trainingModule.setPrintResults(true, "mnist-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
 		System.out.println("Done!");
 		

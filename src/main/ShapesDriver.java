@@ -47,7 +47,7 @@ public class ShapesDriver {
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.setBatchUpdate(batchUpdate);
-	    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 200);
+	    trainingModule.setConvergenceCriteria(1.0e-8, -1, 0, 200);
 	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    trainingModule.doTestTrainedNetwork(); 
@@ -78,7 +78,7 @@ public class ShapesDriver {
 		trainingModule.setOutputOn(true);
 		trainingModule.setOutputAdapter(adapter);
 		trainingModule.setBatchUpdate(batchUpdate);
-		trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 500);
+		trainingModule.setConvergenceCriteria(1.0e-8, -1, 0, 500);
 		trainingModule.doTrainNetworkUntilConvergence();
 		trainingModule.setOutputOn(false);
 		System.out.println("Test:\n");
@@ -154,7 +154,7 @@ public class ShapesDriver {
     trainingModule.setOutputOn(printOut);
     trainingModule.setOutputAdapter(adapter);
     trainingModule.setBatchUpdate(batchUpdate,15);
-    trainingModule.setConvergenceCriteria(1.0e-7, -1, true, 0, 100);
+    trainingModule.setConvergenceCriteria(1.0e-7, -1, 0, 100);
     trainingModule.setPrintResults(true, data + "DRShape-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
     trainingModule.doTrainNetworkUntilConvergence();
 

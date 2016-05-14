@@ -47,7 +47,7 @@ public class CircleDriver {
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
 	    trainingModule.setBatchUpdate(batchUpdate);
-	    trainingModule.setConvergenceCriteria(1.0e-8, -1, true, 0, 300);
+	    trainingModule.setConvergenceCriteria(1.0e-8, -1, 0, 300);
 	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
 	    
