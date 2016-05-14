@@ -71,7 +71,7 @@ public class DNNTrainingModule {
 	
 	public void setBatchUpdate(boolean b, int batchDivisions) {
 		this.batchUpdate = b;
-		this.batchDivisions = batchDivisions;
+		this.batchDivisions = (b) ? batchDivisions : 1;
 		net.setBatchUpdate(b);
 	}
 	
@@ -86,8 +86,8 @@ public class DNNTrainingModule {
 	
 	public void setSnapshotInterval(boolean b, int interval, String fileName) {
 		this.snapshot = b;
-		this.snapshotInterval = (snapshot) ? interval : 1;
-		this.snapshotFile = (snapshot) ? fileName : "snapshot.dnn";
+		this.snapshotInterval = (b) ? interval : 1;
+		this.snapshotFile = (b) ? fileName : "snapshot.dnn";
 	}
 	
 	public NeuralNetwork getNetwork() {

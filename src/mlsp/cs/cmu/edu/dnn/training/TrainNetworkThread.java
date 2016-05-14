@@ -38,6 +38,7 @@ public class TrainNetworkThread extends Thread {
 			int numMinChangeIterations,
 			int maxIterations,
 			boolean batchUpdate,
+			int batchDivisions,
 			/* snapshot control */
 			boolean snapshot,
 			int snapshotInterval,
@@ -54,7 +55,7 @@ public class TrainNetworkThread extends Thread {
 		/* Training setup... */
 		trainingModule.setOutputAdapter(outputAdapter);
 		trainingModule.setOutputOn(printOut);
-		trainingModule.setBatchUpdate(batchUpdate);
+		trainingModule.setBatchUpdate(batchUpdate, batchDivisions);
 		trainingModule.setConvergenceCriteria(minDiff, minSquaredError, allowNegativeIterations,
 				numMinChangeIterations, maxIterations);
 
