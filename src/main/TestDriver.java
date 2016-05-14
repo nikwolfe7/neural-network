@@ -1,4 +1,4 @@
-package example;
+package main;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,10 +28,10 @@ public class TestDriver {
 	  static String outFile = "models" + sep + "circle.network.dnn";
 	  
 		public static void main(String[] args) throws IOException, CloneNotSupportedException {
-			TestDriver(4);
+			RunTestDriver(4);
 		}
 		
-		public static void TestDriver(int... structure) {
+		public static void RunTestDriver(int... structure) {
 			System.out.println("---------------------------------------------------");
 			System.out.println("                    Circle                         ");
 			System.out.println("---------------------------------------------------");
