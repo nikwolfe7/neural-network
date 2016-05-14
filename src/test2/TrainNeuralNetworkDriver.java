@@ -42,7 +42,7 @@ public class TrainNeuralNetworkDriver {
 		pool.shutdown();
 	}
 	
-	/*
+	/* *
 	 * runDNN(o, iterations, batch, new int[] {100}); 			// 79400 -- 1.)	991s **
 		runDNN(o, iterations, batch, new int[] {72,28}); 		// 58744 -- 2.)	754s
 		runDNN(o, iterations, batch, new int[] {56,28,16});		// 46080 -- 3.)	593s
