@@ -20,7 +20,7 @@ public class TrainNetworkThread extends Thread {
 	private NeuralNetwork net;
 	private List<DataInstance> testingSet;
 	private List<DataInstance> trainingSet;
-	private OutputAdapter adapter;
+	private OutputAdapter outputAdapter;
 	private String networkFile;
 
 	public TrainNetworkThread
@@ -38,24 +38,28 @@ public class TrainNetworkThread extends Thread {
 			int numMinChangeIterations,
 			int maxIterations,
 			boolean batchUpdate,
+			/* snapshot control */
 			boolean snapshot,
 			int snapshotInterval,
+			/* network structure */
 			int... structure) throws IOException {
 
-		/* Training setup... */
-		this.adapter = adapter;
+		/* Thread parameters */
+		this.outputAdapter = adapter;
 		this.trainingSet = training;
 		this.testingSet = testing;
-		DataInstance ex = testing.get(0);
 		this.net = dnnFactory.getInitializedNeuralNetwork();
 		this.trainingModule = new DNNTrainingModule(net, trainingSet, testingSet);
-		trainingModule.setOutputAdapter(adapter);
+		
+		/* Training setup... */
+		trainingModule.setOutputAdapter(outputAdapter);
 		trainingModule.setOutputOn(printOut);
 		trainingModule.setBatchUpdate(batchUpdate);
 		trainingModule.setConvergenceCriteria(minDiff, minSquaredError, allowNegativeIterations,
 				numMinChangeIterations, maxIterations);
 
 		/* Create file name */
+		DataInstance ex = testing.get(0);
 		String[] arr = new String[] { netFile, "in-" + ex.getInputDimension(), "out-" + ex.getOutputDimension(),
 				"struct-" + str(structure) + "-id-" + (++idNum) };
 		this.networkFile = String.join("-", arr) + ".dnn";
@@ -88,7 +92,7 @@ public class TrainNetworkThread extends Thread {
 		dnnFactory = new ReadSerializedFileDNNFactory(networkFile);
 		net = dnnFactory.getInitializedNeuralNetwork();
 		trainingModule = new DNNTrainingModule(net, testingSet);
-		trainingModule.setOutputAdapter(adapter);
+		trainingModule.setOutputAdapter(outputAdapter);
 		trainingModule.setOutputOn(printOut);
 		trainingModule.doTestTrainedNetwork();
 	}
