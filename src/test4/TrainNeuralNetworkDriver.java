@@ -17,7 +17,7 @@ public class TrainNeuralNetworkDriver {
 
 	static int numCores = Runtime.getRuntime().availableProcessors();
 	static ExecutorService pool = Executors.newFixedThreadPool(numCores * 2);
-	static String o = "mnist-test3";
+	static String o = "mnist-test4";
 	static boolean batch = false;
 	static int batchDivisions = 10;
 	static boolean saveSnapshots = true;
