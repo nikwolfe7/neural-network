@@ -20,8 +20,8 @@ public class TrainNeuralNetworkDriver {
 	
 	static int numCores = Runtime.getRuntime().availableProcessors();
 	static ExecutorService pool = Executors.newFixedThreadPool(numCores * 2);
-	static boolean batch = false;
-	static int batchDivisions = 1000;
+	static boolean batch = true;
+	static int batchDivisions = 100;
 	static boolean saveSnapshots = true;
 	static int snapshotInterval = 5;
 	static int iterations = 300;
@@ -40,11 +40,8 @@ public class TrainNeuralNetworkDriver {
 	}
 
 	public static void main(String[] args) throws IOException {
-		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 28 });
-		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 100 });
 		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 50, 50 });
-		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 28, 72 });
-		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 72, 28 });
+		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 100 });
 		pool.shutdown();
 	}
 	

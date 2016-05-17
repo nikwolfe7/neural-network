@@ -49,7 +49,7 @@ public class CustomDNNFactory extends FeedForwardDNNAbstractFactory {
 			
 			@Override
 			public Edge getNewEdge() {
-				return new MomentumEdge(-10, 10, 0.001, 0.9);
+				return new SimpleEdge(-1, 1, 0.0005);
 			}
 
 			@Override

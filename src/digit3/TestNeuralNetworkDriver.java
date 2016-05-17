@@ -15,8 +15,8 @@ import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public class TestNeuralNetworkDriver {
 
-	static String modelName = "mnist-test-single-digit-in-784-out-2-struct-28-id-1.dnn";
-	static int numToLearn = 1;
+	static String modelName = "mnist-test-single-digit-0-in-784-out-2-struct-28-id-1.dnn";
+	static int numToLearn = 0;
 	
 	public static void main(String[] args) {
 		/* Test */
