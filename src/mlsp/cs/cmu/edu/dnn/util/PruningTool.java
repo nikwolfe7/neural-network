@@ -29,6 +29,7 @@ public class PruningTool {
 	public static String sep = System.getProperty("file.separator");
 	public static String data = "." + sep + "data" + sep;
 	public static String DNNFileName = "?";
+	public static OutputAdapter adapter = new MaxBinaryThresholdOutput();
 
 	public static NeuralNetwork runPruningExperiment(String dnnFile, boolean newFile, NeuralNetwork net, List<DataInstance> training, List<DataInstance> testing, double percentReduce) throws IOException {
 		DNNTrainingModule trainingModule = null;
@@ -456,7 +457,7 @@ public class PruningTool {
 	private static DNNTrainingModule initTrainingModule(NeuralNetwork net, List<DataInstance> training,
 			List<DataInstance> testing) {
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
+		trainingModule.setOutputAdapter(adapter);
 		trainingModule.setConvergenceCriteria(-1, -1, 0, 1);
 		return trainingModule;
 	}
