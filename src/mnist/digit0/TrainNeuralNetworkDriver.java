@@ -1,4 +1,4 @@
-package digit3;
+package mnist.digit0;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,7 +15,7 @@ import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public class TrainNeuralNetworkDriver {
 
-	static int numToLearn = 3;
+	static int numToLearn = 0;
 	static String o = "mnist-test-single-digit-" + numToLearn;
 	
 	static int numCores = Runtime.getRuntime().availableProcessors();

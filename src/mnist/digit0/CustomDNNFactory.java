@@ -1,4 +1,4 @@
-package digit1;
+package mnist.digit0;
 
 import java.util.List;
 
