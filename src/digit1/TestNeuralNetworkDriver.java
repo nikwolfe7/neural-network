@@ -8,15 +8,14 @@ import mlsp.cs.cmu.edu.dnn.structure.NeuralNetwork;
 import mlsp.cs.cmu.edu.dnn.training.DNNTrainingModule;
 import mlsp.cs.cmu.edu.dnn.training.DataInstance;
 import mlsp.cs.cmu.edu.dnn.training.DataInstanceFactory;
-import mlsp.cs.cmu.edu.dnn.training.MNISTDataInstanceFactory;
 import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
 import mlsp.cs.cmu.edu.dnn.util.MaxBinaryThresholdOutput;
 import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public class TestNeuralNetworkDriver {
 
-	static String modelName = "mnist-test-single-digit-0-in-784-out-2-struct-28-id-1.dnn";
-	static int numToLearn = 0;
+	static String modelName = "mnist-test-single-digit-1-in-784-out-2-struct-100.dnn";
+	static int numToLearn = 1;
 	
 	public static void main(String[] args) {
 		/* Test */
