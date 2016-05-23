@@ -6,7 +6,7 @@ public class TanhNeuron extends Neuron {
 
   private static final long serialVersionUID = 5932029667602181226L;
 
-  @Override
+  	@Override
 	public void forward() {
 		double sum = 0;
 	    for(NetworkElement e : getIncomingElements())

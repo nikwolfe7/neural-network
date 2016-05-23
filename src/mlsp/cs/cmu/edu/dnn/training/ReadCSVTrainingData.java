@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ReadCSVTrainingData implements DataReader {
+	
 
   @Override
   public List<DataInstance> getDataFromFile(String fileName, int inputDim, int outputDim) {
@@ -26,5 +27,5 @@ public class ReadCSVTrainingData implements DataReader {
     }
     return data;
   }
-
+  
 }
