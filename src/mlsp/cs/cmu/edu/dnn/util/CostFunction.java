@@ -25,8 +25,8 @@ public class CostFunction {
 	 * @return the cross entropy between the output and the truth
 	 */
 	public static double crossEntropy(double output, double truth) {
-		//return -(truth * Math.log(output)) - ((1 - truth) * Math.log(1 - output));
-		return -(truth * Math.log(output));
+		return -(truth * Math.log(output)) - ((1 - truth) * Math.log(1 - output));
+		//return -(truth * Math.log(output));
 	}
 
 	public static double crossEntropyDerivative(double output, double truth) {

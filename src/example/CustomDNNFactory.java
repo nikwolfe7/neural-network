@@ -28,7 +28,7 @@ public class CustomDNNFactory extends FeedForwardDNNAbstractFactory {
 
 	@Override
 	protected NeuralNetwork getNewNeuralNetwork(List<Layer> layers) {
-		return new NeuralNetwork(layers);
+		return new CrossEntropyNeuralNetwork(layers);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class CustomDNNFactory extends FeedForwardDNNAbstractFactory {
 
 			@Override
 			public Output getNewOutput() {
-				return new Output();
+				return new CrossEntropyOutput();
 			}
 
 			@Override
@@ -52,7 +52,7 @@ public class CustomDNNFactory extends FeedForwardDNNAbstractFactory {
 
 			@Override
 			public Edge getNewEdge() {
-				return new MomentumEdge(-1, 1, 0.0001, 0.95);
+				return new MomentumEdge(-1, 1, 0.0005, 0.95);
 //				return new SimpleEdge(-1, 1, 0.001);
 			}
 
