@@ -100,7 +100,7 @@ public abstract class WeightInitializedDNNFactory implements DNNFactory {
 				 * Used because we index 1D weight matrix as 2D with row + col
 				 */
 				int nCols = neuronWeightVector.length;
-				/* Handle for bias occuring first in the vector */
+				/* Handle for bias occurring first in the vector */
 				if (biasComesFirst) {
 					/*
 					 * set bias to last element of neuron vector in weight
