@@ -24,13 +24,13 @@ public class CircleDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = true;
-  static boolean batchUpdate = false;
+  static boolean batchUpdate = true;
   static boolean removeElements = false;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
   
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
-		  Circle(50,50);
+		  Circle(4);
 	}
 	
 	public static void Circle(int... structure) {
@@ -40,13 +40,13 @@ public class CircleDriver {
 		DataReader reader = new ReadCSVTrainingData();
 	    List<DataInstance> training = reader.getDataFromFile(data + "circle-train.csv", 2, 1);
 	    List<DataInstance> testing = reader.getDataFromFile(data + "circle-test.csv", 2, 1);
-	    DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+	    DNNFactory factory = new CustomDNNFactory(training.get(0), structure);
 	    
 	    NeuralNetwork net = factory.getInitializedNeuralNetwork();
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
-	    trainingModule.setBatchUpdate(batchUpdate);
+	    trainingModule.setBatchUpdate(batchUpdate, 100);
 	    trainingModule.setConvergenceCriteria(1.0e-8, -1, 0, 300);
 	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();

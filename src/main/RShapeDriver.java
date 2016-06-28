@@ -24,13 +24,12 @@ public class RShapeDriver {
   
   static OutputAdapter adapter = new BinaryThresholdOutput();
   static boolean printOut = true;
-  static boolean batchUpdate = false;
-  static boolean removeElements = false;
+  static boolean batchUpdate = true;
   static String sep = System.getProperty("file.separator");
   static String data = "." + sep + "data" + sep;
   
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
-		RShape(50,50);
+		RShape(8,8);
 	}
 	
 	public static void RShape(int... structure) throws IOException {
@@ -40,35 +39,23 @@ public class RShapeDriver {
 		DataReader reader = new ReadCSVTrainingData();
 		List<DataInstance> training = reader.getDataFromFile(data + "RShape-train.csv", 2, 1);
 		List<DataInstance> testing = reader.getDataFromFile(data + "RShape-test.csv", 2, 1);
-		DNNFactory factory = new SigmoidNetworkFFDNNFactory(training.get(0), structure);
+		DNNFactory factory = new CustomDNNFactory(training.get(0), structure);
 
 		NeuralNetwork net = factory.getInitializedNeuralNetwork();
 		DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
-//		trainingModule.setOutputOn(true);
-//		trainingModule.setOutputAdapter(adapter);
-//		trainingModule.setBatchUpdate(batchUpdate,10);
-//		trainingModule.setConvergenceCriteria(-1, 0.004, true, 0);
-//		trainingModule.setPrintResults(true, data + "RShape-test-results-" + DNNUtils.joinNumbers(structure, "-") + ".csv");
-//		trainingModule.doTrainNetworkUntilConvergence();
-//
-//		System.out.println("Test:\n");
 		
-//		trainingModule.setOutputOn(false);
-//		trainingModule.doTestTrainedNetwork();
-//		trainingModule.saveNetworkToFile("models" + sep + "network.dnn");
+		trainingModule.setOutputOn(true);
+		trainingModule.setOutputAdapter(adapter);
+		trainingModule.setBatchUpdate(batchUpdate,100);
+		trainingModule.setConvergenceCriteria(-1, 0.004, 0);
+		trainingModule.doTrainNetworkUntilConvergence();
 
-		double remove = 0.0;
-		while (remove <= 1) {
-			System.out.println("\n\nWith remove: " + remove);
-			factory = new ReadSerializedFileDNNFactory("models" + sep + "rshape.network.dnn");
-			net = factory.getInitializedNeuralNetwork();
-			trainingModule = new DNNTrainingModule(net, testing);
-			trainingModule.setOutputOn(false);
-			trainingModule.setOutputAdapter(adapter);
-//			net = PruningTool.doPruning(data, batchUpdate, net, training, testing, remove);
-			trainingModule.doTestTrainedNetwork();
-			remove += 2;
-		}
+		System.out.println("Test:\n");
+		
+		trainingModule.setOutputOn(false);
+		trainingModule.doTestTrainedNetwork();
+		trainingModule.saveNetworkToFile("models" + sep + "network.dnn");
+
 
 	}
 
