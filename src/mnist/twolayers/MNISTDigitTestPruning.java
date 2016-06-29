@@ -1,4 +1,4 @@
-package mnist.acc99;
+package mnist.twolayers;
 
 import java.io.IOException;
 import java.util.ArrayList;

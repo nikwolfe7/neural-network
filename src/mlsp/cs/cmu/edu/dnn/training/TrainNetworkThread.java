@@ -76,18 +76,12 @@ public class TrainNetworkThread extends Thread {
 		return String.join("-", arr);
 	}
 
-	private void trainNetwork() {
+	public void trainNetwork() {
 		System.out.println("Training network for file: " + networkFile);
 		trainingModule.doTrainNetworkUntilConvergence();
 	}
 
-	private void testAndSaveNetwork() {
-		System.out.println("Testing network for file: " + networkFile);
-		trainingModule.doTestTrainedNetwork();
-		trainingModule.saveNetworkToFile(networkFile);
-	}
-
-	private void verifySavedNetwork() {
+	public void verifySavedNetwork() {
 		System.out.println("De-serializing network file: " + networkFile);
 		dnnFactory = new ReadSerializedFileDNNFactory(networkFile);
 		net = dnnFactory.getInitializedNeuralNetwork();
@@ -96,7 +90,13 @@ public class TrainNetworkThread extends Thread {
 		trainingModule.setOutputOn(printOut);
 		trainingModule.doTestTrainedNetwork();
 	}
-
+	
+	public void testAndSaveNetwork() {
+		System.out.println("Testing network for file: " + networkFile);
+		trainingModule.doTestTrainedNetwork();
+		trainingModule.saveNetworkToFile(networkFile);
+	}
+	
 	@Override
 	public void run() {
 		trainNetwork();
