@@ -1,4 +1,4 @@
-package mnist.twolayers;
+package mnist.deep;
 
 import java.util.List;
 

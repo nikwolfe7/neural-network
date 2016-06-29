@@ -1,4 +1,4 @@
-package mnist.twolayers;
+package mnist.deep;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class TestNeuralNetworkDriver {
 
 	public static void main(String[] args) {
 		/* Test */
-		String netFile = "models" + DNNUtils.sep + "mnist-acc99-in-400-out-10-struct-50-50-id-1.dnn";
+		String netFile = "models" + DNNUtils.sep + "mnist-deep-acc99-in-400-out-10-struct-50-50-id-1.dnn";
 		OutputAdapter adapter = new MaxBinaryThresholdOutput();
 		DataInstanceFactory dataInstanceFactory = new MNISTAltSmallDataInstanceFactory();
 		List<DataInstance> testing = dataInstanceFactory.getTestingInstances();

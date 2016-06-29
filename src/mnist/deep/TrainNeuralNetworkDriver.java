@@ -1,4 +1,4 @@
-package mnist.twolayers;
+package mnist.deep;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +22,7 @@ public class TrainNeuralNetworkDriver {
 
 	static int numCores = Runtime.getRuntime().availableProcessors();
 	static ExecutorService pool = Executors.newFixedThreadPool(numCores * 2);
-	static String o = "mnist-acc99";
+	static String o = "mnist-deep-acc99";
 	static boolean batch = false;
 	static int batchDivisions = 100;
 	static boolean saveSnapshots = true;
@@ -44,11 +44,11 @@ public class TrainNeuralNetworkDriver {
 		List<DataInstance> training = dataInstanceFactory.getTrainingInstances();
 		List<DataInstance> testing = dataInstanceFactory.getTrainingInstances();
 		DNNFactory factory = new WeightInitSigmoidDNNFactory(training.get(0), true, matrixFiles);
-		NeuralNetwork net = factory.getInitializedNeuralNetwork();
-		DNNTrainingModule testingModule = new DNNTrainingModule(net, training, testing);
-		testingModule.setOutputOn(true);
-		testingModule.setOutputAdapter(new MaxBinaryThresholdOutput());
-		testingModule.doTestTrainedNetwork();
+//		NeuralNetwork net = factory.getInitializedNeuralNetwork();
+//		DNNTrainingModule testingModule = new DNNTrainingModule(net, training, testing);
+//		testingModule.setOutputOn(true);
+//		testingModule.setOutputAdapter(new MaxBinaryThresholdOutput());
+//		testingModule.doTestTrainedNetwork();
 		
 		TrainNetworkThread dnnThread = new TrainNetworkThread(o, adapter, dataInstanceFactory, training, testing, factory,
 				minDiff, minError, 1, maxIter, batch, batchDiv, ss, si, structure);

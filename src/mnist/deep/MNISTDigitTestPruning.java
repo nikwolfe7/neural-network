@@ -1,4 +1,4 @@
-package mnist.twolayers;
+package mnist.deep;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 
 public class MNISTDigitTestPruning {
 
-	static String dnnFile = "mod.mnist-acc99-in-400-out-10-struct-100-id-1.dnn";
+	static String dnnFile = "mnist-deep-acc99-in-400-out-10-struct-50-50-id-1.dnn";
 
 	public static void main(String[] args) throws IOException {
 		TestPruning();
