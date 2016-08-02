@@ -17,7 +17,7 @@ import mlsp.cs.cmu.edu.dnn.util.PruningTool;
 public class CircleTestPruning {
 
   static String sep = System.getProperty("file.separator");
-	public static String dnnFile = "circle.network.dnn";
+	public static String dnnFile = "mod.circle.network.dnn";
 
 	public static void main(String[] args) throws IOException {
 		TestPruning(0);
