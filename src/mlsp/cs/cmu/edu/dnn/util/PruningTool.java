@@ -29,6 +29,7 @@ public class PruningTool {
 	public static String sep = System.getProperty("file.separator");
 	public static String data = "." + sep + "data" + sep;
 	public static String DNNFileName = "?";
+	/*** YOU MAY NEED TO CHANGE THIS DEFAULT! USE setOutputAdapter() ***/
 	public static OutputAdapter adapter = new MaxBinaryThresholdOutput();
 
 	public static NeuralNetwork runPruningExperiment(String dnnFile, boolean newFile, NeuralNetwork net, List<DataInstance> training, List<DataInstance> testing, double percentReduce) throws IOException {
@@ -109,6 +110,10 @@ public class PruningTool {
 		writer.write(algoResult);
 		writer.close();
 		return net;
+	}
+	
+	public static void setOutputAdapter(OutputAdapter o) {
+		PruningTool.adapter = o;
 	}
 
 	private static double[] bruteFuckingForce(double percentReduce, NeuralNetwork net, List<DataInstance> trainingSet, String sortBy) {
@@ -292,6 +297,7 @@ public class PruningTool {
 
 	private static void getGroundTruthError(List<GainSwitchNeuron> sortedNeurons, NeuralNetwork net, List<DataInstance> testingSet) {
 		DNNTrainingModule trainingModule = initTrainingModule(net, testingSet, testingSet);
+		//trainingModule.setOutputOn(true);
 		double initialError = trainingModule.doTestTrainedNetwork();
 		System.out.println("Unmodified network error: " + initialError);
 		for (GainSwitchNeuron neuron : sortedNeurons) {

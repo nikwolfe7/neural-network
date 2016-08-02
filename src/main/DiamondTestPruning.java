@@ -38,6 +38,7 @@ public class DiamondTestPruning {
 		trainingModule.setOutputOn(false);
 		trainingModule.setOutputAdapter(new BinaryThresholdOutput());
 		trainingModule.doTestTrainedNetwork();
+		PruningTool.setOutputAdapter(new BinaryThresholdOutput());
 		net = PruningTool.runPruningExperiment(dnnFile, true, net, training, testing, 1.0);
 	}
 
