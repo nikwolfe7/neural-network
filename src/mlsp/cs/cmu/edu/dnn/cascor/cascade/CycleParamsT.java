@@ -7,11 +7,16 @@ package mlsp.cs.cmu.edu.dnn.cascor.cascade;
  */
 public class CycleParamsT {
 	
-	public int epochs;				/* The number of training epochs to perform in      */
-    								/* each phase before a TIMEOUT is declared.  In     */
-									/* general, a TIMEOUT should never be declared.     */
-	public int patience; 			/* The number of epochs without significant change  */
-									/* before the training is declared STAGNANT         */
-	public double changeThreshold;	/*  The relative size of change required to be      */
-    								/* considered 'significant'                         */
+	/* The number of training epochs to perform in      */
+	/* each phase before a TIMEOUT is declared.  In     */
+	/* general, a TIMEOUT should never be declared.     */
+	public int epochs;
+	
+	/* The number of epochs without significant change  */
+	/* before the training is declared STAGNANT         */
+	public int patience; 			
+	
+	/*  The relative size of change required to be      */
+	/* considered 'significant'                         */
+	public double changeThreshold;	
 }
