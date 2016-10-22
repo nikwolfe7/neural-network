@@ -52,30 +52,30 @@ public class NetworkStruct {
 	public double[] outValues;    		 
 	
 	/* Weights to the outputs                 */
-    public double[][] outWeights;   		
+	public double[][] outWeights;   		
     
-    /* Maximum value of a VARSIGMOID          */
-    public double sigmoidMax;     	
+	/* Maximum value of a VARSIGMOID          */
+	public double sigmoidMax;     	
     
-    /* Minimum value of a VARSIGMOID          */
-    public double sigmoidMin;     	
+	/* Minimum value of a VARSIGMOID          */
+	public double sigmoidMin;     	
     
-    /* Is this net recurrent?                 */
-    public boolean recurrent;      	
+	/* Is this net recurrent?                 */
+	public boolean recurrent;      	
     
-    /* Map from tokens to raw inputs          */
-    //cvrt_t          *inputMap,
+	/* Map from tokens to raw inputs          */
+	//cvrt_t          *inputMap,
     
-    /* Maps from raw outputs to tokens        */
-    //*outputMap;    	 					
+	/* Maps from raw outputs to tokens        */
+	//*outputMap;    	 					
     
-    /* Types for the interior units           */
-    public CCEnum.NodeT[] unitTypes;		
+	/* Types for the interior units           */
+	public CCEnum.NodeT[] unitTypes;		
     
-    /* Types of the outputs                   */
-    public CCEnum.NodeT[] outputTypes;	
+	/* Types of the outputs                   */
+	public CCEnum.NodeT[] outputTypes;	
     
-    /* Pointer to the next layer... 		  */
-    public NetworkStruct next;			
+	/* Pointer to the next layer... 		  */
+	public NetworkStruct next;			
 	
 }

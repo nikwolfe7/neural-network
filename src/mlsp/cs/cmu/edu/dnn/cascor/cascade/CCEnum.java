@@ -37,10 +37,13 @@ public final class CCEnum {
 	}	
 	
 	/*  Type Declarations  */
-	public static enum OutT {	/*  Outputs can be either BINARY or                  */
-		CONT,					/*  CONTinuous.  BINARY values are used for binary   */
-		BINARY					/*  and enumerated units while CONTinuous values are */
-								/*  used for standard floating point numbers.        */					
+	/*  Outputs can be either BINARY or					 	*/
+	/*  CONTinuous.  BINARY values are used for binary		*/
+	/*  and enumerated units while CONTinuous values are 	*/
+	/*  used for standard floating point numbers.        	*/
+	public static enum OutT {
+		CONT,					
+		BINARY					
 	}
 
 }

@@ -5,25 +5,25 @@ package mlsp.cs.cmu.edu.dnn.cascor.cascade;
  */
 public class ErrorDataT {
 	
-	/*  Number of incorrect bits  					*/
+	/* Number of incorrect bits */
 	public int bits;			
 	
-	/*  Computed error index  						*/
+	/* Computed error index */
 	public double index;		
 	
-	/*  The Sum of the Square Differences  			*/
+	/* The Sum of the Square Differences */
 	public double sumSqDiffs;	
 	
-	/*  The Sum of the Square Errors (using EPrime)	*/
+	/* The Sum of the Square Errors (using EPrime) */
 	public double sumSqError;	
 	
-	/*  The error at each output  					*/
+	/* The error at each output */
 	public double[] errors;		
 	
-	/*  Temporary error vector in case of no cache	*/
+	/* Temporary error vector in case of no cache */
 	public double[] tempErrors; 
 	
-	/*  The sum of the error at each output  		*/
+	/* The sum of the error at each output */
 	public double[] sumError; 	
 
 }
