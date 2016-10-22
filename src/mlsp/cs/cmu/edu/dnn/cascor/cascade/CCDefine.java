@@ -1,8 +1,15 @@
 package mlsp.cs.cmu.edu.dnn.cascor.cascade;
 
+
 public final class CCDefine {
 	
-	 /*  Maximum length input line  */
+	/*  Program version  */
+	public static String VER = "2.0";
+			
+	/*  CMU Site contact  */
+	public static String CONTACT = "neural-bench@cs.cmu.edu";
+	
+	/*  Maximum length input line  */
 	public static int MAX_INPUT = 41;
 	
 	/*  Do we use connection crossing statistics or not? */
