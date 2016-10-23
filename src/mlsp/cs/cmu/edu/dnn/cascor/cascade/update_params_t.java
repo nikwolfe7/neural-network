@@ -5,7 +5,7 @@ package mlsp.cs.cmu.edu.dnn.cascor.cascade;
  * specific layer.  Accordingly, instances of this structure exist for the
  * output, candidate in and candidate out layers.                           
  */
-public class UpdateParamsT {
+public class update_params_t {
 
 	/* Learning rate parameter.  Higher rates can decrease    */
 	/* training time, but may cause learning to go unstable   */

@@ -1,11 +1,13 @@
 package mlsp.cs.cmu.edu.dnn.cascor.cascade;
 
+import mlsp.cs.cmu.edu.dnn.cascor.parse.cvrt_t;
+
 /* NET_T
  * This is the network data structure.  This structure contains all necessary
  * information about the network.  Using the information contained within this
  * structure, feedforward prediction is possible.                           
  */
-public class NetworkStruct {
+public class net_t {
 	
 	/* Name of the network                    */
 	public String name;			 	
@@ -64,18 +66,18 @@ public class NetworkStruct {
 	public boolean recurrent;      	
     
 	/* Map from tokens to raw inputs          */
-	//cvrt_t          *inputMap,
+	public cvrt_t inputMap;
     
 	/* Maps from raw outputs to tokens        */
-	//*outputMap;    	 					
+	public cvrt_t outputMap;				
     
 	/* Types for the interior units           */
-	public CCEnum.NodeT[] unitTypes;		
+	public CCEnum.node_t[] unitTypes;		
     
 	/* Types of the outputs                   */
-	public CCEnum.NodeT[] outputTypes;	
+	public CCEnum.node_t[] outputTypes;	
     
 	/* Pointer to the next layer... 		  */
-	public NetworkStruct next;			
+	public net_t next;			
 	
 }

@@ -5,7 +5,7 @@ package mlsp.cs.cmu.edu.dnn.cascor.cascade;
  * Therefore, one of these structures exist for both the output training
  * and candidate training phases.                                           
  */
-public class CycleParamsT {
+public class cycle_params_t {
 	
 	/* The number of training epochs to perform in      */
 	/* each phase before a TIMEOUT is declared.  In     */

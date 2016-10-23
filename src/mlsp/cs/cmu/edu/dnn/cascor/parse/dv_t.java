@@ -5,12 +5,10 @@ package mlsp.cs.cmu.edu.dnn.cascor.parse;
  * from, the output types, number of inputs, outputs and the actual 
  * training vectors.  
  */
-public class ConvertT {
-
-	public int nEnums;
-	public int nUnits;
-	public String[] enums;
-	public double[][] equivs;
-	public double[] unknown;
+public class dv_t {
+	
+	public double[] inputs;
+	public double[] outputs;
+	public boolean reset;
 
 }

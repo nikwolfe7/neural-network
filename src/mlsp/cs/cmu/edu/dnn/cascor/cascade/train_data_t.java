@@ -5,7 +5,7 @@ package mlsp.cs.cmu.edu.dnn.cascor.cascade;
  * but is not otherwise necessary for prediction. This structure is generally 
  * built as training is about to begin.
  */
-public class TrainDataT {
+public class train_data_t {
 
 	/*  The candidate with the best score        */
 	public int 				candBest;		
@@ -49,17 +49,17 @@ public class TrainDataT {
 	public double[][]		errCache;		
 	
 	/*  The activation types of each candidate   */
-	public CCEnum.NodeT[] 	candTypes;		
+	public CCEnum.node_t[] 	candTypes;		
 	
 	/*  Training information on the inputs to    */
 	/*  the candidates                           */
-	public LayerInfoT 		candIn;			
+	public layer_info_t 		candIn;			
 	
 	/*  Training information on the outputs from */
 	/*  the candidate units                      */										
-	public LayerInfoT 		candOut;		
+	public layer_info_t 		candOut;		
 	
 	/*  Training information for the network     */
 	/*  outputs                                  */
-	public LayerInfoT 		output;			
+	public layer_info_t 		output;			
 }

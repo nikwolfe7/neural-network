@@ -3,7 +3,7 @@ package mlsp.cs.cmu.edu.dnn.cascor.cascade;
 /* ERROR_DATA_T 
  * Contains error information on network performance
  */
-public class ErrorDataT {
+public class error_data_t {
 	
 	/* Number of incorrect bits */
 	public int bits;			

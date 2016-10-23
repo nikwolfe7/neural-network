@@ -4,7 +4,7 @@ package mlsp.cs.cmu.edu.dnn.cascor.cascade;
  * This is the main structure used to contain training parameters.  
  * All that is necessary for network training is contained herein.                   
  */
-public class TrainParamsT {
+public class train_params_t {
 	
 	/* The maximum number of units to add   */
 	/* to the network being trained         */
@@ -60,27 +60,27 @@ public class TrainParamsT {
 	public boolean recurrent;		 		
 	
 	/* Type of candidate to comprise pool   */
-	public CCEnum.NodeT candType;	 			
+	public CCEnum.node_t candType;	 			
 	
 	/* Network architecture to use          */
-	public CCEnum.AlgoT algorithm;	 			
+	public CCEnum.algo_t algorithm;	 			
 	
 	/* Measure that determines success      */
-	public CCEnum.ErrorT errorMeasure;			
+	public CCEnum.error_t errorMeasure;			
 	
 	/* Parameters for candidates inputs     */
-	public UpdateParamsT candInUpdate;		   
+	public update_params_t candInUpdate;		   
 	
 	/* Parameters for candidates outputs    */
-	public UpdateParamsT candOutUpdate;			
+	public update_params_t candOutUpdate;			
 	
 	/* Parameters for network outputs       */
-	public UpdateParamsT outputUpdate;			
+	public update_params_t outputUpdate;			
 	
 	/* Candidate phase parameters           */
-	public CycleParamsT candidateParams;		
+	public cycle_params_t candidateParams;		
 	
 	/* Output phase parameters              */
-	public CycleParamsT outputParams;			
+	public cycle_params_t outputParams;			
 	
 }

@@ -5,7 +5,7 @@ package mlsp.cs.cmu.edu.dnn.cascor.cascade;
  * Instances are constructed for the output, candidate input and 
  * candidate output layers. 
  */
-public class LayerInfoT {
+public class layer_info_t {
 	
 	/*  This is related to mu.  See [1]                   */
 	public double shrinkFactor;		

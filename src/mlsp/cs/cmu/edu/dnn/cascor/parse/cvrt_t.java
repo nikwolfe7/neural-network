@@ -5,10 +5,12 @@ package mlsp.cs.cmu.edu.dnn.cascor.parse;
  * from, the output types, number of inputs, outputs and the actual 
  * training vectors.  
  */
-public class DataValueT {
-	
-	public double[] inputs;
-	public double[] outputs;
-	public boolean reset;
+public class cvrt_t {
+
+	public int nEnums;
+	public int nUnits;
+	public String[] enums;
+	public double[][] equivs;
+	public double[] unknown;
 
 }

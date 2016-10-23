@@ -5,12 +5,12 @@ package mlsp.cs.cmu.edu.dnn.cascor.parse;
  * from, the output types, number of inputs, outputs and the actual 
  * training vectors.  
  */
-public class DataSetT {
+public class data_set_t {
 	
 	public String name;
 	public int nPts;
 	public double stdDev;
 	public boolean predictOnly;
-	public DataValueT[] data;
+	public dv_t[] data;
 
 }
