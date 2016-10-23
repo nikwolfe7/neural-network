@@ -1,15 +1,19 @@
-package test2;
+package test.multithread1;
 
 import java.util.List;
 
+import mlsp.cs.cmu.edu.dnn.elements.AdaGradEdge;
 import mlsp.cs.cmu.edu.dnn.elements.Bias;
 import mlsp.cs.cmu.edu.dnn.elements.CrossEntropyOutput;
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.Input;
+import mlsp.cs.cmu.edu.dnn.elements.LinearOutput;
 import mlsp.cs.cmu.edu.dnn.elements.MomentumEdge;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
 import mlsp.cs.cmu.edu.dnn.elements.SimpleEdge;
+import mlsp.cs.cmu.edu.dnn.elements.TanhNeuron;
+import mlsp.cs.cmu.edu.dnn.elements.TanhOutput;
 import mlsp.cs.cmu.edu.dnn.factory.FeedForwardDNNAbstractFactory;
 import mlsp.cs.cmu.edu.dnn.factory.NetworkElementAbstractFactory;
 import mlsp.cs.cmu.edu.dnn.structure.CrossEntropyNeuralNetwork;
@@ -49,7 +53,7 @@ public class CustomDNNFactory extends FeedForwardDNNAbstractFactory {
 			
 			@Override
 			public Edge getNewEdge() {
-				return new MomentumEdge(-10, 10, 0.001, 0.9);
+				return new SimpleEdge(-10, 10, 0.001);
 			}
 
 			@Override

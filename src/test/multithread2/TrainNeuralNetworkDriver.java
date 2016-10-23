@@ -1,4 +1,4 @@
-package test;
+package test.multithread2;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,20 +15,22 @@ import mlsp.cs.cmu.edu.dnn.util.OutputAdapter;
 
 public class TrainNeuralNetworkDriver {
 
+	static int numToLearn = 5;
+	static String o = "mnist-test-single-digit-" + numToLearn;
+	
 	static int numCores = Runtime.getRuntime().availableProcessors();
 	static ExecutorService pool = Executors.newFixedThreadPool(numCores * 2);
-	static String o = "mnist-test";
-	static boolean batch = true;
-	static int batchDivisions = 100;
+	static boolean batch = false;
+	static int batchDivisions = 1000;
 	static boolean saveSnapshots = true;
 	static int snapshotInterval = 5;
-	static int iterations = 1000;
+	static int iterations = 300;
 	static double minDiff = 1.0e-6;
 
 	private static void runDNN(String o, int maxIter, boolean batch, int batchDiv, boolean ss, int si, int... structure)
 			throws IOException {
 		OutputAdapter adapter = new MaxBinaryThresholdOutput();
-		DataInstanceFactory dataInstanceFactory = new MNISTDataInstanceFactory();
+		DataInstanceFactory dataInstanceFactory = new MNISTSingleDigitInstanceFactory(numToLearn);
 		List<DataInstance> training = dataInstanceFactory.getTrainingInstances();
 		List<DataInstance> testing = dataInstanceFactory.getTestingInstances();
 		DNNFactory dnnFactory = new CustomDNNFactory(testing.get(0), structure);
@@ -38,7 +40,11 @@ public class TrainNeuralNetworkDriver {
 	}
 
 	public static void main(String[] args) throws IOException {
-		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 25, 50, 25 });
+		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 28 });
+		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 100 });
+		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 50, 50 });
+		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 28, 72 });
+		runDNN(o, iterations, batch, batchDivisions, saveSnapshots, snapshotInterval, new int[] { 72, 28 });
 		pool.shutdown();
 	}
 	

@@ -1,4 +1,4 @@
-package test2;
+package test.multithread2;
 
 import java.util.List;
 
