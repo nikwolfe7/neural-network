@@ -22,7 +22,7 @@ public class SwitchEdge extends SimpleEdge implements Switchable, SecondDerivati
 	}
 
 	@Override
-	public void setSwitchOff(boolean b) {
+	public void setSwitchedOff(boolean b) {
 		switchOff = b;
 	}
 

@@ -53,7 +53,7 @@ public class GainSwitchLayer implements Layer {
   public void switchOff(boolean b) {
     for(NetworkElement e : getElements()) {
       if(e instanceof Switchable) {
-        ((Switchable) e).setSwitchOff(b);
+        ((Switchable) e).setSwitchedOff(b);
       }
     }
   }

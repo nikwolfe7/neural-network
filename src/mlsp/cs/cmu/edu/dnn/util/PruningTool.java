@@ -135,7 +135,7 @@ public class PruningTool {
 			if(i % 10 == 0) {
 			  gradualChangeGainTest(sortBy, neuron, trainingModule);
 			}
-			neuron.setSwitchOff(true);
+			neuron.setSwitchedOff(true);
 			neurons.remove(neuron);
 			// test network and get error
 			double newError = trainingModule.doTestTrainedNetwork();
@@ -170,7 +170,7 @@ public class PruningTool {
 			if(i % 10 == 0) {
 			  gradualChangeGainTest(sortBy, neuron, trainingModule);
 			}
-			neuron.setSwitchOff(true);
+			neuron.setSwitchedOff(true);
 			sortedNeurons.remove(neuron);
 			// test network and get error
 			double newError = trainingModule.doTestTrainedNetwork();
@@ -284,7 +284,7 @@ public class PruningTool {
 		for (int i = 0; i < neuronsToRemove; i++) {
 			GainSwitchNeuron neuron = neurons.get(i);
 			System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
-			neuron.setSwitchOff(true);
+			neuron.setSwitchedOff(true);
 			double newError = trainingModule.doTestTrainedNetwork();
 			double diff = newError - initialError;
 			System.out.println("E(o1): " + initialError + " E(0): " + newError + "\nE(0) - E(o1): " + diff);
@@ -302,10 +302,10 @@ public class PruningTool {
 		System.out.println("Unmodified network error: " + initialError);
 		for (GainSwitchNeuron neuron : sortedNeurons) {
 			System.out.println("Switching neuron " + neuron.getIdNum() + " OFF...");
-			neuron.setSwitchOff(true);
+			neuron.setSwitchedOff(true);
 			double newError = trainingModule.doTestTrainedNetwork();
 			System.out.println("Switching neuron " + neuron.getIdNum() + " back ON...");
-			neuron.setSwitchOff(false);
+			neuron.setSwitchedOff(false);
 			double diff = newError - initialError;
 			System.out.println("E(o1): " + initialError + " E(0): " + newError + "\nE(0) - E(o1): " + diff);
 			neuron.setGroundTruthError(newError);
@@ -457,7 +457,7 @@ public class PruningTool {
 
 	public static void switchOffNeurons(List<GainSwitchNeuron> sortedNeurons, boolean b) {
 		for (GainSwitchNeuron s : sortedNeurons)
-			s.setSwitchOff(b);
+			s.setSwitchedOff(b);
 	}
 
 	private static DNNTrainingModule initTrainingModule(NeuralNetwork net, List<DataInstance> training,

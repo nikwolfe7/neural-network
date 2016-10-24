@@ -2,10 +2,13 @@ package mlsp.cs.cmu.edu.dnn.elements;
 
 import mlsp.cs.cmu.edu.dnn.util.LayerElementUtils;
 
-public abstract class Edge implements NetworkElement, Cloneable {
+public abstract class Edge implements NetworkElement, Cloneable, Freezable {
 
 	private static final long serialVersionUID = -3785529802453031665L;
 
+	/* Freezable Weight */
+	private boolean frozen = false;
+	
 	/* Batch Training */
 	private boolean batchUpdate = false;
 	private double batchSum = 0;
@@ -84,7 +87,7 @@ public abstract class Edge implements NetworkElement, Cloneable {
 	}
 
 	public void setWeight(double w) {
-		weight = w;
+		if (!isFrozen()) weight = w;
 	}
 
 	@Override
@@ -137,6 +140,16 @@ public abstract class Edge implements NetworkElement, Cloneable {
 		}
 		LayerElementUtils.convertEdge(this, o);
 		return o;
+	}
+
+	@Override
+	public void setFrozen(boolean b) {
+		frozen = b;
+	}
+
+	@Override
+	public boolean isFrozen() {
+		return frozen;
 	}
 
 }

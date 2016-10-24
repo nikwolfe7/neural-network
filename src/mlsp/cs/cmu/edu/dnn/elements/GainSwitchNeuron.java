@@ -42,7 +42,7 @@ public class GainSwitchNeuron extends Neuron implements Switchable, SecondDeriva
   }
 
   @Override
-  public void setSwitchOff(boolean b) {
+  public void setSwitchedOff(boolean b) {
     switchedOff = b;
     setOutput(0);
   }
