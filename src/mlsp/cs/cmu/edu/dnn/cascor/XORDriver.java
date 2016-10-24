@@ -12,7 +12,7 @@ import mlsp.cs.cmu.edu.dnn.training.XORGenerator;
 import mlsp.cs.cmu.edu.dnn.util.BinaryThresholdOutput;
 import mlsp.cs.cmu.edu.dnn.util.DNNUtils;
 
-public class Driver {
+public class XORDriver {
 	
 	/* Useful to have for file separators, like python... */
 	static String sep = DNNUtils.sep;
@@ -25,7 +25,7 @@ public class Driver {
 	/* Step 2: Get a DNN Network factory to buid a factory of specified structure with 
 	 * inputs & outputs matching the data type...
 	 */
-	static DNNFactory factory = new CustomDNNFactory(xorGenerator.getNewDataInstance(), new int[] { 4 });
+	static DNNFactory factory = new CustomDNNFactory(xorGenerator.getNewDataInstance(), new int[] { 2 });
 	
 	/* XOR example... */
 	public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class Driver {
 		tm.setOutputAdapter(new BinaryThresholdOutput());
 		
 		/* Step 7: Set some useful parameters, e.g. convergence criteria */
-		tm.setConvergenceCriteria(1.0e-9, -1, 1, 10000);
+		tm.setConvergenceCriteria(1.0e-9, -1, 1, 1000);
 		tm.setOutputOn(true);
 		
 		/* Step 8: Run training */
