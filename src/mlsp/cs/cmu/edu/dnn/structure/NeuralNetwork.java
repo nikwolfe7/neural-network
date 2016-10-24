@@ -26,6 +26,7 @@ public class NeuralNetwork implements Serializable {
 
 	/* These are the indices of the weight matrices */
 	private List<Integer> weightMatrixLayers;
+	
 	/* These are the indices of the neuron layers */
 	private List<Integer> hiddenNeuronLayers;
 

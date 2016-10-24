@@ -1,5 +1,11 @@
 package mlsp.cs.cmu.edu.dnn.elements;
 
+/**
+ * THIS DOES NOT WORK RELIABLY YET! 
+ * USE AT YOUR OWN RISK!!!
+ * 
+ * @author nikwolfe
+ */
 public class RPropEdge extends Edge {
 
   private static final long serialVersionUID = 7621029224723256343L;
