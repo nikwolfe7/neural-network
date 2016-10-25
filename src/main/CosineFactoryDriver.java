@@ -26,8 +26,7 @@ public class CosineFactoryDriver {
 
   static String sep = System.getProperty("file.separator");
   static DataInstanceGenerator dataGen = new CosineGenerator();
-  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(),50,50);
-//  static DNNFactory factory = new ReadSerializedFileDNNFactory("cos.network.dnn");
+  static DNNFactory factory = new SigmoidNetworkFFDNNFactory(dataGen.getNewDataInstance(), 10);
   
   public static void main(String[] args) {
     
@@ -35,19 +34,20 @@ public class CosineFactoryDriver {
     NeuralNetwork net = factory.getInitializedNeuralNetwork();
 
     /* Generate training and test data */
-    List<DataInstance> training = getData(1000000);
+    List<DataInstance> training = getData(100000);
     List<DataInstance> testing = getData(1000);
 
     /* Train the network */
     DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
     trainingModule.setOutputOn(true);
-//    trainingModule.setOutputAdapter(new BinaryThresholdOutput());
-    trainingModule.setConvergenceCriteria(1.0e-8, -1, 1, 1000);
+    
+    /* trainingModule.setOutputAdapter(new BinaryThresholdOutput()); */
+    trainingModule.setConvergenceCriteria(1.0e-8, -1, 1, 100);
     trainingModule.doTrainNetworkUntilConvergence();
 
     /* Test the network */
     trainingModule.doTestTrainedNetwork();
-    trainingModule.saveNetworkToFile("models" + sep +"cos.big.network.dnn");
+    trainingModule.saveNetworkToFile("models" + sep +"cos.network.dnn");
   }
 
   private static List<DataInstance> getData(int numInstances) {

@@ -25,7 +25,7 @@ public class XORDriver {
 	/* Step 2: Get a DNN Network factory to buid a factory of specified structure with 
 	 * inputs & outputs matching the data type...
 	 */
-	static DNNFactory factory = new CustomDNNFactory(xorGenerator.getNewDataInstance(), new int[] { 2 });
+	static DNNFactory factory = new CustomDNNFactory(xorGenerator.getNewDataInstance(), new int[] { 4 });
 	
 	/* XOR example... */
 	public static void main(String[] args) {

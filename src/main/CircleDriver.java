@@ -30,7 +30,7 @@ public class CircleDriver {
   static String data = "." + sep + "data" + sep;
   
 	public static void main(String[] args) throws IOException, CloneNotSupportedException {
-		  Circle(4);
+		  Circle(8, 8);
 	}
 	
 	public static void Circle(int... structure) {
@@ -46,7 +46,7 @@ public class CircleDriver {
 	    DNNTrainingModule trainingModule = new DNNTrainingModule(net, training, testing);
 	    trainingModule.setOutputOn(printOut);
 	    trainingModule.setOutputAdapter(adapter);
-	    trainingModule.setBatchUpdate(batchUpdate, 100);
+	    trainingModule.setBatchUpdate(batchUpdate, 10);
 	    trainingModule.setConvergenceCriteria(1.0e-8, -1, 0, 300);
 	    trainingModule.setPrintResults(true, "circle-test-results-"+DNNUtils.joinNumbers(structure, "-")+".csv");
 	    trainingModule.doTrainNetworkUntilConvergence();
