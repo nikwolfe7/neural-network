@@ -3,6 +3,7 @@ package mlsp.cs.cmu.edu.dnn.factory;
 import mlsp.cs.cmu.edu.dnn.elements.Bias;
 import mlsp.cs.cmu.edu.dnn.elements.Edge;
 import mlsp.cs.cmu.edu.dnn.elements.Input;
+import mlsp.cs.cmu.edu.dnn.elements.MomentumEdge;
 import mlsp.cs.cmu.edu.dnn.elements.Neuron;
 import mlsp.cs.cmu.edu.dnn.elements.Output;
 import mlsp.cs.cmu.edu.dnn.elements.SimpleEdge;
@@ -26,7 +27,8 @@ public class SigmoidNetworkElementFactory implements NetworkElementAbstractFacto
 
 	@Override
 	public Edge getNewEdge() {
-	  return new SimpleEdge();
+		return new MomentumEdge(-1, 1, 0.003, 0.95);
+		//return new SimpleEdge();
 	}
 
 	@Override
